@@ -1,0 +1,79 @@
+{
+  "name": "Leagues",
+  "version": "1.0.0",
+  "description": "SADVA Leagues API",
+  "private": true,
+  "license": "MIT",
+  "proxy": "https://localhost:3001",
+  "homepage": "https://localhost:5111/ui",
+  "scripts": {
+    "start": "node ./leagues run",
+    "pretest": "npm run lint",
+    "test": "npm run test-unit",
+    "test-unit": "nyc --reporter=html --reporter=text mocha \"test/**/*-test.js\" --exit",
+    "posttest": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
+    "test-no-coverage": "mocha \"test/**/*-test.js\" --exit",
+    "lint": "standard --verbose",
+    "lint-fix": "standard --verbose --fix",
+    "postlint": "npm run doc",
+    "doc": "jsdoc --configure jsdoc.json",
+    "start-react": "react-scripts start",
+    "build-react": "react-scripts build",
+    "test-react": "react-scripts test",
+    "eject-react": "react-scripts eject"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "body-parser": "^1.0.0",
+    "bunyan": "^1.0.0",
+    "commander": "^5.0.0",
+    "cookie-parser": "^1.0.0",
+    "express": "^4.0.0",
+    "helmet": "^3.0.0",
+    "js-yaml": "^3.3.0",
+    "jsonwebtoken": "^8.0.0",
+    "mysql": "^2.0.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "password-hash-and-salt": "^0.1.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1",
+    "uuid4": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "jsdoc": "latest",
+    "mocha": "latest",
+    "nyc": "latest",
+    "sinon": "latest",
+    "sinon-chai": "latest",
+    "standard": "latest",
+    "supertest": "latest"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "standard": {
+    "env": [ "mocha" ],
+    "ignore": [
+      "src/"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

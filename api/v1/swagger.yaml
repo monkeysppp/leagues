@@ -1,0 +1,1135 @@
+---
+swagger: "2.0"
+info:
+  description: "League API"
+  version: "1.0.0"
+  title: "LeaguesAPI"
+host: "localhost:5110"
+basePath: "/api/v1"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /seasons:
+    get:
+      tags:
+      - "Seasons"
+      summary: "Seasons list"
+      description: "Returns a list of Seasons."
+      operationId: "seasonsGet"
+      parameters: []
+      responses:
+        200:
+          description: "An array of seasons"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Season"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      summary: "Create season"
+      description: "Create a new season with a defined name.  If the season already exists, nothing is added."
+      operationId: "seasonsPost"
+      parameters:
+      - in: "body"
+        name: "season"
+        description: "Object containing the name of the season."
+        required: true
+        schema:
+          $ref: "#/definitions/SeasonName"
+      responses:
+        200:
+          description: "An id for the new season, or the id of the existing season if the season already exists."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}:
+    get:
+      tags:
+      - "Seasons"
+      summary: "Season information"
+      description: "Returns an object representing this season."
+      operationId: "seasonsSeasonIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given season."
+          schema:
+            $ref: "#/definitions/Season"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      summary: "Update season"
+      description: "Update the name of this season."
+      operationId: "seasonsSeasonIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "season"
+        description: "Object containing the name of the season."
+        required: true
+        schema:
+          $ref: "#/definitions/SeasonName"
+      responses:
+        200:
+          description: "An object for the updated season"
+          schema:
+            $ref: "#/definitions/Season"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        409:
+          description: "Resource already in use"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      summary: "Delete a season"
+      description: "Delete the season of the given id"
+      operationId: "seasonsSeasonIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Season deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      summary: "Competitions list"
+      description: "Returns a list of Competitions for this season."
+      operationId: "seasonsSeasonIdCompetitionsGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An array of competitions."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Competition"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      summary: "Create competition"
+      description: "Create a new competition with a defined name.  If the competition\
+        \ already exists, nothing is added."
+      operationId: "seasonsSeasonIdCompetitionsPost"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "competition"
+        description: "Object containing the name of the competition."
+        required: true
+        schema:
+          $ref: "#/definitions/CompetitionName"
+      responses:
+        200:
+          description: "An id for the new competition, or the id of the existing competition if the competition already exists."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      summary: "Competition information"
+      description: "Returns an object representing this Competition."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given Competition."
+          schema:
+            $ref: "#/definitions/Competition"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      summary: "Update Competition"
+      description: "Update the name of this Competition."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "competition"
+        description: "Object containing the name of the competition."
+        required: true
+        schema:
+          $ref: "#/definitions/CompetitionName"
+      responses:
+        200:
+          description: "An object for the updated Competition"
+          schema:
+            $ref: "#/definitions/Competition"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        409:
+          description: "Resource already in use"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      summary: "Delete a Competition"
+      description: "Delete the Competition of the given id"
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Competition deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/fixtures:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      summary: "Fixtures list"
+      description: "Returns a list of Fixtures."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An array of fixtures"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Fixture"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      summary: "Create fixture"
+      description: "Create a new fixture with a defined date, venue and matches."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesPost"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "fixture"
+        description: "A fixture containing one or more matches."
+        required: true
+        schema:
+          $ref: "#/definitions/FixturePost"
+      responses:
+        200:
+          description: "An id for the new fixture."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/fixtures/{fixtureId}:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      summary: "Fixture information"
+      description: "Returns an object representing this fixture."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given fixture."
+          schema:
+            $ref: "#/definitions/Fixture"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      summary: "Update fixture"
+      description: "Update the details of this fixture."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "fixture"
+        description: "A fixture containing one or more matches."
+        required: true
+        schema:
+          $ref: "#/definitions/FixturePost"
+      responses:
+        200:
+          description: "An object for the updated fixture"
+          schema:
+            $ref: "#/definitions/Fixture"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      summary: "Delete a fixture"
+      description: "Delete the fixture of the given id"
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Fixture deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/teams:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      summary: "Teams list"
+      description: "Returns a list of Teams."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An array of teams"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      summary: "Create team"
+      description: "Create a new team with a defined name.  If the team already exists, nothing is added."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsPost"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "team"
+        description: "Object containing the name of the team."
+        required: true
+        schema:
+          $ref: "#/definitions/TeamName"
+      responses:
+        200:
+          description: "An id for the new team, or the id of the existing team if the team already exists."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/teams/{teamId}:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      summary: "Team information"
+      description: "Returns an object representing this team."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given team."
+          schema:
+            $ref: "#/definitions/Team"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      summary: "Update team"
+      description: "Update the name of this team."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "team"
+        description: "Object containing the name of the team."
+        required: true
+        schema:
+          $ref: "#/definitions/TeamName"
+      responses:
+        200:
+          description: "An object for the updated team"
+          schema:
+            $ref: "#/definitions/Team"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        409:
+          description: "Resource already in use"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      summary: "Delete a team"
+      description: "Delete the team (including its contacts) of the given id"
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Team deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/teams/{teamId}/contacts:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      - "Contacts"
+      summary: "Contacts list"
+      description: "Returns a list of Contacts."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An array of Contacts"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Contact"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      - "Contacts"
+      summary: "Create contact"
+      description: "Create a new contact with the given email address. If the team already contains the contact, nothing is added."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "contact"
+        description: "Object containing the email address of the contact."
+        required: true
+        schema:
+          $ref: "#/definitions/ContactAddress"
+      responses:
+        200:
+          description: "An id for the new contact, or the id of the existing contact if the contact already exists."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/teams/{teamId}/contacts/{contactId}:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      - "Contacts"
+      summary: "Contact information"
+      description: "Returns an object representing this contact.\n"
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "contactId"
+        in: "path"
+        description: "id of a contact."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given contact."
+          schema:
+            $ref: "#/definitions/Contact"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      - "Contacts"
+      summary: "Update contact"
+      description: "Update the email address of this contact."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "contactId"
+        in: "path"
+        description: "id of a contact."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "contact"
+        description: "Object containing the email address of the contact."
+        required: true
+        schema:
+          $ref: "#/definitions/ContactAddress"
+      responses:
+        200:
+          description: "An object for the updated contact"
+          schema:
+            $ref: "#/definitions/Contact"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        409:
+          description: "Resource already in use"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Teams"
+      - "Contacts"
+      summary: "Delete a contact"
+      description: "Delete the contact of the given id from the team of the given id."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "teamId"
+        in: "path"
+        description: "id of a team."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "contactId"
+        in: "path"
+        description: "id of a contact."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Contact deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+definitions:
+  SeasonName:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the season"
+  Season:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Seasion id"
+      name:
+        type: "string"
+        description: "Name of the season"
+      competitions:
+        type: "array"
+        description: "List of competitions"
+        items:
+          $ref: "#/definitions/Competition"
+  CompetitionName:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the competition"
+  Competition:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Competition id"
+      name:
+        type: "string"
+        description: "Name of the competition"
+      fixtures:
+        type: "array"
+        description: "List of fixtures"
+        items:
+          $ref: "#/definitions/Fixture"
+      teams:
+        type: "array"
+        description: "List of teams"
+        items:
+          $ref: "#/definitions/Team"
+  FixturePost:
+    type: "object"
+    required:
+    - date
+    - venue
+    - matches
+    properties:
+      date:
+        type: "string"
+        description: "Date of the fixture"
+      venue:
+        type: "string"
+        description: "Venue of the fixture"
+      matches:
+        type: "array"
+        description: "List of matches"
+        items:
+          $ref: "#/definitions/MatchPost"
+      adjudicator:
+        type: "string"
+        description: "Match adjudicator"
+  Fixture:
+    type: "object"
+    required:
+    - id
+    - date
+    - venue
+    - matches
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Fixture id"
+      date:
+        type: "string"
+        description: "Date of the fixture"
+      venue:
+        type: "string"
+        description: "Venue of the fixture"
+      matches:
+        type: "array"
+        description: "List of matches"
+        items:
+          $ref: "#/definitions/Match"
+      adjudicator:
+        type: "string"
+        description: "Match adjudicator"
+  Match:
+    type: "object"
+    properties:
+      time:
+        type: "string"
+        description: "Start time for the match"
+      homeTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+      awayTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+      refTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+  MatchPost:
+    type: "object"
+    properties:
+      time:
+        type: "string"
+        description: "Start time for the match"
+      homeTeam:
+        type: "string"
+        description: "Team name"
+      awayTeam:
+        type: "string"
+        description: "Team name"
+      refTeam:
+        type: "string"
+        description: "Team name"
+  TeamName:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the team"
+  Team:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+      name:
+        type: "string"
+        description: "Name of the team"
+      contacts:
+        type: "array"
+        description: "List of Contacts"
+        items:
+          $ref: "#/definitions/Contact"
+  ContactAddress:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "email address for the contact"
+  Contact:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Contact id"
+      email:
+        type: "string"
+        description: "email address for the contact"
+  ResourceId:
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+parameters:
+  seasonId:
+    name: "seasonId"
+    in: "path"
+    description: "id of a season."
+    required: true
+    type: "number"
+    format: "int32"
+  seasonName:
+    in: "body"
+    name: "season"
+    description: "Object containing the name of the season."
+    required: true
+    schema:
+      $ref: "#/definitions/SeasonName"
+  competitionId:
+    name: "competitionId"
+    in: "path"
+    description: "id of a competition."
+    required: true
+    type: "number"
+    format: "int32"
+  competitionName:
+    in: "body"
+    name: "competition"
+    description: "Object containing the name of the competition."
+    required: true
+    schema:
+      $ref: "#/definitions/CompetitionName"
+  teamId:
+    name: "teamId"
+    in: "path"
+    description: "id of a team."
+    required: true
+    type: "number"
+    format: "int32"
+  teamName:
+    in: "body"
+    name: "team"
+    description: "Object containing the name of the team."
+    required: true
+    schema:
+      $ref: "#/definitions/TeamName"
+  contactId:
+    name: "contactId"
+    in: "path"
+    description: "id of a contact."
+    required: true
+    type: "number"
+    format: "int32"
+  contactAddress:
+    in: "body"
+    name: "contact"
+    description: "Object containing the email address of the contact."
+    required: true
+    schema:
+      $ref: "#/definitions/ContactAddress"
+  fixture:
+    in: "body"
+    name: "fixture"
+    description: "A fixture containing one or more matches."
+    required: true
+    schema:
+      $ref: "#/definitions/FixturePost"
+  fixtureId:
+    name: "fixtureId"
+    in: "path"
+    description: "id of a fixture."
+    required: true
+    type: "number"
+    format: "int32"

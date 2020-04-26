@@ -1,0 +1,324 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+@media only screen and (min-device-width: 641px) {
+  html {
+    border: 0px;
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    margin:   0px;
+    padding:  0px;
+    border:   0px;
+    font-family: Helvetica, Verdana, Arial Narrow, sans-serif;
+    font-size: large;
+    color: #4b4b4b;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  div.app {
+    height: 100%;
+  }
+
+  div.topBanner {
+    border-bottom: 1px solid #ababab;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+  }
+
+  div.topBannerLeft {
+    display: inline-block;
+  }
+
+  div.topBannerRight {
+    display: inline-block;
+    float: right;
+  }
+
+  div.mainBody {
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+  }
+
+  div.loginback {
+    height: 100%;
+    background-color: #345678;
+  }
+
+  div.loginwrap {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  div.login {
+    display: inline-block;
+    margin:   10px;
+    padding:  15px;
+    border:   5px solid #6789AB;
+    background-color: #f1f1fe;
+    border-radius: 10px;
+  }
+
+  a.flatLink {
+    color: #4b4b4b;
+    text-decoration: none;
+  }
+
+  .loginButton {
+    background-color: #345678;
+    border: 0px;
+    border-radius: 5px;
+    color: #dddddd;
+    cursor: pointer;
+    display: inline-block;
+    font-size: x-large;
+    padding-top:    5px;
+    padding-bottom: 5px;
+    padding-left:   17px;
+    padding-right:  17px;
+    text-align: center;
+  }
+
+  .loginButton:active {
+    background-color: #547698;
+    color: #eeeeee;
+  }
+
+  .submitButton {
+    background-color: #345678;
+    border: 0px;
+    border-radius: 5px;
+    color: #dddddd;
+    cursor: pointer;
+    display: inline-block;
+    font-size: x-large;
+    padding-top:    5px;
+    padding-bottom: 5px;
+    padding-left:   17px;
+    padding-right:  17px;
+    text-align: center;
+  }
+
+  .submitButton:active {
+    background-color: #547698;
+    color: #eeeeee;
+  }
+
+  .headingBlock {
+    margin:   10px;
+    padding:  20px;
+    display: block;
+  }
+
+  .entryBlock {
+    margin:   10px;
+    padding:  10px;
+    display: block;
+    text-align: right;
+  }
+
+  .buttonBlock {
+    margin:   10px;
+    padding:  10px;
+    display: block;
+  }
+
+  .entryField {
+    padding-left:   5px;
+    padding-right:  5px;
+    display: inline-block;
+    font-size: x-large;
+  }
+
+  .loginCredentials {
+    background-color: #f7f7f7;
+    border: 1px solid #9b9b9b;
+    border-radius: 3px;
+    color: #4b4b4b;
+    width: 100%;
+    padding: 5px;
+    font-size: large;
+  }
+
+  .fieldInput {
+    background-color: #f7f7f7;
+    border: 1px solid #9b9b9b;
+    border-radius: 3px;
+    color: #4b4b4b;
+    width: 100%;
+    padding: 5px;
+    font-size: large;
+  }
+
+  div.heading {
+    width: 100%;
+    height: 100%;
+  }
+
+  span.heading {
+    font-weight: bold;
+    font-size: xx-large;
+  }
+}
+
+@media only screen and (max-device-width: 640px) {
+  html {
+    height: 100%;
+    width: 100%;
+    border: 0%;
+    /* Have to color html, or when the keyboard shows,
+     * scrolling to teh bottom reveals white background */
+    background-color: #f1f1fe;
+  }
+
+  body {
+    height: 100%;
+    width: 100%;
+    margin:   0%;
+    padding:  0%;
+    border:   0%;
+    font-family: Helvetica, Verdana, Arial Narrow, sans-serif;
+    font-size: x-large;
+    color: #4b4b4b;
+  }
+
+  div.topBanner {
+    border-bottom: 1px solid #ababab;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
+
+  div.topBannerLeft {
+    display: inline-block;
+  }
+
+  div.topBannerRight {
+    display: inline-block;
+    float: right;
+  }
+
+  div.mainBody {
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+  }
+
+  div.loginback {
+    height: 100%;
+  }
+
+  div.loginwrap {
+    display: block;
+  }
+
+  div.login {
+  }
+
+  a.flatLink {
+    color: #4b4b4b;
+    text-decoration: none;
+  }
+
+  .loginButton {
+    background-color: #345678;
+    border: 0%;
+    color: #dddddd;
+    display: inline-block;
+    font-size: 100%;
+    width: 75%;
+    padding-top:    4%;
+    padding-bottom: 4%;
+    text-align: center;
+  }
+
+  .loginButton:active {
+    background-color: #547698;
+    color: #eeeeee;
+  }
+
+  .submitButton {
+    background-color: #345678;
+    border: 0%;
+    color: #dddddd;
+    display: inline-block;
+    font-size: 100%;
+    width: 75%;
+    padding-top:    4%;
+    padding-bottom: 4%;
+    text-align: center;
+  }
+
+  .submitButton:active {
+    background-color: #547698;
+    color: #eeeeee;
+  }
+
+  div.headingBlock {
+    padding-top:   5%;
+  }
+
+  .entryBlock {
+    padding:  4%;
+  }
+
+  .buttonBlock {
+    padding:  4%;
+    text-align: center;
+  }
+
+  .entryField {
+    padding:   1.5%;
+    width: 100%;
+  }
+
+  .loginCredentials {
+    background-color: #f7f7f7;
+    border: 1px solid #9b9b9b;
+    color: #4b4b4b;
+    width: 95%;
+    font-size: x-large;
+    padding: 1.5%;
+  }
+
+  .fieldInput {
+    background-color: #f7f7f7;
+    border: 1px solid #9b9b9b;
+    color: #4b4b4b;
+    width: 95%;
+    font-size: x-large;
+    padding: 1.5%;
+  }
+
+  div.heading {
+    width: 94%;
+    padding: 3%;
+    background-color: #345678;
+  }
+
+  span.heading {
+    color: #dddddd;
+    font-weight: bold;
+    font-size: xx-large;
+  }
+}
