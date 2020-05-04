@@ -1,11 +1,11 @@
 {
   "name": "Leagues",
   "version": "1.0.0",
-  "description": "SADVA Leagues API",
+  "description": "Leagues API",
   "private": true,
   "license": "MIT",
   "proxy": "https://localhost:3001",
-  "homepage": "https://localhost:5111/ui",
+  "homepage": "https://localhost:3001/ui",
   "scripts": {
     "start": "node ./leagues run",
     "pretest": "npm run lint",
@@ -23,9 +23,12 @@
     "eject-react": "react-scripts eject"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "body-parser": "^1.0.0",
     "bunyan": "^1.0.0",
     "commander": "^5.0.0",
@@ -35,6 +38,7 @@
     "js-yaml": "^3.3.0",
     "jsonwebtoken": "^8.0.0",
     "mysql": "^2.0.0",
+    "notistack": "^0.9.11",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "password-hash-and-salt": "^0.1.4",
@@ -42,6 +46,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "universal-cookie": "^4.0.0",
     "uuid4": "^1.0.0"
   },
   "devDependencies": {
@@ -59,7 +64,9 @@
     "extends": "react-app"
   },
   "standard": {
-    "env": [ "mocha" ],
+    "env": [
+      "mocha"
+    ],
     "ignore": [
       "src/"
     ]
