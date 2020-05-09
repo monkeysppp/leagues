@@ -21,11 +21,6 @@ import Season from'./Season.js'
 import Colours from '../Colours.js'
 
 // TODO:
-// API date-orders the array of fixtures on save - done but needs unit tests
-// Add thing buttons having focus after return
-// Fixtures: add/edit/delete
-// build system
-// Import
 // Emails
 
 const ExpansionPanel = withStyles(() => ({

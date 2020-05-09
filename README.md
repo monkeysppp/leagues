@@ -2,6 +2,8 @@
 
 Node.js app for managing Volleyball Leagues
 
+![League Fixtures](leagueFixtures.jpg)
+
 ---
 
 Useful docs:
