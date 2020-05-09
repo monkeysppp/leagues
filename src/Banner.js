@@ -1,5 +1,27 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import HomeIcon from '@material-ui/icons/Home'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    color: '#ffffff'
+  },
+  title: {
+    flexGrow: 1,
+  },
+  appBar: {
+    'background-color': '#3C91E6'
+  }
+})
 
 class Banner extends React.Component {
   constructor(props) {
@@ -12,33 +34,58 @@ class Banner extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
     //<NavLink to='/logout' onClick={this.props.logout} className='flatLink'>logout</NavLink>
     if (this.props.loggedIn) {
       return (
-        <div className='topBanner'>
-          <div className='topBannerLeft'>
-            <NavLink to='/ui' className='flatLink'>Home</NavLink>
-          </div>
-          <div className='topBannerRight'>
-            <span>Hi {this.state.username} - </span><a href='/auth/logout' className='flatLink'>logout</a>
-          </div>
-        </div>
+        <AppBar position="static" className={classes.appBar}>
+          <Toolbar>
+            <NavLink to='/ui' className="whiteLink">
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                <HomeIcon />
+              </IconButton>
+            </NavLink>
+            <Typography variant="h6" className={classes.title}>
+              Leagues
+            </Typography>
+            <NavLink to='/auth/logout' className="whiteLink">Logout</NavLink>
+          </Toolbar>
+        </AppBar>
       )
-      // I'm struggling to get this to actually "go" to /logout, it just changes the URL and handles locally (and finds nothing)
-      // so it doesn't actually do anything
+      // <div className='topBanner'>
+      //   <div className='topBannerLeft'>
+      //     <NavLink to='/ui' className='flatLink'>Home</NavLink>
+      //   </div>
+      //   <div className='topBannerRight'>
+      //     <span>Hi {this.state.username} - </span><a href='/auth/logout' className='flatLink'>logout</a>
+      //   </div>
+      // </div>
     } else {
       return (
-        <div className='topBanner'>
-          <div className='topBannerLeft'>
-            <NavLink to='/ui' className='flatLink'>Home</NavLink>
-          </div>
-          <div className='topBannerRight'>
-            <NavLink to='/ui/login' className='flatLink'>login</NavLink>
-          </div>
-        </div>
+        <AppBar position="static" className={classes.appBar}>
+          <Toolbar>
+            <NavLink to='/ui' className="whiteLink">
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                <HomeIcon />
+              </IconButton>
+            </NavLink>
+            <Typography variant="h6" className={classes.title}>
+              Leagues
+            </Typography>
+            <NavLink to='/ui/login' className="whiteLink">Login</NavLink>
+          </Toolbar>
+        </AppBar>
       )
+      // <div className='topBanner'>
+      //   <div className='topBannerLeft'>
+      //     <NavLink to='/ui' className='flatLink'>Home</NavLink>
+      //   </div>
+      //   <div className='topBannerRight'>
+      //     <NavLink to='/ui/login' className='flatLink'>login</NavLink>
+      //   </div>
+      // </div>
     }
   }
 }
 
-export default Banner
+export default withStyles(styles)(Banner)

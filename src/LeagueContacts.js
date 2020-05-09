@@ -9,6 +9,14 @@ const editConfig = {
   contacts: true
 }
 
+const drawConfig = {
+  competitions: {
+    teams: true,
+    fixtures: false,
+    matches: false
+  }
+}
+
 class LeagueContacts extends React.Component {
   constructor (props) {
     super(props)
@@ -24,7 +32,7 @@ class LeagueContacts extends React.Component {
         <center>
           <h1>League Contacts</h1>
         </center>
-        <League editConfig={editConfig} utils={this.utils} />
+        <League editConfig={editConfig} drawConfig={drawConfig} utils={this.utils} />
       </div>
     )
   }

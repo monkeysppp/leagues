@@ -95,6 +95,100 @@ const sampleData = {
                 { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
                 { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
               ]
+            },
+            {
+              id: 4,
+              date: 'Fri 03-Jan-20',
+              venue: 'Venue 1',
+              matches: []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+const expectedData = {
+  seasons: [
+    {
+      id: 1,
+      name: 'seasonName1',
+      competitions: []
+    },
+    {
+      id: 3,
+      name: 'seasonName3',
+      competitions: []
+    },
+    {
+      id: 2,
+      name: 'seasonName2',
+      competitions: [
+        {
+          id: 1,
+          name: 'competitionName1',
+          teams: [],
+          fixtures: []
+        },
+        {
+          id: 3,
+          name: 'competitionName3',
+          teams: [],
+          fixtures: []
+        },
+        {
+          id: 2,
+          name: 'competitionName2',
+          teams: [
+            {
+              id: 1,
+              name: 'teamName1',
+              contacts: [{ id: 1, email: 'contact1@teamName1' }]
+            },
+            {
+              id: 3,
+              name: 'teamName3',
+              contacts: [{ id: 1, email: 'contact1@teamName3' }]
+            },
+            {
+              id: 2,
+              name: 'teamName2',
+              contacts: [
+                { id: 1, email: 'contact1@teamName2' },
+                { id: 3, email: 'contact3@teamName2' },
+                { id: 2, email: 'contact2@teamName2' }
+              ]
+            }
+          ],
+          fixtures: [
+            {
+              id: 4,
+              date: 'Fri 03-Jan-20',
+              venue: 'Venue 1',
+              matches: []
+            },
+            {
+              id: 1,
+              date: 'Fri 10-Jan-20',
+              venue: 'Venue 1',
+              matches: []
+            },
+            {
+              id: 2,
+              date: 'Fri 17-Jan-20',
+              venue: 'Venue 1',
+              adjudicator: 3,
+              matches: [
+                { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
+                { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
+                { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
+              ]
+            },
+            {
+              id: 3,
+              date: 'Fri 24-Jan-20',
+              venue: 'Venue 1',
+              matches: []
             }
           ]
         }
@@ -105,6 +199,10 @@ const sampleData = {
 
 function cloneSampleData () {
   return JSON.parse(JSON.stringify(sampleData))
+}
+
+function cloneExpectedData () {
+  return JSON.parse(JSON.stringify(expectedData))
 }
 
 describe('/api/v1', () => {
@@ -129,14 +227,14 @@ describe('/api/v1', () => {
   describe('/seasons', () => {
     describe('/get', () => {
       context('reading data succeeds', () => {
-        it('returns the data', () => {
+        it('returns the data with matches in date order', () => {
           return request(app)
             .get('/api/v1/seasons')
             .set('Accept', 'application/json')
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons))
             })
         })
       })
@@ -284,7 +382,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2]))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2]))
             })
         })
       })
@@ -521,7 +619,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions))
             })
         })
       })
@@ -608,7 +706,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -627,7 +725,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -700,7 +798,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2]))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2]))
             })
         })
       })
@@ -815,7 +913,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2]))
                 expect(dataFile.writeData).to.be.calledWith(newData)
@@ -835,7 +933,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -911,7 +1009,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -929,7 +1027,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -998,7 +1096,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].fixtures))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].fixtures))
             })
         })
       })
@@ -1162,10 +1260,10 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                  const newData = cloneSampleData()
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
+                  const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures.push({
-                    id: 4,
+                    id: 5,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 1',
                     matches: [
@@ -1196,10 +1294,10 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                  const newData = cloneSampleData()
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
+                  const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures.push({
-                    id: 4,
+                    id: 5,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 1',
                     matches: [
@@ -1482,10 +1580,10 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneSampleData()
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.push({
-                  id: 4,
+                  id: 5,
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
                   adjudicator: 1,
@@ -1521,9 +1619,9 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.push({
-                  id: 4,
+                  id: 5,
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
                   adjudicator: 1,
@@ -1631,7 +1729,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].fixtures[2]))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].fixtures[2]))
             })
         })
       })
@@ -1778,7 +1876,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  const newData = cloneSampleData()
+                  const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -1812,7 +1910,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  const newData = cloneSampleData()
+                  const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -2161,7 +2259,7 @@ describe('/api/v1', () => {
                 .expect('Content-Type', /application\/json/)
                 .expect(200)
                 .then(res => {
-                  const newData = cloneSampleData()
+                  const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -2195,7 +2293,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2] = {
                   id: 2,
                   date: 'Fri 31-Jan-20',
@@ -2234,7 +2332,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2] = {
                   id: 2,
                   date: 'Fri 31-Jan-20',
@@ -2350,7 +2448,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2368,7 +2466,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2437,7 +2535,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].teams))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].teams))
             })
         })
       })
@@ -2537,7 +2635,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2556,7 +2654,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2647,7 +2745,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].teams[2]))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].teams[2]))
             })
         })
       })
@@ -2784,7 +2882,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2]))
                 expect(dataFile.writeData).to.be.calledWith(newData)
@@ -2804,7 +2902,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2901,7 +2999,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2919,7 +3017,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -3006,7 +3104,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].teams[2].contacts))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].teams[2].contacts))
             })
         })
       })
@@ -3119,7 +3217,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -3138,7 +3236,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -3247,7 +3345,7 @@ describe('/api/v1', () => {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .then(res => {
-              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(sampleData.seasons[2].competitions[2].teams[2].contacts[2]))
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].teams[2].contacts[2]))
             })
         })
       })
@@ -3406,7 +3504,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2].contacts[2]))
                 expect(dataFile.writeData).to.be.calledWith(newData)
@@ -3426,7 +3524,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -3544,7 +3642,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -3562,7 +3660,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })

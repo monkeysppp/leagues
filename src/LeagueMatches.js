@@ -10,7 +10,7 @@ const editConfig = {
 }
 
 const drawConfig = {
-  competition: {
+  competitions: {
     teams: false,
     fixtures: false,
     matches: true

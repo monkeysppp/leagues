@@ -18,10 +18,11 @@ import { withStyles } from '@material-ui/styles'
 import { withSnackbar  } from 'notistack'
 
 import Competition from'./Competition.js'
+import Colours from '../Colours.js'
 
 const ExpansionPanel = withStyles(() => ({
   root: {
-    border: '1px solid rgba(255, 0, 0, .125)',
+    border: '1px solid ' + Colours.competitions.border,
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0,
@@ -38,9 +39,9 @@ const ExpansionPanel = withStyles(() => ({
 
 const ExpansionPanelSummary = withStyles(() => ({
   root: {
-    border: '1px solid rgba(120, 0, 0, .125)',
-    background: 'rgba(217, 90, 41, 0.05)',
-    color: '#4b4b4b',
+    border: '1px solid ' + Colours.competitions.heading.background,
+    background: Colours.competitions.heading.background,
+    color: Colours.competitions.heading.text,
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0,
@@ -52,14 +53,25 @@ const ExpansionPanelSummary = withStyles(() => ({
       margin: 'auto',
     },
   },
-  expanded: {}
+  content: {
+    margin: '0',
+    '&$expanded': {
+      margin: '0',
+    },
+  },
+  expanded: {
+    margin: '2px',
+  },
+  expandIcon: {
+    color: Colours.competitions.heading.text
+  }
 }))(MuiExpansionPanelSummary)
 
 const ExpansionPanelDetails = withStyles(() => ({
   root: {
-    background: 'rgba(255, 220, 220, .01)',
+    background: Colours.competitions.body.background,
     display: 'block',
-  }
+  },
 }))(MuiExpansionPanelDetails)
 
 class Season extends React.Component {
@@ -69,6 +81,8 @@ class Season extends React.Component {
       competitionEditable: (this.props.editConfig && this.props.editConfig.hasOwnProperty('competitions')) ? this.props.editConfig.competitions : true,
       addCompetitionDialogOpen: false,
       addCompetitionDialogCompetitionName: '',
+      editCompetitionDialogOpen: false,
+      editCompetitionDialogCompetition: {},
       deleteCompetitionDialogOpen: false,
       deleteCompetitionDialogCompetition: {}
     }
@@ -77,13 +91,25 @@ class Season extends React.Component {
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
-    this.addCompetitionDialogClose = this.addCompetitionDialogClose.bind(this)
     this.addCompetitionDialogOpen = this.addCompetitionDialogOpen.bind(this)
+    this.addCompetitionDialogClose = this.addCompetitionDialogClose.bind(this)
     this.addCompetitionDialogAdd = this.addCompetitionDialogAdd.bind(this)
     this.addCompetitionDialogCompetitionNameChange = this.addCompetitionDialogCompetitionNameChange.bind(this)
-    this.deleteCompetitionDialogClose = this.deleteCompetitionDialogClose.bind(this)
+    this.editCompetitionDialogOpen = this.editCompetitionDialogOpen.bind(this)
+    this.editCompetitionDialogClose = this.editCompetitionDialogClose.bind(this)
+    this.editCompetitionDialogEdit = this.editCompetitionDialogEdit.bind(this)
+    this.editCompetitionDialogCompetitionNameChange = this.editCompetitionDialogCompetitionNameChange.bind(this)
     this.deleteCompetitionDialogOpen = this.deleteCompetitionDialogOpen.bind(this)
+    this.deleteCompetitionDialogClose = this.deleteCompetitionDialogClose.bind(this)
     this.deleteCompetitionDialogDelete = this.deleteCompetitionDialogDelete.bind(this)
+  }
+
+  addCompetitionDialogOpen () {
+    this.setState({ addCompetitionDialogOpen: true })
+  }
+
+  addCompetitionDialogClose () {
+    this.setState({ addCompetitionDialogOpen: false })
   }
 
   addCompetitionDialogAdd () {
@@ -96,20 +122,41 @@ class Season extends React.Component {
           this.enqueueSnackbar('Competition ' + competitionName + ' added', { variant: 'success' });
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add Competition ' + competitionName, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add competition ' + competitionName, { variant: 'error' });
         })
-  }
-
-  addCompetitionDialogOpen () {
-    this.setState({ addCompetitionDialogOpen: true })
-  }
-
-  addCompetitionDialogClose () {
-    this.setState({ addCompetitionDialogOpen: false })
   }
 
   addCompetitionDialogCompetitionNameChange (e) {
     this.setState({ addCompetitionDialogCompetitionName: e.target.value })
+  }
+
+  editCompetitionDialogOpen (competition) {
+    this.setState({ editCompetitionDialogOpen: true, editCompetitionDialogCompetition: { id: competition.id, originalName: competition.name, name: competition.name } })
+  }
+
+  editCompetitionDialogClose () {
+    this.setState({ editCompetitionDialogOpen: false })
+  }
+
+  editCompetitionDialogEdit () {
+    this.editCompetitionDialogClose()
+    const competition = this.state.editCompetitionDialogCompetition
+    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdPut(this.props.season.id, competition.id, competition.name)
+      .then(
+        () => {
+          this.refreshData()
+          this.enqueueSnackbar('Competition name updated to ' + competition.name, { variant: 'success' });
+        },
+        (err) => {
+          this.enqueueSnackbar('Failed to update competition from ' + competition.originalName + ' to ' + competition.name, { variant: 'error' });
+        })
+  }
+
+  editCompetitionDialogCompetitionNameChange (e) {
+    const name = e.target.value
+    this.setState(state => {
+      return { editCompetitionDialogCompetition: { id: state.editCompetitionDialogCompetition.id, originalName: state.editCompetitionDialogCompetition.originalName, name: name }}
+    })
   }
 
   deleteCompetitionDialogOpen (competition) {
@@ -129,7 +176,7 @@ class Season extends React.Component {
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Season ' + this.state.deleteCompetitionDialogCompetition.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Competition ' + this.state.deleteCompetitionDialogCompetition.name, { variant: 'error' })
         })
   }
 
@@ -141,19 +188,19 @@ class Season extends React.Component {
       if (this.state.competitionEditable) {
         body = <div>
           <span>{competition.name}</span>
-          <Tooltip title="Edit competition name"><IconButton aria-label="Edit competition name" component="span"><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete Competition"><IconButton aria-label="Delete competition" component="span" onClick={(e) => {e.stopPropagation(); this.deleteCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip title="Edit competition name"><IconButton aria-label="Edit competition name" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.editCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip title="Delete Competition"><IconButton aria-label="Delete competition" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>
       } else {
         body = <span>{competition.name}</span>
       }
 
       competitions.push(<ExpansionPanel key={competition.id}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header" className="seasonBanner">
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header" >
           {body}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Competition editConfig={this.props.editConfig} seasonId={this.props.season.id} competition={competition} utils={this.utils} key={competition.id}/>
+          <Competition editConfig={this.props.editConfig} drawConfig={this.props.drawConfig} season={this.props.season} competition={competition} utils={this.utils} key={competition.id}/>
         </ExpansionPanelDetails>
       </ExpansionPanel>)
     })
@@ -162,7 +209,9 @@ class Season extends React.Component {
       return (
         <div>
           <Tooltip title="Add new competition"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addCompetitionDialogOpen}>Add Competition</Button></Tooltip>
-          {competitions}
+          <div>
+            {competitions}
+          </div>
           <Dialog open={this.state.addCompetitionDialogOpen} onClose={this.addCompetitionDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="add-season-dialog-title">Add Competition</DialogTitle>
             <DialogContent>
@@ -172,6 +221,17 @@ class Season extends React.Component {
             <DialogActions>
               <Button onClick={this.addCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
               <Button onClick={this.addCompetitionDialogAdd} variant="contained" color="primary">Add</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={this.state.editCompetitionDialogOpen} onClose={this.editCompetitionDialogClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="edit-season-dialog-title">Edit Competition</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Enter the name for the Competition</DialogContentText>
+              <TextField autoFocus margin="dense" id="edit-season-seasonName" onChange={this.editCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editCompetitionDialogEdit()}} label="Competition name" type="text" fullWidth defaultValue={this.state.editCompetitionDialogCompetition.originalName}/>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.editCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
+              <Button onClick={this.editCompetitionDialogEdit} variant="contained" color="primary">Update</Button>
             </DialogActions>
           </Dialog>
           <Dialog open={this.state.deleteCompetitionDialogOpen} onClose={this.deleteCompetitionDialogClose} aria-labelledby="form-dialog-title">

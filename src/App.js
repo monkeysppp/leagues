@@ -12,6 +12,7 @@ import PopulateLeagues from './PopulateLeagues.js'
 
 import SeasonsClient from './seasonsClient.js'
 import Cookies from 'universal-cookie'
+// import jsonwebtoken from 'jsonwebtoken'
 const cookies = new Cookies()
 
 class Main extends React.Component {
@@ -69,7 +70,31 @@ class App extends React.Component {
       seasonsClient: this.seasonsClient,
       enqueueSnackbar: this.enqueueSnackbar
     }
+    // this.checkLoggedIn()
   }
+
+  // Can't do this as we can't access the JWT as it is httponly
+  // checkLoggedIn () {
+  //   if (typeof cookies.get('user') === 'string' && typeof cookies.get('jwt')) {
+  //     try {
+  //       const token = jsonwebtoken.verify(cookies.get('jwt'), 'changeThisSecret')
+  //       const dateNow = new Date()
+  //       const timeNow = dateNow.getTime()
+  //       if (timeNow < token.exp) {
+  //         this.setState({
+  //           username: token.username,
+  //           loggedIn: true
+  //         })
+  //         return
+  //       }
+  //     } catch (err) {
+  //     }
+  //   }
+  //   this.setState({
+  //     username: '',
+  //     loggedIn: false
+  //   })
+  // }
 
   render () {
     return (

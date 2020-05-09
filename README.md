@@ -1,6 +1,6 @@
 # leagues
 
-Node.js app for managing the SADVA Leagues
+Node.js app for managing Volleyball Leagues
 
 ---
 

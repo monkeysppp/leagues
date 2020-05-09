@@ -24,7 +24,16 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdPut (seasonId, seasonName) {}
+  seasonsSeasonIdPut (seasonId, seasonName) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}`, { name: seasonName }, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
 
   seasonsSeasonIdDelete (seasonId) {
     const headers = {
@@ -47,7 +56,16 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdPut (seasonId, competitionId, competitionName) {}
+  seasonsSeasonIdCompetitionsCompetitionIdPut (seasonId, competitionId, competitionName) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}/competitions/${competitionId}`, { name: competitionName }, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
 
   seasonsSeasonIdCompetitionsCompetitionIdDelete (seasonId, competitionId) {
     const headers = {
@@ -70,7 +88,16 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut (seasonId, competitionId, teamId) {}
+  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut (seasonId, competitionId, teamId, teamName) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/teams/${teamId}`, { name: teamName }, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
 
   seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete (seasonId, competitionId, teamId) {
     const headers = {
@@ -93,7 +120,16 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut (seasonId, competitionId, teamId, contactId, contactAddress) {}
+  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut (seasonId, competitionId, teamId, contactId, contactAddress) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/teams/${teamId}/contacts/${contactId}`, { email: contactAddress }, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
 
   seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete (seasonId, competitionId, teamId, contactId) {
     const headers = {
@@ -106,7 +142,7 @@ class SeasonsClient {
   }
 
   seasonsSeasonIdCompetitionsCompetitionIdFixturesPost (seasonId, competitionId, fixture) {
-    
+
   }
 
   seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut (seasonId, competitionId, fixtureId, fixture) {}

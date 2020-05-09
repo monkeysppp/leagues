@@ -20,6 +20,16 @@ function throwError (message, statusCode) {
 exports.seasonsGet = function () {
   log.debug('seasonsGet()')
   seasonsData = dataFile.readData()
+  seasonsData.seasons.forEach(season => {
+    season.competitions.forEach(competition => {
+      competition.fixtures.sort((elem1, elem2) => {
+        const date1 = new Date(elem1.date)
+        const date2 = new Date(elem2.date)
+        return date1 - date2
+      })
+    })
+  })
+
   return seasonsData.seasons
 }
 
@@ -77,7 +87,7 @@ exports.seasonsSeasonIdGet = function (seasonId) {
     throwError('Invalid seasonId', 400)
   }
 
-  seasonsData = dataFile.readData()
+  exports.seasonsGet()
   const seasonCount = seasonsData.seasons.length
   log.debug(`Found ${seasonCount} seasons`)
   for (let i = 0; i < seasonCount; i++) {

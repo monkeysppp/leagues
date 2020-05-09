@@ -63,72 +63,60 @@ div.narrow {
   display: table;
 }
 
-span.boxButton {
-  cursor: pointer;
+span.section-heading {
+  padding: 12px;
+  vertical-align: middle;
 }
 
-div.errorbox
-{
+a.flatLink {
+  color: #4b4b4b;
+  text-decoration: none;
+}
+
+a.whiteLink {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+div.loginback {
+  height: 100%;
+  /* background-color: #345678; */
+}
+
+div.loginwrap {
+  text-align: center;
+  position: relative;
+  top: 20%;
+  transform: translateY(-20%);
+}
+
+div.login {
+  display: inline-block;
   margin:   10px;
-  padding:  10px;
-  border:   1px solid #ff0000;
-  background-color: #ffcccc;
+  padding:  15px;
+  border:   1px solid #6789AB;
+  background-color: #f2f9ff;
+  border-radius: 3px;
+}
+
+.loginButton {
+  background-color: #3C91E6;
+  border: 0px;
   border-radius: 5px;
-}
-
-div.deletebox
-{
-  margin-left:   5px;
-  margin-right:   5px;
-  padding:  0px;
-  border:   1px solid #ff0000;
-  background-color: #ffcccc;
-  border-radius: 15px;
+  color: #dddddd;
+  cursor: pointer;
   display: inline-block;
-  float: right;
-}
-div.deletebox:hover
-{
-  background-color: #ffbbbb;
-}
-div.deletebox:active
-{
-  background-color: #ff8888;
+  font-size: x-large;
+  padding-top:    5px;
+  padding-bottom: 5px;
+  padding-left:   17px;
+  padding-right:  17px;
+  text-align: center;
 }
 
-.deletebox
-{
-  color: #ff0000;
-}
-
-div.addbox
-{
-  margin-left:   5px;
-  margin-right:   5px;
-  padding:  0px;
-  border:   1px solid #60ec8d;
-  background-color: #f4fff4;
-  border-radius: 15px;
-  display: inline-block;
-}
-div.addbox:hover
-{
-  background-color: #e4ffe4;
-}
-div.addbox:active
-{
-  background-color: #a4ffa4;
-}
-
-.addbox
-{
-  color: #60ec8d;
-  font-size: large;
-}
-
-.addtext
-{
-  margin:   10px;
+.loginButton:active {
+  background-color: #547698;
+  color: #eeeeee;
 }
 
 p
@@ -206,52 +194,6 @@ p
   div.mainBody {
     padding-left: 0.5%;
     padding-right: 0.5%;
-  }
-
-  div.loginback {
-    height: 100%;
-    background-color: #345678;
-  }
-
-  div.loginwrap {
-    text-align: center;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  div.login {
-    display: inline-block;
-    margin:   10px;
-    padding:  15px;
-    border:   5px solid #6789AB;
-    background-color: #f1f1fe;
-    border-radius: 10px;
-  }
-
-  a.flatLink {
-    color: #4b4b4b;
-    text-decoration: none;
-  }
-
-  .loginButton {
-    background-color: #345678;
-    border: 0px;
-    border-radius: 5px;
-    color: #dddddd;
-    cursor: pointer;
-    display: inline-block;
-    font-size: x-large;
-    padding-top:    5px;
-    padding-bottom: 5px;
-    padding-left:   17px;
-    padding-right:  17px;
-    text-align: center;
-  }
-
-  .loginButton:active {
-    background-color: #547698;
-    color: #eeeeee;
   }
 
   .submitButton {
@@ -372,39 +314,6 @@ p
   div.mainBody {
     padding-left: 0.5%;
     padding-right: 0.5%;
-  }
-
-  div.loginback {
-    height: 100%;
-  }
-
-  div.loginwrap {
-    display: block;
-  }
-
-  div.login {
-  }
-
-  a.flatLink {
-    color: #4b4b4b;
-    text-decoration: none;
-  }
-
-  .loginButton {
-    background-color: #345678;
-    border: 0%;
-    color: #dddddd;
-    display: inline-block;
-    font-size: 100%;
-    width: 75%;
-    padding-top:    4%;
-    padding-bottom: 4%;
-    text-align: center;
-  }
-
-  .loginButton:active {
-    background-color: #547698;
-    color: #eeeeee;
   }
 
   .submitButton {

@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import { withSnackbar  } from 'notistack'
 
 import Contact from'./Contact.js'
+import Colours from '../Colours.js'
 
 class Team extends React.Component {
   constructor(props) {
@@ -20,18 +21,36 @@ class Team extends React.Component {
     this.state = {
       contactEditable: (this.props.editConfig && this.props.editConfig.hasOwnProperty('contacts')) ? this.props.editConfig.contacts : true,
       addContactDialogOpen: false,
-      addContactDialogContactAddress: ''
+      addContactDialogContactAddress: '',
+      editContactDialogOpen: false,
+      editContactDialogContact: {},
+      deleteContactDialogOpen: false,
+      deleteContactDialogContact: {}
     }
     this.utils = props.utils
     this.seasonsClient = props.utils.seasonsClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
-    this.addContactDialogClose = this.addContactDialogClose.bind(this)
     this.addContactDialogOpen = this.addContactDialogOpen.bind(this)
+    this.addContactDialogClose = this.addContactDialogClose.bind(this)
     this.addContactDialogAdd = this.addContactDialogAdd.bind(this)
-    this.addContactDialogContactNameChange = this.addContactDialogContactNameChange.bind(this)
-    this.deleteContact = this.deleteContact.bind(this)
+    this.addContactDialogContactAddressChange = this.addContactDialogContactAddressChange.bind(this)
+    this.editContactDialogOpen = this.editContactDialogOpen.bind(this)
+    this.editContactDialogClose = this.editContactDialogClose.bind(this)
+    this.editContactDialogEdit = this.editContactDialogEdit.bind(this)
+    this.editContactDialogContactAddressChange = this.editContactDialogContactAddressChange.bind(this)
+    this.deleteContactDialogOpen = this.deleteContactDialogOpen.bind(this)
+    this.deleteContactDialogClose = this.deleteContactDialogClose.bind(this)
+    this.deleteContactDialogDelete = this.deleteContactDialogDelete.bind(this)
+  }
+
+  addContactDialogOpen () {
+    this.setState({ addContactDialogOpen: true })
+  }
+
+  addContactDialogClose () {
+    this.setState({ addContactDialogOpen: false })
   }
 
   addContactDialogAdd () {
@@ -48,27 +67,57 @@ class Team extends React.Component {
         })
   }
 
-  addContactDialogOpen () {
-    this.setState({ addContactDialogOpen: true })
-  }
-
-  addContactDialogClose () {
-    this.setState({ addContactDialogOpen: false })
-  }
-
-  addContactDialogContactNameChange (e) {
+  addContactDialogContactAddressChange (e) {
     this.setState({ addContactDialogContactAddress: e.target.value })
   }
 
-  deleteContact (contact) {
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id)
+  editContactDialogOpen(contact) {
+    this.setState({ editContactDialogOpen: true, editContactDialogContact: { id: contact.id, originalEmail: contact.email, email: contact.email } })
+  }
+
+  editContactDialogClose () {
+    this.setState({ editContactDialogOpen: false })
+  }
+
+  editContactDialogEdit () {
+    this.editContactDialogClose()
+    const contact = this.state.editContactDialogContact
+    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id, contact.email)
       .then(
         () => {
-          this.enqueueSnackbar('Contact ' + contact.name + ' deleted', { variant: 'success' })
+          this.refreshData()
+          this.enqueueSnackbar('Contact address updated to ' + contact.email, { variant: 'success' });
+        },
+        (err) => {
+          this.enqueueSnackbar('Failed to update contact email from ' + contact.originalEmail + ' to ' + contact.email, { variant: 'error' });
+        })
+  }
+
+  editContactDialogContactAddressChange (e) {
+    const email = e.target.value
+    this.setState(state => {
+      return { editContactDialogContact: { id: state.editContactDialogContact.id, originalEmail: state.editContactDialogContact.originalEmail, email: email }}
+    })
+  }
+
+  deleteContactDialogOpen (contact) {
+    this.setState({ deleteContactDialogOpen: true, deleteContactDialogContact: contact })
+  }
+
+  deleteContactDialogClose () {
+    this.setState({ deleteContactDialogOpen: false })
+  }
+
+  deleteContactDialogDelete () {
+    this.deleteContactDialogClose()
+    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, this.state.deleteContactDialogContact.id)
+      .then(
+        () => {
+          this.enqueueSnackbar('Contact ' + this.state.deleteContactDialogContact.name + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Season ' + contact.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Contact ' + this.state.deleteContactDialogContact.name, { variant: 'error' })
         })
   }
 
@@ -79,8 +128,8 @@ class Team extends React.Component {
       if (this.state.contactEditable) {
         contacts.push(<div key={contact.id}>
           <Contact contact={contact}></Contact>
-          <Tooltip title="Edit contact"><IconButton aria-label="Edit contact" component="span"><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete contact"><IconButton aria-label="Delete contact" component="span" onClick={(e) => {e.stopPropagation(); this.deleteContact(contact)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip title="Edit contact"><IconButton aria-label="Edit contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.editContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip title="Delete contact"><IconButton aria-label="Delete contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>)
       } else {
         contacts.push(<Contact contact={contact}></Contact>)
@@ -94,12 +143,33 @@ class Team extends React.Component {
         <Dialog open={this.state.addContactDialogOpen} onClose={this.addContactDialogClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="add-contact-dialog-title">Add Contact</DialogTitle>
           <DialogContent>
-            <DialogContentText>Enter the name for the new Contact</DialogContentText>
-            <TextField autoFocus margin="dense" id="add-contact-contactName" onChange={this.addContactDialogContactNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addContactDialogAdd()}} label="Contact address" type="email" fullWidth/>
+            <DialogContentText>Enter the email address for the new Contact</DialogContentText>
+            <TextField autoFocus margin="dense" id="add-contact-contactAddress" onChange={this.addContactDialogContactAddressChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addContactDialogAdd()}} label="Contact address" type="email" fullWidth/>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.addContactDialogClose} color="primary">Cancel</Button>
-            <Button onClick={this.addContactDialogAdd} color="primary">Add</Button>
+            <Button onClick={this.addContactDialogClose} variant="outlined" color="primary">Cancel</Button>
+            <Button onClick={this.addContactDialogAdd} variant="contained" color="primary">Add</Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={this.state.editContactDialogOpen} onClose={this.editContactDialogClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="edit-contact-dialog-title">Edit Contact</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Enter the email address for the Contact</DialogContentText>
+            <TextField autoFocus margin="dense" id="edit-contact-contactAddress" onChange={this.editContactDialogContactAddressChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editContactDialogEdit()}} label="Contact address" type="email" fullWidth defaultValue={this.state.editContactDialogContact.originalEmail}/>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.editContactDialogClose} variant="outlined" color="primary">Cancel</Button>
+            <Button onClick={this.editContactDialogAdd} variant="contained" color="primary">Edit</Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={this.state.deleteContactDialogOpen} onClose={this.deleteContactDialogClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="delete-contact-dialog-title">Delete Contact</DialogTitle>
+          <DialogContent>
+            <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteContactDialogDelete()}}>Are you sure you want to delete the contact "{this.state.deleteContactDialogContact.email}" from {this.props.team.name}?</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.deleteContactDialogClose} variant="outlined" color="primary">Cancel</Button>
+            <Button onClick={this.deleteContactDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -108,7 +178,9 @@ class Team extends React.Component {
     return (
       <div>
         {addContact}
-        {contacts}
+        <div>
+          {contacts}
+        </div>
       </div>
     )
   }

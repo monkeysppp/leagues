@@ -1,18 +1,6 @@
 import React from 'react'
-import { AddBoxOutlined, AddCircleOutlined, DeleteOutlined, EditOutlined, ExpandMoreOutlined, ExpandLessOutlined } from '@material-ui/icons'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Tooltip from '@material-ui/core/Tooltip'
-import { withSnackbar  } from 'notistack'
-
+import Colours from '../Colours.js'
 
 class Fixture extends React.Component {
   constructor(props) {
@@ -30,7 +18,7 @@ class Fixture extends React.Component {
     const matches = []
     this.props.fixture.matches.forEach((match, index) => {
       matches.push(<div key={index}>
-        <span>{match.time} : {this.state.teams[`id-${match.homeTeam}`].name} v {this.state.teams[`id-${match.awayTeam}`].name} ({this.state.teams[`id-${match.refTeam}`].name} ref)</span>
+        <span style={Colours.matches.iconStyle}>{match.time} : {this.state.teams[`id-${match.homeTeam}`].name} v {this.state.teams[`id-${match.awayTeam}`].name} ({this.state.teams[`id-${match.refTeam}`].name} ref)</span>
       </div>)
     })
 
@@ -39,27 +27,7 @@ class Fixture extends React.Component {
         {matches}
       </div>
     )
-    // const matches = []
-    // this.state.fixture.matches.forEach((match, index) => {
-    //   matches.push(<div key={index}>
-    //     <span>{match.time} : {this.state.teams[`id-${match.homeTeam}`].name} v {this.state.teams[`id-${match.awayTeam}`].name} ({this.state.teams[`id-${match.refTeam}`].name} ref)</span>
-    //   </div>)
-    // })
-    //
-    // if (this.state.expanded) {
-    //   return (
-    //     <div className='fixturebox'>
-    //       <span className='boxButton' onClick={() => this.toggleExpanded()}>{this.state.fixture.date}&nbsp;&nbsp;<EditOutlined />&nbsp;&nbsp;<DeleteOutlined /></span>
-    //       {matches}
-    //     </div>
-    //   )
-    // }
-    // return (
-    //   <div className='fixturebox'>
-    //     <span className='boxButton' onClick={() => this.toggleExpanded()}>{this.state.fixture.date}...&nbsp;&nbsp;<EditOutlined />&nbsp;&nbsp;<DeleteOutlined /></span>
-    //   </div>
-    // )
   }
 }
 
-export default withSnackbar(Fixture)
+export default Fixture

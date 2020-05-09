@@ -18,20 +18,19 @@ import { withStyles } from '@material-ui/styles'
 import { withSnackbar  } from 'notistack'
 
 import Season from'./Season.js'
+import Colours from '../Colours.js'
 
 // TODO:
-// Delete confirmation - started
-// Matches to have match view and not teams/fixtures - got a plan
-// API date-orders the array of fixtures on save
-// Edit entry
-// form for fixtures
+// API date-orders the array of fixtures on save - done but needs unit tests
+// Add thing buttons having focus after return
+// Fixtures: add/edit/delete
 // build system
-// import and emails
+// Import
+// Emails
 
 const ExpansionPanel = withStyles(() => ({
   root: {
-    border: '1px solid rgba(0, 0, 120, .125)',
-    background: 'rgba(200, 200, 250, .125)',
+    border: '1px solid ' + Colours.seasons.border,
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0,
@@ -48,9 +47,9 @@ const ExpansionPanel = withStyles(() => ({
 
 const ExpansionPanelSummary = withStyles(() => ({
   root: {
-    border: '1px solid rgba(0, 0, 120, .125)',
-    background: 'rgba(120, 120, 255, .05)',
-    color: '#4b4b4b',
+    border: '1px solid ' + Colours.seasons.heading.background,
+    background: Colours.seasons.heading.background,
+    color: Colours.seasons.heading.text,
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0,
@@ -62,12 +61,23 @@ const ExpansionPanelSummary = withStyles(() => ({
       margin: 'auto',
     },
   },
-  expanded: {}
+  content: {
+    margin: '0',
+    '&$expanded': {
+      margin: '0',
+    },
+  },
+  expanded: {
+    margin: '2px',
+  },
+  expandIcon: {
+    color: Colours.seasons.heading.text
+  }
 }))(MuiExpansionPanelSummary)
 
 const ExpansionPanelDetails = withStyles(() => ({
   root: {
-    background: 'rgba(220, 220, 255, .01)',
+    background: Colours.seasons.body.background,
     display: 'block',
   }
 }))(MuiExpansionPanelDetails)
@@ -80,6 +90,8 @@ class League extends React.Component {
       seasons: [],
       addSeasonDialogOpen: false,
       addSeasonDialogSeasonName: '',
+      editSeasonDialogOpen: false,
+      editSeasonDialogSeason: {},
       deleteSeasonDialogOpen: false,
       deleteSeasonDialogSeason: {}
     }
@@ -87,12 +99,16 @@ class League extends React.Component {
     this.enqueueSnackbar = props.enqueueSnackbar
 
     this.refreshData = this.refreshData.bind(this)
-    this.addSeasonDialogClose = this.addSeasonDialogClose.bind(this)
     this.addSeasonDialogOpen = this.addSeasonDialogOpen.bind(this)
+    this.addSeasonDialogClose = this.addSeasonDialogClose.bind(this)
     this.addSeasonDialogAdd = this.addSeasonDialogAdd.bind(this)
     this.addSeasonDialogSeasonNameChange = this.addSeasonDialogSeasonNameChange.bind(this)
-    this.deleteSeasonDialogClose = this.deleteSeasonDialogClose.bind(this)
+    this.editSeasonDialogOpen = this.editSeasonDialogOpen.bind(this)
+    this.editSeasonDialogClose = this.editSeasonDialogClose.bind(this)
+    this.editSeasonDialogEdit = this.editSeasonDialogEdit.bind(this)
+    this.editSeasonDialogSeasonNameChange = this.editSeasonDialogSeasonNameChange.bind(this)
     this.deleteSeasonDialogOpen = this.deleteSeasonDialogOpen.bind(this)
+    this.deleteSeasonDialogClose = this.deleteSeasonDialogClose.bind(this)
     this.deleteSeasonDialogDelete = this.deleteSeasonDialogDelete.bind(this)
 
     this.utils = {
@@ -106,6 +122,14 @@ class League extends React.Component {
     this.refreshData()
   }
 
+  addSeasonDialogOpen () {
+    this.setState({ addSeasonDialogOpen: true })
+  }
+
+  addSeasonDialogClose () {
+    this.setState({ addSeasonDialogOpen: false })
+  }
+
   addSeasonDialogAdd () {
     this.addSeasonDialogClose()
     const seasonName = this.state.addSeasonDialogSeasonName
@@ -116,28 +140,49 @@ class League extends React.Component {
           this.enqueueSnackbar('Season ' + seasonName + ' added', { variant: 'success' });
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add Season ' + seasonName, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add season ' + seasonName, { variant: 'error' });
         })
-  }
-
-  addSeasonDialogOpen () {
-    this.setState({ addSeasonDialogOpen: true })
-  }
-
-  addSeasonDialogClose () {
-    this.setState({ addSeasonDialogOpen: false })
   }
 
   addSeasonDialogSeasonNameChange (e) {
     this.setState({ addSeasonDialogSeasonName: e.target.value })
   }
 
-  deleteSeasonDialogClose () {
-    this.setState({ deleteSeasonDialogOpen: false })
+  editSeasonDialogOpen (season) {
+    this.setState({ editSeasonDialogOpen: true, editSeasonDialogSeason: { id: season.id, originalName: season.name, name: season.name } })
+  }
+
+  editSeasonDialogClose () {
+    this.setState({ editSeasonDialogOpen: false })
+  }
+
+  editSeasonDialogEdit () {
+    this.editSeasonDialogClose()
+    const season = this.state.editSeasonDialogSeason
+    this.seasonsClient.seasonsSeasonIdPut(season.id, season.name)
+      .then(
+        () => {
+          this.refreshData()
+          this.enqueueSnackbar('Season name updated to ' + season.name, { variant: 'success' });
+        },
+        (err) => {
+          this.enqueueSnackbar('Failed to update season from ' + season.originalName + ' to ' + season.name, { variant: 'error' });
+        })
+  }
+
+  editSeasonDialogSeasonNameChange (e) {
+    const name = e.target.value
+    this.setState(state => {
+      return { editSeasonDialogSeason: { id: state.editSeasonDialogSeason.id, originalName: state.editSeasonDialogSeason.originalName, name: name }}
+    })
   }
 
   deleteSeasonDialogOpen (season) {
     this.setState({ deleteSeasonDialogOpen: true, deleteSeasonDialogSeason: season })
+  }
+
+  deleteSeasonDialogClose () {
+    this.setState({ deleteSeasonDialogOpen: false })
   }
 
   deleteSeasonDialogDelete () {
@@ -157,7 +202,7 @@ class League extends React.Component {
     this.seasonsClient.seasonsGet()
       .then(seasons => {
         this.setState({
-          seasons: seasons
+          seasons: seasons,
         })
       })
   }
@@ -169,8 +214,8 @@ class League extends React.Component {
       if (this.state.seasonEditable) {
         body = <div>
           <span>{season.name}</span>
-          <Tooltip title="Edit Season"><IconButton aria-label="Edit season name" component="span"><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete Season"><IconButton aria-label="Delete season" component="span" onClick={(e) => {e.stopPropagation(); this.deleteSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip title="Edit Season"><IconButton aria-label="Edit season name" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.editSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip title="Delete Season"><IconButton aria-label="Delete season" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>
       } else {
         body = <span>{season.name}</span>
@@ -181,7 +226,7 @@ class League extends React.Component {
           {body}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Season editConfig={this.props.editConfig} season={season} utils={this.utils} key={season.id}/>
+          <Season editConfig={this.props.editConfig} drawConfig={this.props.drawConfig} season={season} utils={this.utils} key={season.id}/>
         </ExpansionPanelDetails>
       </ExpansionPanel>)
     })
@@ -190,7 +235,9 @@ class League extends React.Component {
       return (
         <div>
           <Tooltip title="Add new season"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addSeasonDialogOpen}>Add Season</Button></Tooltip>
-          {seasons}
+          <div>
+            {seasons}
+          </div>
           <Dialog open={this.state.addSeasonDialogOpen} onClose={this.addSeasonDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="add-season-dialog-title">Add Season</DialogTitle>
             <DialogContent>
@@ -202,14 +249,25 @@ class League extends React.Component {
               <Button onClick={this.addSeasonDialogAdd} variant="contained" color="primary">Add</Button>
             </DialogActions>
           </Dialog>
+          <Dialog open={this.state.editSeasonDialogOpen} onClose={this.editSeasonDialogClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="edit-season-dialog-title">Edit Season</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Enter the name for the Season</DialogContentText>
+              <TextField autoFocus margin="dense" id="edit-season-seasonName" onChange={this.editSeasonDialogSeasonNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editSeasonDialogEdit()}} label="Season name" type="text" fullWidth defaultValue={this.state.editSeasonDialogSeason.originalName} />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.editSeasonDialogClose} variant="outlined" color="primary">Cancel</Button>
+              <Button onClick={this.editSeasonDialogEdit} variant="contained" color="primary">Update</Button>
+            </DialogActions>
+          </Dialog>
           <Dialog open={this.state.deleteSeasonDialogOpen} onClose={this.deleteSeasonDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-season-dialog-title">Delete Season</DialogTitle>
             <DialogContent>
-              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteSeasonDialogDelete()}}>Are you sure you want to delete the {this.state.deleteSeasonDialogSeason.name} season?</DialogContentText>
+              <DialogContentText>Are you sure you want to delete the {this.state.deleteSeasonDialogSeason.name} season?</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteSeasonDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.deleteSeasonDialogDelete} variant="contained" color="secondary">Delete</Button>
+              <Button onClick={this.deleteSeasonDialogDelete} autoFocus onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteSeasonDialogDelete()}} variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
         </div>
