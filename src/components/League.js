@@ -20,9 +20,6 @@ import { withSnackbar  } from 'notistack'
 import Season from'./Season.js'
 import Colours from '../Colours.js'
 
-// TODO:
-// Emails
-
 const ExpansionPanel = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.seasons.border,
@@ -199,6 +196,8 @@ class League extends React.Component {
         this.setState({
           seasons: seasons,
         })
+      }).catch(() => {
+        this.enqueueSnackbar('Failed to fetch season data', { variant: 'error' });
       })
   }
 
