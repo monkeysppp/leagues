@@ -91,9 +91,9 @@ const sampleData = {
               venue: 'Venue 1',
               adjudicator: 3,
               matches: [
-                { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
+                { id: 1, time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
+                { id: 3, time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
+                { id: 2, time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
               ]
             },
             {
@@ -179,9 +179,9 @@ const expectedData = {
               venue: 'Venue 1',
               adjudicator: 3,
               matches: [
-                { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
+                { id: 1, time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
+                { id: 3, time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
+                { id: 2, time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
               ]
             },
             {
@@ -1124,12 +1124,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: '',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: ''
                 })
                 .set('Accept', 'application/json')
                 .expect(404)
@@ -1146,12 +1141,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: '',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: ''
                 })
                 .set('Accept', 'application/json')
                 .expect(404)
@@ -1176,12 +1166,7 @@ describe('/api/v1', () => {
                 .post('/api/v1/seasons/2/competitions/2/fixtures')
                 .send({
                   venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1195,12 +1180,7 @@ describe('/api/v1', () => {
                 .send({
                   date: '',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1213,12 +1193,7 @@ describe('/api/v1', () => {
                 .post('/api/v1/seasons/2/competitions/2/fixtures')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1232,12 +1207,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: '',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1250,12 +1220,7 @@ describe('/api/v1', () => {
                 .post('/api/v1/seasons/2/competitions/2/fixtures')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 1'
                 })
                 .set('Accept', 'application/json')
                 .expect(200)
@@ -1266,11 +1231,7 @@ describe('/api/v1', () => {
                     id: 5,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 1',
-                    matches: [
-                      { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                      { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                      { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                    ]
+                    matches: []
                   })
                   expect(dataFile.writeData).to.be.calledWith(newData)
                 })
@@ -1284,12 +1245,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: '',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: ''
                 })
                 .set('Accept', 'application/json')
                 .expect(200)
@@ -1300,11 +1256,7 @@ describe('/api/v1', () => {
                     id: 5,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 1',
-                    matches: [
-                      { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                      { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                      { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                    ]
+                    matches: []
                   })
                   expect(dataFile.writeData).to.be.calledWith(newData)
                 })
@@ -1318,235 +1270,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName4',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('matches are missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1'
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a match time is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a match time is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: '', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName4', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: '', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName4', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: '' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName4' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName4'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1569,12 +1293,7 @@ describe('/api/v1', () => {
               .send({
                 date: 'Fri 31-Jan-20',
                 venue: 'Venue 1',
-                adjudicator: 'teamName1',
-                matches: [
-                  { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                  { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                  { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                ]
+                adjudicator: 'teamName1'
               })
               .set('Accept', 'application/json')
               .expect('Content-Type', /application\/json/)
@@ -1587,11 +1306,7 @@ describe('/api/v1', () => {
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
                   adjudicator: 1,
-                  matches: [
-                    { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                    { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                    { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                  ]
+                  matches: []
                 })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -1609,12 +1324,7 @@ describe('/api/v1', () => {
               .send({
                 date: 'Fri 31-Jan-20',
                 venue: 'Venue 1',
-                adjudicator: 'teamName1',
-                matches: [
-                  { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                  { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                  { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                ]
+                adjudicator: 'teamName1'
               })
               .set('Accept', 'application/json')
               .expect(500)
@@ -1625,11 +1335,7 @@ describe('/api/v1', () => {
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
                   adjudicator: 1,
-                  matches: [
-                    { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                    { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                    { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                  ]
+                  matches: []
                 })
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -1648,12 +1354,7 @@ describe('/api/v1', () => {
             .send({
               date: 'Fri 31-Jan-20',
               venue: 'Venue 1',
-              adjudicator: '',
-              matches: [
-                { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-              ]
+              adjudicator: ''
             })
             .set('Accept', 'application/json')
             .expect(500)
@@ -1780,7 +1481,7 @@ describe('/api/v1', () => {
           context('fixture is missing', () => {
             it('returns 400', () => {
               return request(app)
-                .post('/api/v1/seasons/2/competitions/2/fixtures')
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -1792,12 +1493,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/2/fixtures/2')
                 .send({
                   venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1811,12 +1507,7 @@ describe('/api/v1', () => {
                 .send({
                   date: '',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1829,12 +1520,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/2/fixtures/2')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1848,12 +1534,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: '',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName1'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1866,12 +1547,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/2/fixtures/2')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 1'
                 })
                 .set('Accept', 'application/json')
                 .expect(200)
@@ -1881,11 +1557,7 @@ describe('/api/v1', () => {
                     id: 2,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 1',
-                    matches: [
-                      { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                      { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                      { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                    ]
+                    matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
                   expect(dataFile.writeData).to.be.calledWith(newData)
@@ -1900,12 +1572,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 2',
-                  adjudicator: '',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: ''
                 })
                 .set('Accept', 'application/json')
                 .expect(200)
@@ -1915,11 +1582,7 @@ describe('/api/v1', () => {
                     id: 2,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 2',
-                    matches: [
-                      { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                      { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                      { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                    ]
+                    matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
                   expect(dataFile.writeData).to.be.calledWith(newData)
@@ -1934,235 +1597,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName4',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('matches are missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1'
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a match time is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a match time is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: '', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a home team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName4', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: '', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('an away team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName4', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team is missing', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team is zero length', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: '' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
-                })
-                .set('Accept', 'application/json')
-                .expect(400)
-            })
-          })
-
-          context('a reffing team does not exist', () => {
-            it('returns 400', () => {
-              return request(app)
-                .put('/api/v1/seasons/2/competitions/2/fixtures/2')
-                .send({
-                  date: 'Fri 31-Jan-20',
-                  venue: 'Venue 1',
-                  adjudicator: 'teamName1',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName4' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  adjudicator: 'teamName4'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -2185,12 +1620,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/1000/competitions/2/fixtures/2')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 2',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 2'
                 })
                 .set('Accept', 'application/json')
                 .expect(404)
@@ -2206,12 +1636,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/1000/fixtures/2')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 2',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 2'
                 })
                 .set('Accept', 'application/json')
                 .expect(404)
@@ -2227,12 +1652,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/2/fixtures/1000')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 2',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 2'
                 })
                 .set('Accept', 'application/json')
                 .expect(404)
@@ -2248,12 +1668,7 @@ describe('/api/v1', () => {
                 .put('/api/v1/seasons/2/competitions/2/fixtures/2')
                 .send({
                   date: 'Fri 31-Jan-20',
-                  venue: 'Venue 2',
-                  matches: [
-                    { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                    { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                    { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                  ]
+                  venue: 'Venue 2'
                 })
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /application\/json/)
@@ -2264,11 +1679,7 @@ describe('/api/v1', () => {
                     id: 2,
                     date: 'Fri 31-Jan-20',
                     venue: 'Venue 2',
-                    matches: [
-                      { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                      { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                      { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                    ]
+                    matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
                   expect(dataFile.writeData).to.be.calledWith(newData)
@@ -2282,12 +1693,7 @@ describe('/api/v1', () => {
               .send({
                 date: 'Fri 31-Jan-20',
                 venue: 'Venue 2',
-                adjudicator: 'teamName1',
-                matches: [
-                  { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                  { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                  { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                ]
+                adjudicator: 'teamName1'
               })
               .set('Accept', 'application/json')
               .expect('Content-Type', /application\/json/)
@@ -2299,11 +1705,7 @@ describe('/api/v1', () => {
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 2',
                   adjudicator: 1,
-                  matches: [
-                    { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                    { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                    { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                  ]
+                  matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
                 expect(dataFile.writeData).to.be.calledWith(newData)
@@ -2322,12 +1724,7 @@ describe('/api/v1', () => {
               .send({
                 date: 'Fri 31-Jan-20',
                 venue: 'Venue 2',
-                adjudicator: 'teamName3',
-                matches: [
-                  { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                  { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                  { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-                ]
+                adjudicator: 'teamName3'
               })
               .set('Accept', 'application/json')
               .expect(500)
@@ -2338,11 +1735,7 @@ describe('/api/v1', () => {
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 2',
                   adjudicator: 3,
-                  matches: [
-                    { time: '19:00', homeTeam: 1, awayTeam: 2, refTeam: 3 },
-                    { time: '20:00', homeTeam: 2, awayTeam: 3, refTeam: 1 },
-                    { time: '21:00', homeTeam: 3, awayTeam: 1, refTeam: 2 }
-                  ]
+                  matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
                 expect(dataFile.writeData).to.be.calledWith(newData)
               })
@@ -2361,12 +1754,7 @@ describe('/api/v1', () => {
             .send({
               date: 'Fri 31-Jan-20',
               venue: 'Venue 2',
-              adjudicator: 'teamName3',
-              matches: [
-                { time: '19:00', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' },
-                { time: '20:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' },
-                { time: '21:00', homeTeam: 'teamName3', awayTeam: 'teamName1', refTeam: 'teamName2' }
-              ]
+              adjudicator: 'teamName3'
             })
             .set('Accept', 'application/json')
             .expect(500)
@@ -2482,6 +1870,826 @@ describe('/api/v1', () => {
         it('returns 500', () => {
           return request(app)
             .delete('/api/v1/seasons/2/competitions/2/fixtures/2')
+            .set('Accept', 'application/json')
+            .expect(500)
+        })
+      })
+    })
+  })
+
+  describe('/seasons/:seasonId/competitions/:competitionId/fixtures/:fixtureId/matches', () => {
+    describe('/get', () => {
+      context('reading data succeeds', () => {
+        context('seasonId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/a/competitions/2/fixtures/2/matches')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('competitionId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/a/fixtures/2/matches')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('fixtureId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/a/matches')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('season does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/1000/competitions/2/fixtures/2/matches')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        context('competition does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/1000/fixtures/2/matches')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        context('fixture does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/1000/matches')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        it('returns the data', () => {
+          return request(app)
+            .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /application\/json/)
+            .expect(200)
+            .then(res => {
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].fixtures[2].matches))
+            })
+        })
+      })
+
+      context('reading data fails', () => {
+        beforeEach(() => {
+          dataFile.readData.throws(error500)
+        })
+
+        it('returns 500', () => {
+          return request(app)
+            .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+            .set('Accept', 'application/json')
+            .expect(500)
+        })
+      })
+    })
+    describe('/post', () => {
+      context('reading data succeeds', () => {
+        context('writing data succeeds', () => {
+          context('season does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .post('/api/v1/seasons/1000/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('competition does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/1000/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('fixture does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/1000/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('match is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('time is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('time is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('homeTeam is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('homeTeam is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: '', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('homeTeam does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'NoSuchTeam', awayTeam: 'teamName3', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('awayTeam is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('awayTeam is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: '', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('awayTeam does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'NoSuchTeam', refTeam: 'teamName1' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('refTeam is missing', () => {
+            it('returns the new id', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3' })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
+                  const newData = cloneExpectedData()
+                  newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
+                  expect(dataFile.writeData).to.be.calledWith(newData)
+                })
+            })
+          })
+
+          context('refTeam is zero length', () => {
+            it('returns the new id', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: '' })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
+                  const newData = cloneExpectedData()
+                  newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
+                  expect(dataFile.writeData).to.be.calledWith(newData)
+                })
+            })
+          })
+
+          context('refTeam team does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'NoSuchTeam' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('posted data is not JSON', () => {
+            it('returns 400', () => {
+              return request(app)
+                .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+                .send('name=match')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          it('returns the new id', () => {
+            return request(app)
+              .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+              .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /application\/json/)
+              .expect(200)
+              .then(res => {
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+
+        context('writing data fails', () => {
+          beforeEach(() => {
+            dataFile.writeData.throws(error500)
+          })
+
+          it('returns 500', () => {
+            return request(app)
+              .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+              .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+              .set('Accept', 'application/json')
+              .expect(500)
+              .then(() => {
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+      })
+
+      context('reading data fails', () => {
+        beforeEach(() => {
+          dataFile.readData.throws(error500)
+        })
+
+        it('returns 500', () => {
+          return request(app)
+            .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
+            .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: 'teamName1' })
+            .set('Accept', 'application/json')
+            .expect(500)
+            .then(() => {
+              expect(dataFile.writeData.callCount).to.equal(0)
+            })
+        })
+      })
+    })
+  })
+
+  describe('/seasons/:seasonId/competitions/:competitionId/fixtures/:fixtureId/matches/:matchId', () => {
+    describe('/get', () => {
+      context('reading data succeeds', () => {
+        context('seasonId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/a/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('competitionId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/a/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('fixtureId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/a/matches/2')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('matchId is invalid', () => {
+          it('returns 400', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches/a')
+              .set('Accept', 'application/json')
+              .expect(400)
+          })
+        })
+
+        context('season does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/1000/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        context('competition does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/1000/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        context('fixture does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/1000/matches/2')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        context('match does not exist', () => {
+          it('returns 404', () => {
+            return request(app)
+              .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches/1000')
+              .set('Accept', 'application/json')
+              .expect(404)
+          })
+        })
+
+        it('returns the data', () => {
+          return request(app)
+            .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /application\/json/)
+            .expect(200)
+            .then(res => {
+              expect(JSON.stringify(res.body)).to.equal(JSON.stringify(expectedData.seasons[2].competitions[2].fixtures[2].matches[2]))
+            })
+        })
+      })
+
+      context('reading data fails', () => {
+        beforeEach(() => {
+          dataFile.readData.throws(error500)
+        })
+
+        it('returns 500', () => {
+          return request(app)
+            .get('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+            .set('Accept', 'application/json')
+            .expect(500)
+        })
+      })
+    })
+    describe('/put', () => {
+      context('reading data succeeds', () => {
+        context('writing data succeeds', () => {
+          context('seasonId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/a/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('competitionId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/a/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('fixtureId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/a/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('matchId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/a')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('match is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('time is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('time is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('homeTeam is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('homeTeam is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: '', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('awayTeam is missing', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('awayTeam is zero length', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: '', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
+          context('refTeam is missing', () => {
+            it('returns the new match', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2' })
+                .expect(200)
+                .then(res => {
+                  const newData = cloneExpectedData()
+                  newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2 }
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
+                  expect(dataFile.writeData).to.be.calledWith(newData)
+                })
+            })
+          })
+
+          context('refTeam is zero length', () => {
+            it('returns the new id', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: '' })
+                .expect(200)
+                .then(res => {
+                  const newData = cloneExpectedData()
+                  newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 2, awayTeam: 3 }
+                  expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
+                  expect(dataFile.writeData).to.be.calledWith(newData)
+                })
+            })
+          })
+
+          context('refTeam team does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'NoSuchTeam' })
+                .expect(400)
+            })
+          })
+
+          context('posted data is not JSON', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send('name=match2')
+                .expect(400)
+            })
+          })
+
+          context('season does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .put('/api/v1/seasons/1000/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('competition does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/1000/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('fixture does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/1000/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('match does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/1000')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(404)
+                .then(res => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          it('returns the new fixture', () => {
+            return request(app)
+              .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+              .expect('Content-Type', /application\/json/)
+              .expect(200)
+              .then(res => {
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+
+        context('writing data fails', () => {
+          beforeEach(() => {
+            dataFile.writeData.throws(error500)
+          })
+
+          it('returns 500', () => {
+            return request(app)
+              .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+              .expect(500)
+              .then(() => {
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+      })
+
+      context('reading data fails', () => {
+        beforeEach(() => {
+          dataFile.readData.throws(error500)
+        })
+
+        it('returns 500', () => {
+          return request(app)
+            .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+            .set('Accept', 'application/json')
+            .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
+            .expect(500)
+            .then(() => {
+              expect(dataFile.writeData.callCount).to.equal(0)
+            })
+        })
+      })
+    })
+    describe('/delete', () => {
+      context('reading data succeeds', () => {
+        context('writing data succeeds', () => {
+          context('seasonId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/a/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('season does not exist', () => {
+            it('returns 404', () => {
+              return request(app)
+                .delete('/api/v1/seasons/1000/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(() => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('competitionId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/a/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('competition does not exist', () => {
+            it('returns 200', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/1000/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(() => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('fixtureId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/fixtures/a/matches/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('fixture does not exist', () => {
+            it('returns 200', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/fixtures/1000/matches/2')
+                .set('Accept', 'application/json')
+                .expect(404)
+                .then(() => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          context('matchId is invalid', () => {
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/fixtures/2/matches/a')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
+          context('match does not exist', () => {
+            it('returns 200', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/fixtures/2/matches/1000')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(() => {
+                  expect(dataFile.writeData.callCount).to.equal(0)
+                })
+            })
+          })
+
+          it('deletes the data', () => {
+            return request(app)
+              .delete('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(200)
+              .then(() => {
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+
+        context('writing data fails', () => {
+          beforeEach(() => {
+            dataFile.writeData.throws(error500)
+          })
+
+          it('returns 500', () => {
+            return request(app)
+              .delete('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+              .set('Accept', 'application/json')
+              .expect(500)
+              .then(() => {
+                const newData = cloneExpectedData()
+                newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
+                expect(dataFile.writeData).to.be.calledWith(newData)
+              })
+          })
+        })
+      })
+
+      context('reading data fails', () => {
+        beforeEach(() => {
+          dataFile.readData.throws(error500)
+        })
+
+        it('returns 500', () => {
+          return request(app)
+            .delete('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
             .set('Accept', 'application/json')
             .expect(500)
         })

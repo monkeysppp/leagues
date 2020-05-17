@@ -4,16 +4,24 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
+import InputLabel from '@material-ui/core/InputLabel'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Tooltip from '@material-ui/core/Tooltip'
+import DateFnsUtils from '@date-io/date-fns'
+import { format, parse } from 'date-fns'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+
 import { withStyles } from '@material-ui/styles'
 import { withSnackbar  } from 'notistack'
 
@@ -34,7 +42,6 @@ const ExpansionPanelWrapper = withStyles(() => ({
   },
   expanded: {}
 }))(MuiExpansionPanel)
-
 const ExpansionPanelSummaryWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.heading.border,
@@ -61,14 +68,12 @@ const ExpansionPanelSummaryWrapper = withStyles(() => ({
     color: Colours.fixtures.heading.text
   }
 }))(MuiExpansionPanelSummary)
-
 const ExpansionPanelDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.fixtures.body.background,
     display: 'block',
   }
 }))(MuiExpansionPanelDetails)
-
 const ExpansionPanel = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.border,
@@ -85,7 +90,6 @@ const ExpansionPanel = withStyles(() => ({
   },
   expanded: {}
 }))(MuiExpansionPanel)
-
 const ExpansionPanelSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.heading.border,
@@ -115,7 +119,6 @@ const ExpansionPanelSummary = withStyles(() => ({
     color: Colours.fixtures.heading.text
   }
 }))(MuiExpansionPanelSummary)
-
 const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.matches.background,
@@ -130,7 +133,9 @@ class Fixtures extends React.Component {
       fixtureEditable: (this.props.editConfig && this.props.editConfig.hasOwnProperty('fixtures')) ? this.props.editConfig.fixtures : true,
       fixturesDrawn: (this.props.drawConfig && this.props.drawConfig.competitions && this.props.drawConfig.competitions.hasOwnProperty('fixtures')) ? this.props.drawConfig.competitions.fixtures : true,
       addFixtureDialogOpen: false,
-      addFixtureDialogFixture: {},
+      addFixtureDialogFixtureDate: new Date(),
+      addFixtureDialogFixtureVenue: '',
+      addFixtureDialogFixtureAdjudicator: 'None',
       editFixtureDialogOpen: false,
       editFixtureDialogFixture: {},
       deleteFixtureDialogOpen: false,
@@ -144,11 +149,15 @@ class Fixtures extends React.Component {
     this.addFixtureDialogClose = this.addFixtureDialogClose.bind(this)
     this.addFixtureDialogOpen = this.addFixtureDialogOpen.bind(this)
     this.addFixtureDialogAdd = this.addFixtureDialogAdd.bind(this)
-    this.addFixtureDialogFixtureNameChange = this.addFixtureDialogFixtureNameChange.bind(this)
+    this.addFixtureDialogFixtureDateChange = this.addFixtureDialogFixtureDateChange.bind(this)
+    this.addFixtureDialogFixtureVenueChange = this.addFixtureDialogFixtureVenueChange.bind(this)
+    this.addFixtureDialogFixtureAdjudicatorChange = this.addFixtureDialogFixtureAdjudicatorChange.bind(this)
     this.editFixtureDialogOpen = this.editFixtureDialogOpen.bind(this)
     this.editFixtureDialogClose = this.editFixtureDialogClose.bind(this)
     this.editFixtureDialogEdit = this.editFixtureDialogEdit.bind(this)
-    this.editFixtureDialogFixtureChange = this.editFixtureDialogFixtureChange.bind(this)
+    this.editFixtureDialogFixtureDateChange = this.editFixtureDialogFixtureDateChange.bind(this)
+    this.editFixtureDialogFixtureVenueChange = this.editFixtureDialogFixtureVenueChange.bind(this)
+    this.editFixtureDialogFixtureAdjudicatorChange = this.editFixtureDialogFixtureAdjudicatorChange.bind(this)
     this.deleteFixtureDialogOpen = this.deleteFixtureDialogOpen.bind(this)
     this.deleteFixtureDialogClose = this.deleteFixtureDialogClose.bind(this)
     this.deleteFixtureDialogDelete = this.deleteFixtureDialogDelete.bind(this)
@@ -163,45 +172,114 @@ class Fixtures extends React.Component {
   }
 
   addFixtureDialogAdd () {
-    // this.addFixtureDialogClose()
-    // const fixtureName = this.state.addFixtureDialogFixtureName
-    // this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(this.props.seasonId, this.props.competition.id, fixtureName)
-    //   .then(
-    //     () => {
-    //       this.refreshData()
-    //       this.enqueueSnackbar('Fixture ' + fixtureName + ' added', { variant: 'success' });
-    //     },
-    //     (err) => {
-    //       this.enqueueSnackbar('Failed to add Fixture ' + fixtureName, { variant: 'error' });
-    //     })
+    this.addFixtureDialogClose()
+    const fixture = {
+      date: format(this.state.addFixtureDialogFixtureDate, 'eee dd-LLL-yy'),
+      venue: this.state.addFixtureDialogFixtureVenue
+    }
+    if (this.state.addFixtureDialogFixtureAdjudicator !== 'None') {
+      fixture.adjudicator = this.state.addFixtureDialogFixtureAdjudicator
+    }
+
+    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(this.props.season.id, this.props.competition.id, fixture)
+      .then(
+        () => {
+          this.refreshData()
+          this.enqueueSnackbar('Fixture on ' + fixture.date + ' added', { variant: 'success' });
+        },
+        (err) => {
+          this.enqueueSnackbar('Failed to add fixture on ' + fixture.date, { variant: 'error' });
+        })
+      .then(() => {
+        this.setState({
+          addFixtureDialogFixtureDate: new Date(),
+          addFixtureDialogFixtureVenue: '',
+          addFixtureDialogFixtureAdjudicator: 'None'
+        })
+      })
   }
 
-  addFixtureDialogFixtureNameChange (e) {
-    // this.setState({ addFixtureDialogFixtureName: e.target.value })
+  addFixtureDialogFixtureDateChange (e) {
+    if (e instanceof Date) {
+      this.setState({ addFixtureDialogFixtureDate: e })
+    }
+  }
+
+  addFixtureDialogFixtureVenueChange (e) {
+    this.setState({ addFixtureDialogFixtureVenue: e.target.value })
+  }
+
+  addFixtureDialogFixtureAdjudicatorChange (e) {
+    this.setState({ addFixtureDialogFixtureAdjudicator: e.target.value })
   }
 
   editFixtureDialogOpen(fixture) {
-
+    const teamMap = {}
+    this.props.competition.teams.forEach(team => {
+      teamMap[`id-${team.id}`] = team
+    })
+    const date = parse(fixture.date.split(' ')[1], 'dd-LLL-yy', new Date())
+    let adjudicator = 'None'
+    if (fixture.adjudicator) {
+      adjudicator = teamMap[`id-${fixture.adjudicator}`].name
+    }
+    this.setState({ editFixtureDialogOpen: true, editFixtureDialogFixture: { id: fixture.id, date: date, originalDate: date, venue: fixture.venue, adjudicator: adjudicator } })
   }
 
   editFixtureDialogClose () {
-
+    this.setState({ editFixtureDialogOpen: false })
   }
 
   editFixtureDialogEdit () {
+    this.editFixtureDialogClose()
+    const fixture = {
+      date: format(this.state.editFixtureDialogFixture.date, 'eee dd-LLL-yy'),
+      venue: this.state.editFixtureDialogFixture.venue
+    }
+    if (this.state.editFixtureDialogFixture.adjudicator !== 'None') {
+      fixture.adjudicator = this.state.editFixtureDialogFixture.adjudicator
+    }
 
+    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(this.props.season.id, this.props.competition.id, this.state.editFixtureDialogFixture.id, fixture)
+      .then(
+        () => {
+          this.refreshData()
+          this.enqueueSnackbar(`Fixture updated to ${fixture.date} at ${fixture.venue}`, { variant: 'success' });
+        },
+        (err) => {
+          this.enqueueSnackbar(`Failed to edit fixture on ${this.state.editFixtureDialogFixture.originalDate}`, { variant: 'error' });
+        })
   }
 
-  editFixtureDialogFixtureChange (e) {
-
+  editFixtureDialogFixtureDateChange (e) {
+    if (e instanceof Date) {
+      const date = e
+      this.setState(state => {
+        return { editFixtureDialogFixture: { id: state.editFixtureDialogFixture.id, date: date, originalDate: state.editFixtureDialogFixture.originalDate, venue: state.editFixtureDialogFixture.venue, adjudicator: state.editFixtureDialogFixture.adjudicator }}
+      })
+    }
   }
 
-  deleteFixtureDialogClose () {
-    this.setState({ deleteFixtureDialogOpen: false })
+  editFixtureDialogFixtureVenueChange (e) {
+    const venue = e.target.value
+    this.setState(state => {
+      return { editFixtureDialogFixture: { id: state.editFixtureDialogFixture.id, date: state.editFixtureDialogFixture.date, originalDate: state.editFixtureDialogFixture.originalDate, venue: venue, adjudicator: state.editFixtureDialogFixture.adjudicator }}
+    })
+  }
+
+  editFixtureDialogFixtureAdjudicatorChange (e) {
+    const adjudicator = e.target.value
+    this.setState(state => {
+      return { editFixtureDialogFixture: { id: state.editFixtureDialogFixture.id, date: state.editFixtureDialogFixture.date, originalDate: state.editFixtureDialogFixture.originalDate, venue: state.editFixtureDialogFixture.venue, adjudicator: adjudicator }}
+    })
   }
 
   deleteFixtureDialogOpen (fixture) {
     this.setState({ deleteFixtureDialogOpen: true, deleteFixtureDialogFixture: fixture })
+  }
+
+  deleteFixtureDialogClose () {
+    this.setState({ deleteFixtureDialogOpen: false })
   }
 
   deleteFixtureDialogDelete () {
@@ -226,12 +304,12 @@ class Fixtures extends React.Component {
         let body
         if (this.state.fixtureEditable) {
           body = <div>
-            <span>{fixture.date}</span>
-            <Tooltip title="Edit Fixture"><IconButton aria-label="Edit fixture" component="span" style={Colours.fixtures.iconStyle}><EditOutlined /></IconButton></Tooltip>
+            <span>{fixture.date} at {fixture.venue}</span>
+            <Tooltip title="Edit Fixture"><IconButton aria-label="Edit fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.editFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
             <Tooltip title="Delete Fixture"><IconButton aria-label="Delete fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
           </div>
         } else {
-          body = <span>{fixture.date}</span>
+          body = <span>{fixture.date} at {fixture.venue}</span>
         }
 
         fixtures.push(<ExpansionPanel key={fixture.id}>
@@ -239,11 +317,18 @@ class Fixtures extends React.Component {
             {body}
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Fixture editConfig={this.props.editConfig} seasonId={this.props.season.id} competitionId={this.props.competition.id} fixture={fixture} teams={this.props.competition.teams} utils={this.utils} key={fixture.id}/>
+            <Fixture editConfig={this.props.editConfig} seasonId={this.props.season.id} competition={this.props.competition} fixture={fixture} teams={this.props.competition.teams} utils={this.utils} key={fixture.id}/>
           </ExpansionPanelDetails>
         </ExpansionPanel>)
       })
     }
+
+    const teamSelectorItems = [<MenuItem value='None' selected key={-1}>None</MenuItem>]
+    this.props.competition.teams.forEach(team => {
+      teamSelectorItems.push(
+        <MenuItem value={team.name} key={team.id}>{team.name}</MenuItem>
+      )
+    })
 
     let fixturePanel
     if (!this.state.fixturesDrawn) {
@@ -259,14 +344,43 @@ class Fixtures extends React.Component {
             {fixtures}
           </div>
           <Dialog open={this.state.addFixtureDialogOpen} onClose={this.addFixtureDialogClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="add-season-dialog-title">Add Fixture</DialogTitle>
+            <DialogTitle id="add-fixture-dialog-title">Add Fixture</DialogTitle>
             <DialogContent>
-              <DialogContentText>Enter the name for the new Fixture</DialogContentText>
-              <TextField autoFocus margin="dense" id="add-season-seasonName" onChange={this.addFixtureDialogFixtureNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addFixtureDialogAdd()}} label="Fixture name" type="text" fullWidth/>
+              <DialogContentText>Enter the details for the new Fixture</DialogContentText>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.addFixtureDialogFixtureDate} onChange={this.addFixtureDialogFixtureDateChange} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
+                <br/>
+                <TextField margin="dense" id="add-fixture-venue" onChange={this.addFixtureDialogFixtureVenueChange} label="Venue" type="text" />
+                <br/>
+                <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.addFixtureDialogFixtureAdjudicator} onChange={this.addFixtureDialogFixtureAdjudicatorChange}>
+                  {teamSelectorItems}
+                </Select>
+                <br/><br/>
+              </MuiPickersUtilsProvider>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.addFixtureDialogClose} color="primary">Cancel</Button>
-              <Button onClick={this.addFixtureDialogAdd} color="primary">Add</Button>
+              <Button onClick={this.addFixtureDialogClose} variant="outlined" color="primary">Cancel</Button>
+              <Button onClick={this.addFixtureDialogAdd} variant="contained" color="primary">Add</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={this.state.editFixtureDialogOpen} onClose={this.editFixtureDialogClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="edit-fixture-dialog-title">Edit Fixture</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Enter the new details for the Fixture</DialogContentText>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.editFixtureDialogFixture.date} onChange={this.editFixtureDialogFixtureDateChange} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
+                <br/>
+                <TextField margin="dense" id="edit-fixture-venue" value={this.state.editFixtureDialogFixture.venue} onChange={this.editFixtureDialogFixtureVenueChange} label="Venue" type="text" />
+                <br/>
+                <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.editFixtureDialogFixture.adjudicator} onChange={this.editFixtureDialogFixtureAdjudicatorChange}>
+                  {teamSelectorItems}
+                </Select>
+                <br/><br/>
+              </MuiPickersUtilsProvider>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.editFixtureDialogClose} variant="outlined" color="primary">Cancel</Button>
+              <Button onClick={this.editFixtureDialogEdit} variant="contained" color="primary">Update</Button>
             </DialogActions>
           </Dialog>
           <Dialog open={this.state.deleteFixtureDialogOpen} onClose={this.deleteFixtureDialogClose} aria-labelledby="form-dialog-title">

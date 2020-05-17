@@ -213,10 +213,10 @@ class Season extends React.Component {
             {competitions}
           </div>
           <Dialog open={this.state.addCompetitionDialogOpen} onClose={this.addCompetitionDialogClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="add-season-dialog-title">Add Competition</DialogTitle>
+            <DialogTitle id="add-competition-dialog-title">Add Competition</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the new Competition</DialogContentText>
-              <TextField autoFocus margin="dense" id="add-season-seasonName" onChange={this.addCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addCompetitionDialogAdd()}} label="Competition name" type="text" fullWidth/>
+              <TextField autoFocus margin="dense" id="add-competition-seasonName" onChange={this.addCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addCompetitionDialogAdd()}} label="Competition name" type="text" fullWidth/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.addCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -224,10 +224,10 @@ class Season extends React.Component {
             </DialogActions>
           </Dialog>
           <Dialog open={this.state.editCompetitionDialogOpen} onClose={this.editCompetitionDialogClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="edit-season-dialog-title">Edit Competition</DialogTitle>
+            <DialogTitle id="edit-competition-dialog-title">Edit Competition</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the Competition</DialogContentText>
-              <TextField autoFocus margin="dense" id="edit-season-seasonName" onChange={this.editCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editCompetitionDialogEdit()}} label="Competition name" type="text" fullWidth defaultValue={this.state.editCompetitionDialogCompetition.originalName}/>
+              <TextField autoFocus margin="dense" id="edit-competition-seasonName" onChange={this.editCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editCompetitionDialogEdit()}} label="Competition name" type="text" fullWidth defaultValue={this.state.editCompetitionDialogCompetition.originalName}/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.editCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>

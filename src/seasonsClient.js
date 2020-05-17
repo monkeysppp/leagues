@@ -142,16 +142,64 @@ class SeasonsClient {
   }
 
   seasonsSeasonIdCompetitionsCompetitionIdFixturesPost (seasonId, competitionId, fixture) {
-
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.post(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures`, fixture, { headers: headers })
+      .then(res => {
+        return res.data
+      })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut (seasonId, competitionId, fixtureId, fixture) {}
+  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut (seasonId, competitionId, fixtureId, fixture) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures/${fixtureId}`, fixture, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
 
   seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete (seasonId, competitionId, fixtureId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
     return axios.delete(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures/${fixtureId}`, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
+
+  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost (seasonId, competitionId, fixtureId, match) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.post(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures/${fixtureId}/matches`, match, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
+
+  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut (seasonId, competitionId, fixtureId, matchId, match) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token'),
+      'content-type': 'application/json'
+    }
+    return axios.put(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures/${fixtureId}/matches/${matchId}`, match, { headers: headers })
+      .then(res => {
+        return res.data
+      })
+  }
+
+  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete (seasonId, competitionId, fixtureId, matchId) {
+    const headers = {
+      'x-csrf-token': cookies.get('X-CSRF-Token')
+    }
+    return axios.delete(`/api/v1/seasons/${seasonId}/competitions/${competitionId}/fixtures/${fixtureId}/matches/${matchId}`, { headers: headers })
       .then(res => {
         return res.data
       })

@@ -473,6 +473,231 @@ paths:
         500:
           description: "Internal server error"
     x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/fixtures/{fixtureId}/matches:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      - "Matches"
+      summary: "Match list"
+      description: "Returns a list of Matches."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An array of matches"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Match"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      - "Matches"
+      summary: "Create match"
+      description: "Create a new match with a defined start time, homeTeam and awayTeam."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "match"
+        description: "A match."
+        required: true
+        schema:
+          $ref: "#/definitions/MatchPost"
+      responses:
+        200:
+          description: "An id for the new match."
+          schema:
+            $ref: "#/definitions/ResourceId"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
+  /seasons/{seasonId}/competitions/{competitionId}/fixtures/{fixtureId}/matches/{matchId}:
+    get:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      - "Matches"
+      summary: "Match information"
+      description: "Returns an object representing this match."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdGet"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "matchId"
+        in: "path"
+        description: "id of a match."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "An object for the given match."
+          schema:
+            $ref: "#/definitions/Match"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      - "Matches"
+      summary: "Update match"
+      description: "Update the details of this match."
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "matchId"
+        in: "path"
+        description: "id of a match."
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "match"
+        description: "A match."
+        required: true
+        schema:
+          $ref: "#/definitions/MatchPost"
+      responses:
+        200:
+          description: "An object for the updated match"
+          schema:
+            $ref: "#/definitions/Match"
+        400:
+          description: "Bad request"
+        404:
+          description: "Resource not found"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "Seasons"
+      - "Competitions"
+      - "Fixtures"
+      - "Matches"
+      summary: "Delete a match"
+      description: "Delete the match of the given id"
+      operationId: "seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete"
+      parameters:
+      - name: "seasonId"
+        in: "path"
+        description: "id of a season."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "competitionId"
+        in: "path"
+        description: "id of a competition."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "fixtureId"
+        in: "path"
+        description: "id of a fixture."
+        required: true
+        type: "number"
+        format: "int32"
+      - name: "matchId"
+        in: "path"
+        description: "id of a match."
+        required: true
+        type: "number"
+        format: "int32"
+      responses:
+        200:
+          description: "Match deleted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+    x-swagger-router-controller: "Seasons"
   /seasons/{seasonId}/competitions/{competitionId}/teams:
     get:
       tags:
@@ -945,7 +1170,6 @@ definitions:
     required:
     - date
     - venue
-    - matches
     properties:
       date:
         type: "string"
@@ -953,11 +1177,6 @@ definitions:
       venue:
         type: "string"
         description: "Venue of the fixture"
-      matches:
-        type: "array"
-        description: "List of matches"
-        items:
-          $ref: "#/definitions/MatchPost"
       adjudicator:
         type: "string"
         description: "Match adjudicator"
@@ -987,26 +1206,12 @@ definitions:
       adjudicator:
         type: "string"
         description: "Match adjudicator"
-  Match:
-    type: "object"
-    properties:
-      time:
-        type: "string"
-        description: "Start time for the match"
-      homeTeam:
-        type: "integer"
-        format: "int32"
-        description: "Team id"
-      awayTeam:
-        type: "integer"
-        format: "int32"
-        description: "Team id"
-      refTeam:
-        type: "integer"
-        format: "int32"
-        description: "Team id"
   MatchPost:
     type: "object"
+    required:
+    - time
+    - homeTeam
+    - awayTeam
     properties:
       time:
         type: "string"
@@ -1020,6 +1225,33 @@ definitions:
       refTeam:
         type: "string"
         description: "Team name"
+  Match:
+    type: "object"
+    required:
+    - id
+    - time
+    - homeTeam
+    - awayTeam
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Match id"
+      time:
+        type: "string"
+        description: "Start time for the match"
+      homeTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+      awayTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
+      refTeam:
+        type: "integer"
+        format: "int32"
+        description: "Team id"
   TeamName:
     type: "object"
     properties:
@@ -1130,6 +1362,20 @@ parameters:
     name: "fixtureId"
     in: "path"
     description: "id of a fixture."
+    required: true
+    type: "number"
+    format: "int32"
+  match:
+    in: "body"
+    name: "match"
+    description: "A Match containing teams"
+    required: true
+    schema:
+      $ref: "#/definitions/MatchPost"
+  matchId:
+    name: "matchId"
+    in: "path"
+    description: "id of a match."
     required: true
     type: "number"
     format: "int32"

@@ -78,6 +78,7 @@ class League extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      initialising: true,
       seasonEditable: (this.props.editConfig && this.props.editConfig.hasOwnProperty('seasons')) ? this.props.editConfig.seasons : true,
       seasons: [],
       addSeasonDialogOpen: false,
@@ -195,6 +196,7 @@ class League extends React.Component {
       .then(seasons => {
         this.setState({
           seasons: seasons,
+          initialising: false
         })
       }).catch(() => {
         this.enqueueSnackbar('Failed to fetch season data', { variant: 'error' });
@@ -202,6 +204,14 @@ class League extends React.Component {
   }
 
   render () {
+    if (this.state.initialising) {
+      return (
+        <center>
+          <br/><br/><br/><br/><br/><br/>
+          <span>Loading...</span>
+        </center>
+      )
+    }
     const seasons = []
     this.state.seasons.forEach((season) => {
       let body

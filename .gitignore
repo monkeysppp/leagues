@@ -25,5 +25,6 @@ yarn-error.log*
 
 /cert/cert.pem
 /cert/key.pem
+/config/production.json
 /data
 /jsdoc

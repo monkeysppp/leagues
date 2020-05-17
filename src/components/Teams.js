@@ -34,7 +34,6 @@ const ExpansionPanelWrapper = withStyles(() => ({
   },
   expanded: {}
 }))(MuiExpansionPanel)
-
 const ExpansionPanelSummaryWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.heading.border,
@@ -61,14 +60,12 @@ const ExpansionPanelSummaryWrapper = withStyles(() => ({
     color: Colours.teams.heading.text
   }
 }))(MuiExpansionPanelSummary)
-
 const ExpansionPanelDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.teams.body.background,
     display: 'block',
   }
 }))(MuiExpansionPanelDetails)
-
 const ExpansionPanel = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.border,
@@ -85,7 +82,6 @@ const ExpansionPanel = withStyles(() => ({
   },
   expanded: {}
 }))(MuiExpansionPanel)
-
 const ExpansionPanelSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.heading.border,
@@ -115,7 +111,6 @@ const ExpansionPanelSummary = withStyles(() => ({
     color: Colours.teams.heading.text
   }
 }))(MuiExpansionPanelSummary)
-
 const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.contacts.background,
@@ -288,7 +283,7 @@ class Teams extends React.Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.editTeamDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.editTeamDialogAdd} variant="contained" color="primary">Edit</Button>
+              <Button onClick={this.editTeamDialogEdit} variant="contained" color="primary">Edit</Button>
             </DialogActions>
           </Dialog>
           <Dialog open={this.state.deleteTeamDialogOpen} onClose={this.deleteTeamDialogClose} aria-labelledby="form-dialog-title">

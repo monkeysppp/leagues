@@ -41,7 +41,7 @@ exports.seasonsGet = function () {
  * @returns {number} The id of the new season.  If the season already exists, the id of the existing season is returned
  **/
 exports.seasonsPost = function (seasonName) {
-  log.debug('seasonPost(seasonName) seasonName=<' + seasonName + '>')
+  log.debug(`seasonPost(seasonName) seasonName=<${seasonName}>`)
 
   if (!seasonName || seasonName.length === 0) {
     throwError('No seasonName', 400)
@@ -81,7 +81,7 @@ exports.seasonsPost = function (seasonName) {
  * @returns {object} The requested season
  **/
 exports.seasonsSeasonIdGet = function (seasonId) {
-  log.debug('seasonsSeasonIdGet(seasonId) seasonId=<' + seasonId + '>')
+  log.debug(`seasonsSeasonIdGet(seasonId) seasonId=<${seasonId}>`)
 
   if (isNaN(seasonId)) {
     throwError('Invalid seasonId', 400)
@@ -109,7 +109,7 @@ exports.seasonsSeasonIdGet = function (seasonId) {
  * @returns
  **/
 exports.seasonsSeasonIdPut = function (seasonId, seasonName) {
-  log.debug('seasonsSeasonIdPut(seasonId, seasonName) seasonId=<' + seasonId + '> seasonName=<' + seasonName + '>')
+  log.debug(`seasonsSeasonIdPut(seasonId, seasonName) seasonId=<${seasonId}> seasonName=<${seasonName}>`)
 
   if (isNaN(seasonId)) {
     throwError('Invalid seasonId', 400)
@@ -148,7 +148,7 @@ exports.seasonsSeasonIdPut = function (seasonId, seasonName) {
  * @param {number} seasonId The id of the season
  **/
 exports.seasonsSeasonIdDelete = function (seasonId) {
-  log.debug('seasonsSeasonIdDelete(seasonId) seasonId=<' + seasonId + '>')
+  log.debug(`seasonsSeasonIdDelete(seasonId) seasonId=<${seasonId}>`)
 
   if (isNaN(seasonId)) {
     throwError('Invalid seasonId', 400)
@@ -173,7 +173,7 @@ exports.seasonsSeasonIdDelete = function (seasonId) {
  * @returns {array} the competitions for that season
  **/
 exports.seasonsSeasonIdCompetitionsGet = function (seasonId) {
-  log.debug('seasonsSeasonIdCompetitionsGet(seasonId) seasonId=<' + seasonId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsGet(seasonId) seasonId=<${seasonId}>`)
   return exports.seasonsSeasonIdGet(seasonId).competitions
 }
 
@@ -186,8 +186,7 @@ exports.seasonsSeasonIdCompetitionsGet = function (seasonId) {
  * @returns {number} id for the competition. If the competition already exists, the id of the existing competition is returned
  **/
 exports.seasonsSeasonIdCompetitionsPost = function (seasonId, competitionName) {
-  log.debug('seasonsSeasonIdCompetitionsPost(seasonId, competitionName) seasonId=<' +
-    seasonId + '> competitionName=<' + competitionName + '>')
+  log.debug(`seasonsSeasonIdCompetitionsPost(seasonId, competitionName) seasonId=<${seasonId}> competitionName=<${competitionName}>`)
 
   if (!competitionName || competitionName.length === 0) {
     throwError('No competitionName', 400)
@@ -228,8 +227,7 @@ exports.seasonsSeasonIdCompetitionsPost = function (seasonId, competitionName) {
  * @returns {Object} the requested competition
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdGet = function (seasonId, competitionId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId) seasonId=<${seasonId}> competitionId=<${competitionId}>`)
 
   if (isNaN(competitionId)) {
     throwError('Invalid competitionId', 400)
@@ -258,8 +256,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdGet = function (seasonId, compet
  * @returns
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdPut = function (seasonId, competitionId, competitionName) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdPut(seasonId, competitionId, seasonName) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> competitionName=<' + competitionName + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdPut(seasonId, competitionId, seasonName) seasonId=<${seasonId}> competitionId=<${competitionId}> competitionName=<${competitionName}>`)
 
   if (isNaN(competitionId)) {
     throwError('Invalid competitionId', 400)
@@ -299,8 +296,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdPut = function (seasonId, compet
  * @param {number} competitionId The id of the competition
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdDelete = function (seasonId, competitionId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdDelete(seasonId, competitionId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdDelete(seasonId, competitionId) seasonId=<${seasonId}> competitionId=<${competitionId}>`)
 
   if (isNaN(competitionId)) {
     throwError('Invalid competitionId', 400)
@@ -326,8 +322,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdDelete = function (seasonId, com
  * @returns {array} the teams for the requested competition
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsGet = function (seasonId, competitionId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsGet(seasonId, competitionId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsGet(seasonId, competitionId) seasonId=<${seasonId}> competitionId=<${competitionId}>`)
   return exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId).teams
 }
 
@@ -341,8 +336,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsGet = function (seasonId, c
  * @returns {number} id for the team. If the team already exists, the id of the existing team is returned
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost = function (seasonId, competitionId, teamName) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(seasonId, competitionId, teamName) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> , teamName=<' + teamName + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(seasonId, competitionId, teamName) seasonId=<${seasonId}> competitionId=<${competitionId}> , teamName=<${teamName}>`)
 
   if (!teamName || teamName.length === 0) {
     throwError('No teamName', 400)
@@ -383,8 +377,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost = function (seasonId, 
  * @returns {array} the requested team
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet = function (seasonId, competitionId, teamId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet(seasonId, competitionId, teamId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet(seasonId, competitionId, teamId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}>`)
 
   if (isNaN(teamId)) {
     throwError('Ivalid teamId', 400)
@@ -414,8 +407,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet = function (seaso
  * @returns
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut = function (seasonId, competitionId, teamId, teamName) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(seasonId, competitionId, teamId, seasonName) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '> teamName=<' + teamName + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(seasonId, competitionId, teamId, seasonName) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> teamName=<${teamName}>`)
 
   if (isNaN(teamId)) {
     throwError('Invalid teamId', 400)
@@ -455,8 +447,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut = function (seaso
  * @param {number} teamId The id of the team
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete = function (seasonId, competitionId, teamId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(seasonId, competitionId, teamId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(seasonId, competitionId, teamId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}>`)
 
   if (isNaN(teamId)) {
     throwError('Invalid teamId', 400)
@@ -483,8 +474,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete = function (se
  * @returns {array} the contacts for the requested team
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsGet = function (seasonId, competitionId, teamId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsGet(seasonId, competitionId, teamId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId<' + teamId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsGet(seasonId, competitionId, teamId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}>`)
   return exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet(seasonId, competitionId, teamId).contacts
 }
 
@@ -499,8 +489,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsGet = functio
  * @returns {number} id for the contact. If the contact already exists, the id of the existing contact is returned
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = function (seasonId, competitionId, teamId, contactAddress) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(seasonId, competitionId, teamId, contactAddress) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> , teamId=<' + teamId + '> contactAddress=>' + contactAddress + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(seasonId, competitionId, teamId, contactAddress) seasonId=<${seasonId}> competitionId=<${competitionId}> , teamId=<${teamId}> contactAddress=<${contactAddress}>`)
 
   if (!contactAddress || contactAddress.length === 0) {
     throwError('No contactAddress', 400)
@@ -541,8 +530,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = functi
  * @returns {array} the requested contact
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet = function (seasonId, competitionId, teamId, contactId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet(seasonId, competitionId, teamId, contactId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '> contactId=<' + contactId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet(seasonId, competitionId, teamId, contactId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> contactId=<${contactId}>`)
 
   if (isNaN(contactId)) {
     throwError('Invalid contactId', 400)
@@ -573,8 +561,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet 
  * @returns
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut = function (seasonId, competitionId, teamId, contactId, contactAddress) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(seasonId, competitionId, teamId, contactId, contactAddress) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '> contactId=<' + contactId + '> contactAddress=<' + contactAddress + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(seasonId, competitionId, teamId, contactId, contactAddress) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> contactId=<${contactId}> contactAddress=<${contactAddress}>`)
 
   if (isNaN(contactId)) {
     throwError('Invalid contactId', 400)
@@ -618,8 +605,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut 
  * @param {number} contactId id for the contact
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete = function (seasonId, competitionId, teamId, contactId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(seasonId, competitionId, teamId, contactId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> teamId=<' + teamId + '> contactId=<' + contactId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(seasonId, competitionId, teamId, contactId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> contactId=<${contactId}>`)
 
   if (isNaN(contactId)) {
     throwError('Invalid contactId', 400)
@@ -657,8 +643,7 @@ function getTeamIdFromName (competition, teamName) {
  * @returns {array} the fixtures for the requested competition
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesGet = function (seasonId, competitionId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdFixturesGet(seasonId, competitionId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesGet(seasonId, competitionId) seasonId=<${seasonId}> competitionId=<${competitionId}>`)
   return exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId).fixtures
 }
 
@@ -669,11 +654,10 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesGet = function (seasonId
  * @param {number} competitionId id for the competition
  * @param {object} fixture to add
  *
- * @returns {number} id for the team. If the team already exists, the id of the existing team is returned
+ * @returns {number} id for the fixture.
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonId, competitionId, fixture) {
-  log.info('seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(seasonId, competitionId, fixture) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> , fixture=<' + JSON.stringify(fixture) + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> , fixture=<${JSON.stringify(fixture)}>`)
 
   if (!fixture.date) {
     throwError('No date found', 400)
@@ -683,46 +667,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonI
     throwError('No venue found', 400)
   }
 
-  if (!fixture.matches) {
-    throwError('No matches found', 400)
-  }
-
   const competition = exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId)
-  for (let matchIndex = 0; matchIndex < fixture.matches.length; matchIndex++) {
-    var homeTeam = fixture.matches[matchIndex].homeTeam
-    var awayTeam = fixture.matches[matchIndex].awayTeam
-    var refTeam = fixture.matches[matchIndex].refTeam
-
-    var homeTeamId
-    var awayTeamId
-    var refTeamId
-
-    if (!fixture.matches[matchIndex].time) {
-      throwError('Match time is not specified', 400)
-    }
-
-    try {
-      homeTeamId = getTeamIdFromName(competition, homeTeam)
-    } catch (err) {
-      throwError('Home team doesn\'t exist: ' + homeTeam, 400)
-    }
-
-    try {
-      awayTeamId = getTeamIdFromName(competition, awayTeam)
-    } catch (err) {
-      throwError('Away team doesn\'t exist: ' + awayTeam, 400)
-    }
-
-    try {
-      refTeamId = getTeamIdFromName(competition, refTeam)
-    } catch (err) {
-      throwError('Ref team doesn\'t exist: ' + refTeam, 400)
-    }
-
-    fixture.matches[matchIndex].homeTeam = homeTeamId
-    fixture.matches[matchIndex].awayTeam = awayTeamId
-    fixture.matches[matchIndex].refTeam = refTeamId
-  }
 
   const fixtureCount = competition.fixtures.length
   let nextFixtureId = 0
@@ -737,7 +682,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonI
   newFixture.id = nextFixtureId + 1
   newFixture.date = fixture.date
   newFixture.venue = fixture.venue
-  newFixture.matches = fixture.matches
+  newFixture.matches = []
   if (typeof fixture.adjudicator === 'string' && fixture.adjudicator.length > 0) {
     try {
       newFixture.adjudicator = getTeamIdFromName(competition, fixture.adjudicator)
@@ -756,12 +701,12 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonI
  *
  * @param {number} seasonId id for the season
  * @param {number} competitionId id for the competition
+ * @param {number} fixtureId id for the fixture
  *
  * @returns {array} the requested fixture
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet = function (seasonId, competitionId, fixtureId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> fixtureId=<' + fixtureId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}>`)
 
   if (isNaN(fixtureId)) {
     throwError('Ivalid fixtureId', 400)
@@ -791,8 +736,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet = function 
  * @returns
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function (seasonId, competitionId, fixtureId, fixture) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(seasonId, competitionId, fixture) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> fixture=<' + fixture + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> fixture=<${JSON.stringify(fixture)}>`)
 
   if (isNaN(fixtureId)) {
     throwError('Invalid fixtureId', 400)
@@ -806,48 +750,8 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function 
     throwError('No venue found', 400)
   }
 
-  if (!fixture.matches) {
-    throwError('No matches found', 400)
-  }
-
   const competition = exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId)
   let fixtureToReplace
-  for (let matchIndex = 0; matchIndex < fixture.matches.length; matchIndex++) {
-    var homeTeam = fixture.matches[matchIndex].homeTeam
-    var awayTeam = fixture.matches[matchIndex].awayTeam
-    var refTeam = fixture.matches[matchIndex].refTeam
-
-    var homeTeamId
-    var awayTeamId
-    var refTeamId
-
-    if (!fixture.matches[matchIndex].time) {
-      throwError('Match time is not specified', 400)
-    }
-
-    try {
-      homeTeamId = getTeamIdFromName(competition, homeTeam)
-    } catch (err) {
-      throwError('Home team doesn\'t exist: ' + homeTeam, 400)
-    }
-
-    try {
-      awayTeamId = getTeamIdFromName(competition, awayTeam)
-    } catch (err) {
-      throwError('Away team doesn\'t exist: ' + awayTeam, 400)
-    }
-
-    try {
-      refTeamId = getTeamIdFromName(competition, refTeam)
-    } catch (err) {
-      throwError('Ref team doesn\'t exist: ' + refTeam, 400)
-    }
-
-    fixture.matches[matchIndex].homeTeam = homeTeamId
-    fixture.matches[matchIndex].awayTeam = awayTeamId
-    fixture.matches[matchIndex].refTeam = refTeamId
-  }
-
   const fixtureCount = competition.fixtures.length
   for (let i = 0; i < fixtureCount; i++) {
     if (competition.fixtures[i].id === fixtureId) {
@@ -859,7 +763,6 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function 
   if (fixtureToReplace) {
     fixtureToReplace.date = fixture.date
     fixtureToReplace.venue = fixture.venue
-    fixtureToReplace.matches = fixture.matches
     if (typeof fixture.adjudicator === 'string' && fixture.adjudicator.length > 0) {
       try {
         fixtureToReplace.adjudicator = getTeamIdFromName(competition, fixture.adjudicator)
@@ -884,8 +787,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function 
  * @param {number} fixtureId The id of the fixture
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete = function (seasonId, competitionId, fixtureId) {
-  log.debug('seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(seasonId, competitionId, fixtureId) seasonId=<' +
-    seasonId + '> competitionId=<' + competitionId + '> fixtureId=<' + fixtureId + '>')
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(seasonId, competitionId, fixtureId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}>`)
 
   if (isNaN(fixtureId)) {
     throwError('Invalid fixtureId', 400)
@@ -896,6 +798,240 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete = functi
   for (let i = 0; i < fixtureCount; i++) {
     if (fixtures[i].id === fixtureId) {
       fixtures.splice(i, 1)
+      dataFile.writeData(seasonsData)
+      return
+    }
+  }
+}
+
+/**
+ * Get the matches for a given fixture
+ *
+ * @param {number} seasonId id for the season
+ * @param {number} competitionId id for the competition
+ * @param {number} fixtureId id for the fixture
+ *
+ * @returns {array} the fixtures for the requested competition
+ **/
+exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesGet = function (seasonId, competitionId, fixtureId) {
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesGet(seasonId, competitionId, fixtureId) seasonId=<${seasonId}> competitionId=<${competitionId} fixtureId=<${fixtureId}>`)
+  return exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId).matches
+}
+
+/**
+ * Create a new match
+ *
+ * @param {number} seasonId id for the season
+ * @param {number} competitionId id for the competition
+ * @param {number} fixtureId id for the fixture
+ * @param {object} match to add
+ *
+ * @returns {number} id for the match.
+ **/
+exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost = function (seasonId, competitionId, fixtureId, match) {
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}>, match=<${JSON.stringify(match)}>`)
+
+  if (!match.time) {
+    throwError('No time found', 400)
+  }
+
+  if (!match.homeTeam) {
+    throwError('No homeTeam found', 400)
+  }
+
+  if (!match.awayTeam) {
+    throwError('No awayTeam found', 400)
+  }
+
+  const competition = exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId)
+  const homeTeam = match.homeTeam
+  const awayTeam = match.awayTeam
+  const refTeam = match.refTeam
+
+  let homeTeamId
+  let awayTeamId
+  let refTeamId
+
+  try {
+    homeTeamId = getTeamIdFromName(competition, homeTeam)
+  } catch (err) {
+    throwError('Home team doesn\'t exist: ' + homeTeam, 400)
+  }
+
+  try {
+    awayTeamId = getTeamIdFromName(competition, awayTeam)
+  } catch (err) {
+    throwError('Away team doesn\'t exist: ' + awayTeam, 400)
+  }
+
+  if (refTeam) {
+    try {
+      refTeamId = getTeamIdFromName(competition, refTeam)
+    } catch (err) {
+      throwError('Reffing team doesn\'t exist: ' + awayTeam, 400)
+    }
+  }
+
+  const fixture = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId)
+  const matchCount = fixture.matches.length
+  let nextMatchId = 0
+  for (let i = 0; i < matchCount; i++) {
+    // Remember the highest id we see
+    if (fixture.matches[i].id > nextMatchId) {
+      nextMatchId = fixture.matches[i].id
+    }
+  }
+
+  const newMatch = {}
+  newMatch.id = nextMatchId + 1
+  newMatch.time = match.time
+  newMatch.homeTeam = homeTeamId
+  newMatch.awayTeam = awayTeamId
+  if (refTeamId) {
+    newMatch.refTeam = refTeamId
+  }
+  fixture.matches.push(newMatch)
+
+  dataFile.writeData(seasonsData)
+  return { id: newMatch.id }
+}
+
+/**
+ * Get the match
+ *
+ * @param {number} seasonId id for the season
+ * @param {number} competitionId id for the competition
+ * @param {number} fixtureId id for the fixture
+ * @param {number} matchId id for the match
+ *
+ * @returns {array} the requested match
+ **/
+exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdGet = function (seasonId, competitionId, fixtureId, matchId) {
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdGet(seasonId, competitionId, fixtureId, matchId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> matchId=<${matchId}>`)
+
+  if (isNaN(matchId)) {
+    throwError('Ivalid matchId', 400)
+  }
+
+  const fixture = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId)
+  const matchCount = fixture.matches.length
+  log.debug(`Found ${matchCount} matches`)
+  for (let i = 0; i < matchCount; i++) {
+    if (fixture.matches[i].id === matchId) {
+      log.debug(`Match ${matchId} found`)
+      return fixture.matches[i]
+    }
+  }
+
+  throwError('Match not found', 404)
+}
+
+/**
+ * Update the match
+ *
+ * @param {number} seasonId The id of the season
+ * @param {number} competitionId The id of the competition
+ * @param {number} fixtureId The id of the fixture
+ * @param {number} matchId id for the match
+ * @param {object} match the new details for the match
+ *
+ * @returns
+ **/
+exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut = function (seasonId, competitionId, fixtureId, matchId, match) {
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> matchId=<${matchId}> match=<${JSON.stringify(match)}>`)
+
+  if (isNaN(matchId)) {
+    throwError('Invalid matchId', 400)
+  }
+
+  if (!match.time) {
+    throwError('No time found', 400)
+  }
+
+  if (!match.homeTeam) {
+    throwError('No homeTeam found', 400)
+  }
+
+  if (!match.awayTeam) {
+    throwError('No awayTeam found', 400)
+  }
+
+  const competition = exports.seasonsSeasonIdCompetitionsCompetitionIdGet(seasonId, competitionId)
+  const homeTeam = match.homeTeam
+  const awayTeam = match.awayTeam
+  const refTeam = match.refTeam
+
+  let homeTeamId
+  let awayTeamId
+  let refTeamId
+
+  try {
+    homeTeamId = getTeamIdFromName(competition, homeTeam)
+  } catch (err) {
+    throwError('Home team doesn\'t exist: ' + homeTeam, 400)
+  }
+
+  try {
+    awayTeamId = getTeamIdFromName(competition, awayTeam)
+  } catch (err) {
+    throwError('Away team doesn\'t exist: ' + awayTeam, 400)
+  }
+
+  if (refTeam) {
+    try {
+      refTeamId = getTeamIdFromName(competition, refTeam)
+    } catch (err) {
+      throwError('Reffing team doesn\'t exist: ' + awayTeam, 400)
+    }
+  }
+
+  let matchToReplace
+  const fixture = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId)
+  const matchCount = fixture.matches.length
+  for (let i = 0; i < matchCount; i++) {
+    // Remember the highest id we see
+    if (fixture.matches[i].id === matchId) {
+      matchToReplace = fixture.matches[i]
+      break
+    }
+  }
+
+  if (matchToReplace) {
+    matchToReplace.time = match.time
+    matchToReplace.homeTeam = homeTeamId
+    matchToReplace.awayTeam = awayTeamId
+    if (refTeamId) {
+      matchToReplace.refTeam = refTeamId
+    } else {
+      delete matchToReplace.refTeam
+    }
+
+    dataFile.writeData(seasonsData)
+    return matchToReplace
+  }
+  throwError('Match not found', 404)
+}
+
+/**
+ * Delete a specific match
+ *
+ * @param {number} seasonId The id of the season
+ * @param {number} competitionId The id of the competition
+ * @param {number} fixtureId The id of the fixture
+ * @param {number} matchId id for the match
+ **/
+exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete = function (seasonId, competitionId, fixtureId, matchId) {
+  log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete(seasonId, competitionId, fixtureId, matchId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> matchId=<${matchId}>`)
+
+  if (isNaN(matchId)) {
+    throwError('Invalid matchId', 400)
+  }
+
+  const matches = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesGet(seasonId, competitionId, fixtureId)
+  const matchCount = matches.length
+  for (let i = 0; i < matchCount; i++) {
+    if (matches[i].id === matchId) {
+      matches.splice(i, 1)
       dataFile.writeData(seasonsData)
       return
     }
