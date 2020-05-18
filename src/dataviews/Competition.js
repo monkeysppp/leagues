@@ -1,9 +1,8 @@
 import React from 'react'
 
-import Fixtures from'./Fixtures.js'
-import Teams from'./Teams.js'
-import Matches from'./Matches.js'
-import Colours from '../Colours.js'
+import Fixtures from './Fixtures.js'
+import Teams from './Teams.js'
+import Matches from './Matches.js'
 
 class Competition extends React.Component {
   constructor(props) {

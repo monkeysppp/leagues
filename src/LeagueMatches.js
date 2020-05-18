@@ -1,5 +1,5 @@
 import React from 'react'
-import League from'./components/League.js'
+import League from'./dataviews/League.js'
 
 const editConfig = {
   seasons: false,

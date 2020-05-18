@@ -12,7 +12,7 @@ import PopulateLeagues from './PopulateLeagues.js'
 
 import SeasonsClient from './seasonsClient.js'
 import Cookies from 'universal-cookie'
-// import jsonwebtoken from 'jsonwebtoken'
+
 const cookies = new Cookies()
 
 class Main extends React.Component {
@@ -33,7 +33,7 @@ class Main extends React.Component {
             <LeagueMatches utils={this.props.utils}/>
           </Route>
           <Route exact path='/ui/PopulateLeagues'>
-            <PopulateLeagues />
+            <PopulateLeagues utils={this.props.utils}/>
           </Route>
           <Route exact path='/ui/EmailReminders'>
             <EmailReminders />
@@ -67,34 +67,9 @@ class App extends React.Component {
     }
     this.seasonsClient = new SeasonsClient()
     this.utils = {
-      seasonsClient: this.seasonsClient,
-      enqueueSnackbar: this.enqueueSnackbar
+      seasonsClient: this.seasonsClient
     }
-    // this.checkLoggedIn()
   }
-
-  // Can't do this as we can't access the JWT as it is httponly
-  // checkLoggedIn () {
-  //   if (typeof cookies.get('user') === 'string' && typeof cookies.get('jwt')) {
-  //     try {
-  //       const token = jsonwebtoken.verify(cookies.get('jwt'), 'changeThisSecret')
-  //       const dateNow = new Date()
-  //       const timeNow = dateNow.getTime()
-  //       if (timeNow < token.exp) {
-  //         this.setState({
-  //           username: token.username,
-  //           loggedIn: true
-  //         })
-  //         return
-  //       }
-  //     } catch (err) {
-  //     }
-  //   }
-  //   this.setState({
-  //     username: '',
-  //     loggedIn: false
-  //   })
-  // }
 
   render () {
     return (
@@ -106,5 +81,4 @@ class App extends React.Component {
   }
 }
 
-// export default withCookies(App)
 export default App

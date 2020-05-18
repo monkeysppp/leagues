@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 
 class SeasonsClient {
-  seasonsGet () {
+async seasonsGet () {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -13,7 +13,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsPost (seasonName) {
+async seasonsPost (seasonName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -24,7 +24,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdPut (seasonId, seasonName) {
+async seasonsSeasonIdPut (seasonId, seasonName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -35,7 +35,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdDelete (seasonId) {
+async seasonsSeasonIdDelete (seasonId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -45,7 +45,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsPost (seasonId, competitionName) {
+async seasonsSeasonIdCompetitionsPost (seasonId, competitionName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -56,7 +56,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdPut (seasonId, competitionId, competitionName) {
+async seasonsSeasonIdCompetitionsCompetitionIdPut (seasonId, competitionId, competitionName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -67,7 +67,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdDelete (seasonId, competitionId) {
+async seasonsSeasonIdCompetitionsCompetitionIdDelete (seasonId, competitionId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -77,7 +77,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsPost (seasonId, competitionId, teamName) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsPost (seasonId, competitionId, teamName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -88,7 +88,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut (seasonId, competitionId, teamId, teamName) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut (seasonId, competitionId, teamId, teamName) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -99,7 +99,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete (seasonId, competitionId, teamId) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete (seasonId, competitionId, teamId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -109,7 +109,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost (seasonId, competitionId, teamId, contactAddress) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost (seasonId, competitionId, teamId, contactAddress) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -120,7 +120,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut (seasonId, competitionId, teamId, contactId, contactAddress) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut (seasonId, competitionId, teamId, contactId, contactAddress) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -131,7 +131,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete (seasonId, competitionId, teamId, contactId) {
+async seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete (seasonId, competitionId, teamId, contactId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -141,7 +141,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesPost (seasonId, competitionId, fixture) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesPost (seasonId, competitionId, fixture) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -152,7 +152,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut (seasonId, competitionId, fixtureId, fixture) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut (seasonId, competitionId, fixtureId, fixture) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -163,7 +163,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete (seasonId, competitionId, fixtureId) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete (seasonId, competitionId, fixtureId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }
@@ -173,7 +173,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost (seasonId, competitionId, fixtureId, match) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost (seasonId, competitionId, fixtureId, match) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -184,7 +184,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut (seasonId, competitionId, fixtureId, matchId, match) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut (seasonId, competitionId, fixtureId, matchId, match) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
@@ -195,7 +195,7 @@ class SeasonsClient {
       })
   }
 
-  seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete (seasonId, competitionId, fixtureId, matchId) {
+async seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete (seasonId, competitionId, fixtureId, matchId) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token')
     }

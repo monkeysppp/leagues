@@ -4,6 +4,19 @@ Node.js app for managing Volleyball Leagues
 
 ![League Fixtures](leagueFixtures.jpg)
 
+
+## What is it?
+
+## What does it do?
+
+## What does it _not_ do?
+
+## How do I use it?
+
+### Prereqs
+### Setup and Install
+### Running
+
 ---
 
 Useful docs:

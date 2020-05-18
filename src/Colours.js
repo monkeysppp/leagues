@@ -30,7 +30,7 @@ const Colours = {
     },
     body: {
       // border: '#',
-      background: '#',
+      background: '#ffffff',
       text: '#ffffff'
     },
     iconStyle: {

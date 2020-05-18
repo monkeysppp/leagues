@@ -4,7 +4,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -31,13 +30,16 @@ import Colours from '../Colours.js'
 const ExpansionPanelWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.border,
-    margin: '15px 0',
+    margin: '0px 0px 6px',
     boxShadow: 'none',
     '&:before': {
       display: 'none',
     },
     '&$expanded': {
-      margin: '15px 0',
+      margin: '0px 0px 6px',
+    },
+    '&$expanded:last-child': {
+      margin: '0px 0px 6px',
     },
   },
   expanded: {}
@@ -72,6 +74,7 @@ const ExpansionPanelDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.fixtures.body.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 const ExpansionPanel = withStyles(() => ({
@@ -123,6 +126,7 @@ const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.matches.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 
@@ -185,10 +189,10 @@ class Fixtures extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Fixture on ' + fixture.date + ' added', { variant: 'success' });
+          this.enqueueSnackbar('Fixture on ' + fixture.date + ' added', { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add fixture on ' + fixture.date, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add fixture on ' + fixture.date, { variant: 'error' })
         })
       .then(() => {
         this.setState({
@@ -244,10 +248,10 @@ class Fixtures extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar(`Fixture updated to ${fixture.date} at ${fixture.venue}`, { variant: 'success' });
+          this.enqueueSnackbar(`Fixture updated to ${fixture.date} at ${fixture.venue}`, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar(`Failed to edit fixture on ${this.state.editFixtureDialogFixture.originalDate}`, { variant: 'error' });
+          this.enqueueSnackbar(`Failed to edit fixture on ${this.state.editFixtureDialogFixture.originalDate}`, { variant: 'error' })
         })
   }
 
@@ -352,9 +356,13 @@ class Fixtures extends React.Component {
                 <br/>
                 <TextField margin="dense" id="add-fixture-venue" onChange={this.addFixtureDialogFixtureVenueChange} label="Venue" type="text" />
                 <br/>
-                <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.addFixtureDialogFixtureAdjudicator} onChange={this.addFixtureDialogFixtureAdjudicatorChange}>
-                  {teamSelectorItems}
-                </Select>
+                <br/>
+                <FormControl>
+                  <InputLabel shrink id="demo-simple-select-placeholder-label-label">Adjudicator</InputLabel>
+                  <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.addFixtureDialogFixtureAdjudicator} onChange={this.addFixtureDialogFixtureAdjudicatorChange}>
+                    {teamSelectorItems}
+                  </Select>
+                </FormControl>
                 <br/><br/>
               </MuiPickersUtilsProvider>
             </DialogContent>
@@ -372,10 +380,15 @@ class Fixtures extends React.Component {
                 <br/>
                 <TextField margin="dense" id="edit-fixture-venue" value={this.state.editFixtureDialogFixture.venue} onChange={this.editFixtureDialogFixtureVenueChange} label="Venue" type="text" />
                 <br/>
-                <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.editFixtureDialogFixture.adjudicator} onChange={this.editFixtureDialogFixtureAdjudicatorChange}>
-                  {teamSelectorItems}
-                </Select>
-                <br/><br/>
+                <br/>
+                <FormControl>
+                  <InputLabel shrink id="demo-simple-select-placeholder-label-label">Adjudicator</InputLabel>
+                  <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.editFixtureDialogFixture.adjudicator} onChange={this.editFixtureDialogFixtureAdjudicatorChange}>
+                    {teamSelectorItems}
+                  </Select>
+                </FormControl>
+                <br/>
+                <br/>
               </MuiPickersUtilsProvider>
             </DialogContent>
             <DialogActions>

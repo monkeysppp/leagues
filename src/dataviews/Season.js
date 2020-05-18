@@ -71,6 +71,7 @@ const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.competitions.body.background,
     display: 'block',
+    padding: '6px'
   },
 }))(MuiExpansionPanelDetails)
 
@@ -119,10 +120,10 @@ class Season extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Competition ' + competitionName + ' added', { variant: 'success' });
+          this.enqueueSnackbar('Competition ' + competitionName + ' added', { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add competition ' + competitionName, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add competition ' + competitionName, { variant: 'error' })
         })
   }
 
@@ -145,10 +146,10 @@ class Season extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Competition name updated to ' + competition.name, { variant: 'success' });
+          this.enqueueSnackbar('Competition name updated to ' + competition.name, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to update competition from ' + competition.originalName + ' to ' + competition.name, { variant: 'error' });
+          this.enqueueSnackbar('Failed to update competition from ' + competition.originalName + ' to ' + competition.name, { variant: 'error' })
         })
   }
 

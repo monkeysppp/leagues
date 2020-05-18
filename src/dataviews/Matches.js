@@ -11,13 +11,16 @@ import Colours from '../Colours.js'
 const ExpansionPanelWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.matches.border,
-    margin: '15px 0',
+    margin: '0px',
     boxShadow: 'none',
     '&:before': {
       display: 'none',
     },
     '&$expanded': {
       margin: '15px 0',
+    },
+    '&$expanded:last-child': {
+      margin: '0px 0px 6px',
     },
   },
   expanded: {}
@@ -52,6 +55,7 @@ const ExpansionPanelDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.matches.body.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 const ExpansionPanel = withStyles(() => ({
@@ -103,6 +107,7 @@ const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.matches.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 

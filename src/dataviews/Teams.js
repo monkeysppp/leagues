@@ -23,13 +23,16 @@ import Colours from '../Colours.js'
 const ExpansionPanelWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.border,
-    margin: '15px 0',
+    margin: '0px',
     boxShadow: 'none',
     '&:before': {
       display: 'none',
     },
     '&$expanded': {
       margin: '15px 0',
+    },
+    '&$expanded:last-child': {
+      margin: '0px 0px 6px',
     },
   },
   expanded: {}
@@ -64,6 +67,7 @@ const ExpansionPanelDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.teams.body.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 const ExpansionPanel = withStyles(() => ({
@@ -115,6 +119,7 @@ const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.contacts.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 
@@ -164,10 +169,10 @@ class Teams extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Team ' + teamName + ' added', { variant: 'success' });
+          this.enqueueSnackbar('Team ' + teamName + ' added', { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add team ' + teamName, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add team ' + teamName, { variant: 'error' })
         })
   }
 
@@ -190,10 +195,10 @@ class Teams extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Team name updated to ' + team.name, { variant: 'success' });
+          this.enqueueSnackbar('Team name updated to ' + team.name, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to update team from ' + team.originalName + ' to ' + team.name, { variant: 'error' });
+          this.enqueueSnackbar('Failed to update team from ' + team.originalName + ' to ' + team.name, { variant: 'error' })
         })
   }
 
@@ -289,7 +294,7 @@ class Teams extends React.Component {
           <Dialog open={this.state.deleteTeamDialogOpen} onClose={this.deleteTeamDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-team-dialog-title">Delete Team</DialogTitle>
             <DialogContent>
-              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteTeamDialogDelete()}}>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?</DialogContentText>
+              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteTeamDialogDelete()}}>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?<br/><br/>WARNING: deleting a team when it still has fixtures will break the seaon!</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteTeamDialogClose} variant="outlined" color="primary">Cancel</Button>

@@ -60,10 +60,10 @@ class Team extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Contact ' + contactAddress + ' added', { variant: 'success' });
+          this.enqueueSnackbar('Contact ' + contactAddress + ' added', { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add Contact ' + contactAddress, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add Contact ' + contactAddress, { variant: 'error' })
         })
   }
 
@@ -86,10 +86,10 @@ class Team extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Contact address updated to ' + contact.email, { variant: 'success' });
+          this.enqueueSnackbar('Contact address updated to ' + contact.email, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to update contact email from ' + contact.originalEmail + ' to ' + contact.email, { variant: 'error' });
+          this.enqueueSnackbar('Failed to update contact email from ' + contact.originalEmail + ' to ' + contact.email, { variant: 'error' })
         })
   }
 

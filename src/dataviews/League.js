@@ -71,6 +71,7 @@ const ExpansionPanelDetails = withStyles(() => ({
   root: {
     background: Colours.seasons.body.background,
     display: 'block',
+    padding: '6px'
   }
 }))(MuiExpansionPanelDetails)
 
@@ -130,10 +131,10 @@ class League extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Season ' + seasonName + ' added', { variant: 'success' });
+          this.enqueueSnackbar('Season ' + seasonName + ' added', { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to add season ' + seasonName, { variant: 'error' });
+          this.enqueueSnackbar('Failed to add season ' + seasonName, { variant: 'error' })
         })
   }
 
@@ -156,10 +157,10 @@ class League extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar('Season name updated to ' + season.name, { variant: 'success' });
+          this.enqueueSnackbar('Season name updated to ' + season.name, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar('Failed to update season from ' + season.originalName + ' to ' + season.name, { variant: 'error' });
+          this.enqueueSnackbar('Failed to update season from ' + season.originalName + ' to ' + season.name, { variant: 'error' })
         })
   }
 
@@ -199,7 +200,7 @@ class League extends React.Component {
           initialising: false
         })
       }).catch(() => {
-        this.enqueueSnackbar('Failed to fetch season data', { variant: 'error' });
+        this.enqueueSnackbar('Failed to fetch season data', { variant: 'error' })
       })
   }
 
@@ -242,6 +243,10 @@ class League extends React.Component {
           <div>
             {seasons}
           </div>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
           <Dialog open={this.state.addSeasonDialogOpen} onClose={this.addSeasonDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="add-season-dialog-title">Add Season</DialogTitle>
             <DialogContent>

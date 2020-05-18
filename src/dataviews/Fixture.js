@@ -1,6 +1,7 @@
 import React from 'react'
 import { AddCircleOutlined, DeleteOutlined, EditOutlined } from '@material-ui/icons'
-
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -80,10 +81,10 @@ class Fixture extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar(`Match between ${match.homeTeam} and ${match.awayTeam} added`, { variant: 'success' });
+          this.enqueueSnackbar(`Match between ${match.homeTeam} and ${match.awayTeam} added`, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar(`Failed to add Match between ${match.homeTeam} and ${match.awayTeam}`, { variant: 'error' });
+          this.enqueueSnackbar(`Failed to add Match between ${match.homeTeam} and ${match.awayTeam}`, { variant: 'error' })
         })
       .then(() => {
         this.setState({
@@ -119,7 +120,11 @@ class Fixture extends React.Component {
       teamMap[`id-${team.id}`] = team
     })
     const time = parse(match.time, 'HH:mm', new Date('2000-01-01T19:00:00'))
-    this.setState({ editMatchDialogOpen: true, editMatchDialogMatch: { id: match.id, time: time, homeTeam: teamMap[`id-${match.homeTeam}`].name, awayTeam: teamMap[`id-${match.awayTeam}`].name, refTeam: teamMap[`id-${match.refTeam}`].name, originalTime: match.time, originalHomeTeam: teamMap[`id-${match.homeTeam}`].name, originalAwayTeam: teamMap[`id-${match.awayTeam}`].name } })
+    let refTeam = 'None'
+    if (match.refTeam) {
+      refTeam = teamMap[`id-${match.refTeam}`].name
+    }
+    this.setState({ editMatchDialogOpen: true, editMatchDialogMatch: { id: match.id, time: time, homeTeam: teamMap[`id-${match.homeTeam}`].name, awayTeam: teamMap[`id-${match.awayTeam}`].name, refTeam: refTeam, originalTime: match.time, originalHomeTeam: teamMap[`id-${match.homeTeam}`].name, originalAwayTeam: teamMap[`id-${match.awayTeam}`].name } })
   }
 
   editMatchDialogClose () {
@@ -140,10 +145,10 @@ class Fixture extends React.Component {
       .then(
         () => {
           this.refreshData()
-          this.enqueueSnackbar(`Match updated to ${match.time} between ${match.homeTeam} and ${match.awayTeam}`, { variant: 'success' });
+          this.enqueueSnackbar(`Match updated to ${match.time} between ${match.homeTeam} and ${match.awayTeam}`, { variant: 'success' })
         },
         (err) => {
-          this.enqueueSnackbar(`Failed to edit Match at ${this.state.editMatchDialogMatch.originalTime} between ${this.state.editMatchDialogMatch.originalHomeTeam} and ${this.state.editMatchDialogMatch.originalAwayTeam}`, { variant: 'error' });
+          this.enqueueSnackbar(`Failed to edit Match at ${this.state.editMatchDialogMatch.originalTime} between ${this.state.editMatchDialogMatch.originalHomeTeam} and ${this.state.editMatchDialogMatch.originalAwayTeam}`, { variant: 'error' })
         })
   }
 
@@ -213,9 +218,23 @@ class Fixture extends React.Component {
     const matches = []
 
     this.props.fixture.matches.forEach((match) => {
-      let matchString = <span style={Colours.matches.iconStyle}>{match.time} : {teamMap[`id-${match.homeTeam}`].name} v {teamMap[`id-${match.awayTeam}`].name}</span>
+      let homeTeam = 'None'
+      let awayTeam = 'None'
+      let refTeam = 'None'
+
+      try {
+        homeTeam = teamMap[`id-${match.homeTeam}`].name
+      } catch {}
+      try {
+        awayTeam = teamMap[`id-${match.awayTeam}`].name
+      } catch {}
+      try {
+        refTeam = teamMap[`id-${match.refTeam}`].name
+      } catch {}
+
+      let matchString = <span style={Colours.matches.iconStyle}>{match.time} : {homeTeam} v {awayTeam}</span>
       if (match.refTeam) {
-        matchString = <span style={Colours.matches.iconStyle}>{match.time} : {teamMap[`id-${match.homeTeam}`].name} v {teamMap[`id-${match.awayTeam}`].name} ({teamMap[`id-${match.refTeam}`].name} ref)</span>
+        matchString = <span style={Colours.matches.iconStyle}>{match.time} : {homeTeam} v {awayTeam} ({refTeam} ref)</span>
       }
       matches.push(<div key={match.id}>
         {matchString}
@@ -244,18 +263,30 @@ class Fixture extends React.Component {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.addMatchDialogMatchTime} onChange={this.addMatchDialogMatchTimeChange} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
             <br/>
-            <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.addMatchDialogMatchHome} onChange={this.addMatchDialogMatchHomeChange}>
-              {teamSelectorItems}
-            </Select>
+            <FormControl>
+              <InputLabel shrink id="home-team-label">Home&nbsp;Team</InputLabel>
+              <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.addMatchDialogMatchHome} onChange={this.addMatchDialogMatchHomeChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
             <br/>
-            <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.addMatchDialogMatchAway} onChange={this.addMatchDialogMatchAwayChange}>
-              {teamSelectorItems}
-            </Select>
             <br/>
-            <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.addMatchDialogMatchRef} onChange={this.addMatchDialogMatchRefChange}>
-              {teamSelectorItems}
-            </Select>
-            <br/><br/>
+            <FormControl>
+              <InputLabel shrink id="away-team-label">Away&nbsp;Team</InputLabel>
+              <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.addMatchDialogMatchAway} onChange={this.addMatchDialogMatchAwayChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
+            <br/>
+            <br/>
+            <FormControl>
+              <InputLabel shrink id="ref-team-label">Reffing&nbsp;Team</InputLabel>
+              <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.addMatchDialogMatchRef} onChange={this.addMatchDialogMatchRefChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
+            <br/>
+            <br/>
           </MuiPickersUtilsProvider>
         </DialogContent>
         <DialogActions>
@@ -270,17 +301,28 @@ class Fixture extends React.Component {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.editMatchDialogMatch.time} onChange={this.editMatchDialogMatchTimeChange} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
             <br/>
-            <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.editMatchDialogMatch.homeTeam} onChange={this.editMatchDialogMatchHomeChange}>
-              {teamSelectorItems}
-            </Select>
+            <FormControl>
+              <InputLabel shrink id="home-team-label">Home&nbsp;Team</InputLabel>
+              <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.editMatchDialogMatch.homeTeam} onChange={this.editMatchDialogMatchHomeChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
             <br/>
-            <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.editMatchDialogMatch.awayTeam} onChange={this.editMatchDialogMatchAwayChange}>
-              {teamSelectorItems}
-            </Select>
             <br/>
-            <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.editMatchDialogMatch.refTeam} onChange={this.editMatchDialogMatchRefChange}>
-              {teamSelectorItems}
-            </Select>
+            <FormControl>
+              <InputLabel shrink id="away-team-label">Away&nbsp;Team</InputLabel>
+              <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.editMatchDialogMatch.awayTeam} onChange={this.editMatchDialogMatchAwayChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
+            <br/>
+            <br/>
+            <FormControl>
+              <InputLabel shrink id="reffing-team-label">Reffing&nbsp;Team</InputLabel>
+              <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.editMatchDialogMatch.refTeam} onChange={this.editMatchDialogMatchRefChange}>
+                {teamSelectorItems}
+              </Select>
+            </FormControl>
             <br/><br/>
           </MuiPickersUtilsProvider>
         </DialogContent>
