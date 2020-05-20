@@ -1,12 +1,12 @@
 
 const Colours = {
   seasons: {
-    border: '#2C81d6', // 'rgba(0, 0, 120, .125)',
-    background: '#ffffff', // 'rgba(200, 200, 250, .125)',
+    border: '#2C81d6',
+    background: '#ffffff',
     // text: '',
     heading: {
-      border: '#3C91E6', // rgba(0, 0, 120, .125)
-      background: '#3C91E6', // rgba(120, 120, 255, .05)
+      border: '#3C91E6',
+      background: '#3C91E6',
       text: '#ffffff'
     },
     body: {
@@ -102,6 +102,24 @@ const Colours = {
     body: {
       // border: '#',
       background: '#',
+      text: '#ffffff'
+    },
+    iconStyle: {
+      color: '#ffffff'
+    }
+  },
+  emailReminders: {
+    border: '#2C81d6',
+    background: '#ffffff',
+    // text: '',
+    heading: {
+      border: '#3C91E6',
+      background: '#3C91E6',
+      text: '#ffffff'
+    },
+    body: {
+      // border: '#B0BAC5',
+      background: 'rgba(220, 220, 255, .01)',
       text: '#ffffff'
     },
     iconStyle: {

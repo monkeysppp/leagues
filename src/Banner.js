@@ -48,7 +48,7 @@ class Banner extends React.Component {
             <Typography variant="h6" className={classes.title}>
               Leagues
             </Typography>
-            <NavLink to='/auth/logout' className="whiteLink">Logout</NavLink>
+            <a href="/auth/logout" className="whiteLink">Logout</a>
           </Toolbar>
         </AppBar>
       )

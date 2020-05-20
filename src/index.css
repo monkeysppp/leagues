@@ -12,7 +12,7 @@ code {
     monospace;
 } */
 
-.seasonBanner {
+/* .seasonBanner {
   background-color: #f5f5f5;
 }
 
@@ -61,7 +61,7 @@ div.contactbox
 
 div.narrow {
   display: table;
-}
+} */
 
 span.section-heading {
   padding: 12px;
@@ -125,7 +125,7 @@ p
 }
 
 
-@media only screen and (min-device-width: 641px) {
+@media only screen and (min-device-width: 900px) {
   html {
     border: 0px;
     height: 100%;
@@ -273,7 +273,7 @@ p
   }
 }
 
-@media only screen and (max-device-width: 640px) {
+@media only screen and (max-device-width: 900px) {
   html {
     height: 100%;
     width: 100%;
