@@ -7,6 +7,7 @@ import { withSnackbar  } from 'notistack'
 
 import League from'./dataviews/League.js'
 import ProcessCSV from './populate/ProcessCSV.js'
+import Colours from './Colours.js'
 
 const editConfig = {
   seasons: false,
@@ -25,10 +26,10 @@ class PopulateLeagues extends React.Component {
       season: []
     }
 
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.enqueueSnackbar
     this.utils = {
-      seasonsClient: {
+      leaguesAPIClient: {
         seasonsGet: () => {
           return Promise.resolve(this.state.season)
         }
@@ -69,13 +70,13 @@ class PopulateLeagues extends React.Component {
 
   async uploadData () {
     try {
-      const seasonRes = await this.seasonsClient.seasonsPost(this.state.season[0].name)
+      const seasonRes = await this.leaguesAPIClient.seasonsPost(this.state.season[0].name)
       this.state.season[0].competitions.forEach(async (competition) => {
         const teamMap = {}
-        const competitionRes = await this.seasonsClient.seasonsSeasonIdCompetitionsPost(seasonRes.id, competition.name)
+        const competitionRes = await this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(seasonRes.id, competition.name)
         competition.teams.forEach(async (team) => {
           teamMap[`id-${team.id}`] = team
-          await this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(seasonRes.id, competitionRes.id, team.name)
+          await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(seasonRes.id, competitionRes.id, team.name)
         })
         competition.fixtures.forEach(async (fixture) => {
           const postFixture = {
@@ -83,7 +84,7 @@ class PopulateLeagues extends React.Component {
             venue: fixture.venue,
             adjudicator: fixture.adjudicator,
           }
-          const fixtureRes = await this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(seasonRes.id, competitionRes.id, postFixture)
+          const fixtureRes = await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(seasonRes.id, competitionRes.id, postFixture)
           fixture.matches.forEach(async (match) => {
             const postMatch = {
               time: match.time,
@@ -91,7 +92,7 @@ class PopulateLeagues extends React.Component {
               awayTeam: teamMap[`id-${match.awayTeam}`].name,
               refTeam: teamMap[`id-${match.refTeam}`].name
             }
-            await this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(seasonRes.id, competitionRes.id, fixtureRes.id, postMatch)
+            await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(seasonRes.id, competitionRes.id, fixtureRes.id, postMatch)
           })
         })
       })
@@ -105,14 +106,14 @@ class PopulateLeagues extends React.Component {
   }
 
   render () {
-    let analyseButton = <Tooltip title="Analyse csv data"><Button variant="contained" color="primary" startIcon={<HourglassEmpty />} onClick={this.analyseData}>Analyse</Button></Tooltip>
+    let analyseButton = <Tooltip title="Analyse csv data"><Button variant="contained" style={Colours.populateLeague.iconStyle} startIcon={<HourglassEmpty />} onClick={this.analyseData}>Analyse</Button></Tooltip>
     let processedData = <div></div>
     if (this.state.dataProcessed) {
       analyseButton = <Tooltip title="Clear processed data"><Button variant="contained" color="secondary" startIcon={<Undo />} onClick={this.reset}>Clear</Button></Tooltip>
       processedData = <div>
         <League editConfig={editConfig} utils={this.utils} />
         <br/>
-        <Tooltip title="Commit season data"><Button variant="contained" color="primary" startIcon={<SaveAlt />} onClick={this.uploadData}>Commit</Button></Tooltip>
+        <Tooltip title="Commit season data"><Button variant="contained" style={Colours.populateLeague.iconStyle} startIcon={<SaveAlt />} onClick={this.uploadData}>Commit</Button></Tooltip>
       </div>
     }
     return (

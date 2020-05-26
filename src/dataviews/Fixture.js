@@ -36,7 +36,7 @@ class Fixture extends React.Component {
       deleteMatchDialogMatch: {}
     }
     this.utils = props.utils
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
@@ -77,7 +77,7 @@ class Fixture extends React.Component {
     if (this.state.addMatchDialogMatchRef !== 'None') {
       match.refTeam = this.state.addMatchDialogMatchRef
     }
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(this.props.seasonId, this.props.competition.id, this.props.fixture.id, match)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(this.props.seasonId, this.props.competition.id, this.props.fixture.id, match)
       .then(
         () => {
           this.refreshData()
@@ -141,7 +141,7 @@ class Fixture extends React.Component {
     if (this.state.editMatchDialogMatch.refTeam !== 'None') {
       match.refTeam = this.state.editMatchDialogMatch.refTeam
     }
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut(this.props.seasonId, this.props.competition.id, this.props.fixture.id, this.state.editMatchDialogMatch.id, match)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut(this.props.seasonId, this.props.competition.id, this.props.fixture.id, this.state.editMatchDialogMatch.id, match)
       .then(
         () => {
           this.refreshData()
@@ -198,7 +198,7 @@ class Fixture extends React.Component {
     const homeTeam = teamMap[`id-${this.state.deleteMatchDialogMatch.homeTeam}`].name
     const awayTeam = teamMap[`id-${this.state.deleteMatchDialogMatch.awayTeam}`].name
     this.deleteMatchDialogClose()
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete(this.props.seasonId, this.props.competition.id, this.props.fixture.id, this.state.deleteMatchDialogMatch.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete(this.props.seasonId, this.props.competition.id, this.props.fixture.id, this.state.deleteMatchDialogMatch.id)
       .then(
         () => {
           this.enqueueSnackbar(`Match between ${homeTeam} and ${awayTeam} deleted`, { variant: 'success' })

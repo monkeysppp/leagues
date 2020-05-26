@@ -1117,6 +1117,122 @@ paths:
         500:
           description: "Internal server error"
     x-swagger-router-controller: "Seasons"
+  /reminders/email:
+    get:
+      tags:
+      - "Email"
+      summary: "Get email reminder config"
+      description: "Get the basic config on the email reminders, such as whether it is enabled or not."
+      operationId: "remindersEmailGET"
+      responses:
+        200:
+          description: "The current email config"
+          schema:
+            $ref: "#/definitions/ReminderEmails"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Email"
+      summary: "Enable and disable email reminders"
+      description: "Enable and disable email reminders."
+      operationId: "remindersEmailPut"
+      parameters:
+      - name: "config"
+        in: "body"
+        description: "Set whether email reminders are enabled or not"
+        required: true
+        schema:
+          $ref: "#/definitions/ReminderEmails"
+      responses:
+        200:
+          description: "Setting update accepted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+  /reminders/email/body:
+    get:
+      tags:
+      - "Email"
+      summary: "Get reminder email body"
+      description: "Get the leader and tailer parts of the email reminder."
+      operationId: "remindersEmailBodyGet"
+      responses:
+        200:
+          description: "Body update accepted"
+          schema:
+            $ref: '#/definitions/ReminderEmailBody'
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Email"
+      summary: "Update reminder email"
+      description: "Update the leader and tailer parts of the email reminder."
+      operationId: "remindersEmailBodyPut"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "The parts of the email reminder"
+        required: true
+        schema:
+          $ref: '#/definitions/ReminderEmailBody'
+      responses:
+        200:
+          description: "Body update accepted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+  /reminders/email/smtp:
+    get:
+      tags:
+      - "Email"
+      summary: "Get SMTP settings"
+      description: "Get the SMTP settings used when sending an email."
+      operationId: "remindersEmailSMTPGet"
+      responses:
+        200:
+          description: "SMTP setting update accepted"
+          schema:
+            $ref: '#/definitions/ReminderEmailSMTPGet'
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "Email"
+      summary: "Update SMTP settings"
+      description: "Update the SMTP settings used when sending an email."
+      operationId: "remindersEmailSMTPPut"
+      parameters:
+      - name: "smtp"
+        in: "body"
+        description: "The SMTP settings"
+        required: true
+        schema:
+          $ref: '#/definitions/ReminderEmailSMTP'
+      responses:
+        200:
+          description: "SMTP setting update accepted"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
+  /reminders/email/next:
+    get:
+      tags:
+      - "Email"
+      summary: "Get next email"
+      description: "Get the details and body of the next email to be sent."
+      operationId: "remindersEmailNext"
+      responses:
+        200:
+          description: "Details on the next email."
+          schema:
+            $ref: "#/definitions/ReminderEmailNext"
+        500:
+          description: "Internal server error"
 definitions:
   SeasonName:
     type: "object"
@@ -1294,6 +1410,76 @@ definitions:
       id:
         type: "integer"
         format: "int32"
+  ReminderEmails:
+    type: "object"
+    properties:
+      enabled:
+        type: "boolean"
+        description: "Set whether email reminders are enabled or not"
+      reminderDays:
+        type: "integer"
+        format: "int32"
+        description: "The number of days in advance to send the reminder email (maximum 32)"
+      reminderTime:
+        type: "string"
+        description: "The time of day to send the reminder email"
+  ReminderEmailBody:
+    type: "object"
+    properties:
+      leader:
+        type: "string"
+        description: "A part of the email"
+      tailer:
+        type: "string"
+        description: "A part of the email"
+  ReminderEmailSMTP:
+    type: "object"
+    required:
+    - host
+    - port
+    - user
+    properties:
+      host:
+        type: "string"
+        description: "The FQDN of the SMTP server to talk to"
+      port:
+        type: "integer"
+        format: "int32"
+        description: "The port number to connect to (defaults to 587)"
+      user:
+        type: "string"
+        description: "The user to log in as"
+      password:
+        type: "string"
+        description: "The password to log in with"
+  ReminderEmailSMTPGet:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "The FQDN of the SMTP server to talk to"
+      port:
+        type: "integer"
+        format: "int32"
+        description: "The port number to connect to (defaults to 587)"
+      user:
+        type: "string"
+        description: "The user to log in as"
+  ReminderEmailNext:
+    type: "object"
+    properties:
+      time:
+        type: "string"
+        description: "The time and date that the next email will be sent"
+      recipients:
+        type: "string"
+        description: "The list of recipients to receive the next email"
+      subject:
+        type: "string"
+        description: "The subject for the next email to be sent"
+      body:
+        type: "string"
+        description: "The content of the next email to be sent"
 parameters:
   seasonId:
     name: "seasonId"

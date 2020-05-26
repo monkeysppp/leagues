@@ -12,7 +12,7 @@ chai.use(sinonChai)
 const fs = require('fs')
 const path = require('path')
 
-const dataFile = require('../../../api/v1/dataFile.js')
+const dataFile = require('../../../api/v1/seasonsDataFile.js')
 
 const seasonsDataFile = path.join(__dirname, '..', '..', '..', 'data', 'seasons.json')
 const sampleData = {

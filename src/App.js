@@ -10,7 +10,7 @@ import LeagueFixtures from './LeagueFixtures.js'
 import LeagueMatches from './LeagueMatches.js'
 import PopulateLeagues from './PopulateLeagues.js'
 
-import SeasonsClient from './seasonsClient.js'
+import LeaguesAPIClient from './LeaguesAPIClient.js'
 import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()
@@ -36,7 +36,7 @@ class Main extends React.Component {
             <PopulateLeagues utils={this.props.utils}/>
           </Route>
           <Route exact path='/ui/EmailReminders'>
-            <EmailReminders />
+            <EmailReminders utils={this.props.utils}/>
           </Route>
           <Route exact path='/ui/logout'>
             <Home loggedIn={this.props.loggedIn} logout={true} />
@@ -65,9 +65,9 @@ class App extends React.Component {
       username: cookies.get('user'),
       loggedIn: typeof cookies.get('user') === 'string'
     }
-    this.seasonsClient = new SeasonsClient()
+    this.leaguesAPIClient = new LeaguesAPIClient()
     this.utils = {
-      seasonsClient: this.seasonsClient
+      leaguesAPIClient: this.leaguesAPIClient
     }
   }
 

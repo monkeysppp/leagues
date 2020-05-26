@@ -20,9 +20,9 @@ const drawConfig = {
 class LeagueMatches extends React.Component {
   constructor (props) {
     super(props)
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.utils = {
-      seasonsClient: this.seasonsClient
+      leaguesAPIClient: this.leaguesAPIClient
     }
   }
 

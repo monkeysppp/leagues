@@ -16,7 +16,7 @@ const bodyParser = require('body-parser')
 const request = require('supertest')
 
 const router = require('../../../api/v1/routes.js')
-const dataFile = require('../../../api/v1/dataFile.js')
+const seasonsDataFile = require('../../../api/v1/seasonsseasonsDataFile.js')
 
 const error500 = new Error('Internal failure')
 error500.status = 500
@@ -215,13 +215,13 @@ describe('/api/v1', () => {
   })
 
   beforeEach(() => {
-    sinon.stub(dataFile, 'readData').returns(cloneSampleData())
-    sinon.stub(dataFile, 'writeData').returns()
+    sinon.stub(seasonsDataFile, 'readData').returns(cloneSampleData())
+    sinon.stub(seasonsDataFile, 'writeData').returns()
   })
 
   afterEach(() => {
-    dataFile.readData.restore()
-    dataFile.writeData.restore()
+    seasonsDataFile.readData.restore()
+    seasonsDataFile.writeData.restore()
   })
 
   describe('/seasons', () => {
@@ -241,7 +241,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -284,7 +284,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 2 }))
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -310,14 +310,14 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneSampleData()
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -329,7 +329,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneSampleData()
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -337,7 +337,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -347,7 +347,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -389,7 +389,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -449,7 +449,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -462,7 +462,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(409)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -478,14 +478,14 @@ describe('/api/v1', () => {
                 const newData = cloneSampleData()
                 newData.seasons[2].name = 'NewSeason2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -497,7 +497,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneSampleData()
                 newData.seasons[2].name = 'NewSeason2Name'
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -505,7 +505,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -515,7 +515,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -539,7 +539,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -552,14 +552,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneSampleData()
                 newData.seasons.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -570,7 +570,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneSampleData()
                 newData.seasons.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -578,7 +578,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -626,7 +626,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -648,7 +648,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -692,7 +692,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 2 }))
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -708,14 +708,14 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -727,7 +727,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -735,7 +735,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -745,7 +745,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -805,7 +805,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -874,7 +874,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -887,7 +887,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -900,7 +900,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(409)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -916,14 +916,14 @@ describe('/api/v1', () => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -935,7 +935,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -943,7 +943,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -953,7 +953,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -977,7 +977,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -998,7 +998,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1011,14 +1011,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -1029,7 +1029,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -1037,7 +1037,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1103,7 +1103,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1129,7 +1129,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1146,7 +1146,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1233,7 +1233,7 @@ describe('/api/v1', () => {
                     venue: 'Venue 1',
                     matches: []
                   })
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -1258,7 +1258,7 @@ describe('/api/v1', () => {
                     venue: 'Venue 1',
                     matches: []
                   })
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -1308,14 +1308,14 @@ describe('/api/v1', () => {
                   adjudicator: 1,
                   matches: []
                 })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -1337,7 +1337,7 @@ describe('/api/v1', () => {
                   adjudicator: 1,
                   matches: []
                 })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -1345,7 +1345,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1359,7 +1359,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -1437,7 +1437,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1560,7 +1560,7 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -1585,7 +1585,7 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -1625,7 +1625,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1641,7 +1641,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1657,7 +1657,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1682,7 +1682,7 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -1708,14 +1708,14 @@ describe('/api/v1', () => {
                   matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -1737,7 +1737,7 @@ describe('/api/v1', () => {
                   adjudicator: 3,
                   matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -1745,7 +1745,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1759,7 +1759,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -1783,7 +1783,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1804,7 +1804,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1825,7 +1825,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1838,14 +1838,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -1856,7 +1856,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -1864,7 +1864,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1948,7 +1948,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -1970,7 +1970,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1983,7 +1983,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -1996,7 +1996,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2101,7 +2101,7 @@ describe('/api/v1', () => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                   const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -2117,7 +2117,7 @@ describe('/api/v1', () => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                   const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -2153,14 +2153,14 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -2172,7 +2172,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -2180,7 +2180,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2190,7 +2190,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -2286,7 +2286,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2417,7 +2417,7 @@ describe('/api/v1', () => {
                   const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -2433,7 +2433,7 @@ describe('/api/v1', () => {
                   const newData = cloneExpectedData()
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 2, awayTeam: 3 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
-                  expect(dataFile.writeData).to.be.calledWith(newData)
+                  expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
           })
@@ -2466,7 +2466,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2479,7 +2479,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2492,7 +2492,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2505,7 +2505,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2521,14 +2521,14 @@ describe('/api/v1', () => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -2540,7 +2540,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -2548,7 +2548,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2558,7 +2558,7 @@ describe('/api/v1', () => {
             .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -2582,7 +2582,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2603,7 +2603,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2624,7 +2624,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2645,7 +2645,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2658,14 +2658,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -2676,7 +2676,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -2684,7 +2684,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2750,7 +2750,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2772,7 +2772,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2785,7 +2785,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2829,7 +2829,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 2 }))
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -2845,14 +2845,14 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -2864,7 +2864,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -2872,7 +2872,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -2882,7 +2882,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -2960,7 +2960,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3038,7 +3038,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3051,7 +3051,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3064,7 +3064,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3077,7 +3077,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(409)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3093,14 +3093,14 @@ describe('/api/v1', () => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -3112,7 +3112,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -3120,7 +3120,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3130,7 +3130,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -3154,7 +3154,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3175,7 +3175,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3196,7 +3196,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3209,14 +3209,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -3227,7 +3227,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -3235,7 +3235,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3319,7 +3319,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3341,7 +3341,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3354,7 +3354,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3367,7 +3367,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3411,7 +3411,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 2 }))
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3427,14 +3427,14 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -3446,7 +3446,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -3454,7 +3454,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3464,7 +3464,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -3560,7 +3560,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3647,7 +3647,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3660,7 +3660,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3673,7 +3673,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3686,7 +3686,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3699,7 +3699,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(409)
                 .then(res => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3715,14 +3715,14 @@ describe('/api/v1', () => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2].contacts[2]))
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -3734,7 +3734,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -3742,7 +3742,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3752,7 +3752,7 @@ describe('/api/v1', () => {
             .set('Accept', 'application/json')
             .expect(500)
             .then(() => {
-              expect(dataFile.writeData.callCount).to.equal(0)
+              expect(seasonsDataFile.writeData.callCount).to.equal(0)
             })
         })
       })
@@ -3776,7 +3776,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3797,7 +3797,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3818,7 +3818,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(404)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3839,7 +3839,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
-                  expect(dataFile.writeData.callCount).to.equal(0)
+                  expect(seasonsDataFile.writeData.callCount).to.equal(0)
                 })
             })
           })
@@ -3852,14 +3852,14 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
 
         context('writing data fails', () => {
           beforeEach(() => {
-            dataFile.writeData.throws(error500)
+            seasonsDataFile.writeData.throws(error500)
           })
 
           it('returns 500', () => {
@@ -3870,7 +3870,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneExpectedData()
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
-                expect(dataFile.writeData).to.be.calledWith(newData)
+                expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
         })
@@ -3878,7 +3878,7 @@ describe('/api/v1', () => {
 
       context('reading data fails', () => {
         beforeEach(() => {
-          dataFile.readData.throws(error500)
+          seasonsDataFile.readData.throws(error500)
         })
 
         it('returns 500', () => {
@@ -3890,4 +3890,41 @@ describe('/api/v1', () => {
       })
     })
   })
+
+  describe('/reminders/email', () => {
+    describe('get', () => {
+
+    })
+
+    describe('put', () => {
+
+    })
+  })
+
+  describe('/reminders/email/body', () => {
+    describe('get', () => {
+
+    })
+
+    describe('put', () => {
+
+    })
+  })
+
+  describe('/reminders/email/smtp', () => {
+    describe('get', () => {
+
+    })
+
+    describe('put', () => {
+
+    })
+  })
+
+  describe('/reminders/email/next', () => {
+    describe('get', () => {
+
+    })
+  })
+
 })

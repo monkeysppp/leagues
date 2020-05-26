@@ -4,9 +4,9 @@ import League from'./dataviews/League.js'
 class LeagueFixtures extends React.Component {
   constructor (props) {
     super(props)
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.utils = {
-      seasonsClient: this.seasonsClient
+      leaguesAPIClient: this.leaguesAPIClient
     }
   }
 

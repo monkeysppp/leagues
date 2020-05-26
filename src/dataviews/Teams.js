@@ -137,7 +137,7 @@ class Teams extends React.Component {
       deleteTeamDialogTeam: {},
     }
     this.utils = props.utils
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
@@ -165,7 +165,7 @@ class Teams extends React.Component {
   addTeamDialogAdd () {
     this.addTeamDialogClose()
     const teamName = this.state.addTeamDialogTeamName
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(this.props.season.id, this.props.competition.id, teamName)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(this.props.season.id, this.props.competition.id, teamName)
       .then(
         () => {
           this.refreshData()
@@ -191,7 +191,7 @@ class Teams extends React.Component {
   editTeamDialogEdit () {
     this.editTeamDialogClose()
     const team = this.state.editTeamDialogTeam
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(this.props.season.id, this.props.competition.id, team.id, team.name)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(this.props.season.id, this.props.competition.id, team.id, team.name)
       .then(
         () => {
           this.refreshData()
@@ -219,7 +219,7 @@ class Teams extends React.Component {
 
   deleteTeamDialogDelete () {
     this.deleteTeamDialogClose()
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteTeamDialogTeam.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteTeamDialogTeam.id)
       .then(
         () => {
           this.enqueueSnackbar('Team ' + this.state.deleteTeamDialogTeam.name + ' deleted', { variant: 'success' })

@@ -2,7 +2,7 @@
 
 const logging = require('../../lib/logging.js')
 const log = logging.getLogger('api/seasons')
-const data = require('./data.js')
+const data = require('./seasonsData.js')
 
 exports.seasonsGet = function (req, res, next) {
   log.info('GET /v1/seasons')

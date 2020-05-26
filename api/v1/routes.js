@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const seasons = require('./seasons.js')
+const emailReminders = require('./emailReminders.js')
 
 router.route('/seasons')
   .get(seasons.seasonsGet)
@@ -46,5 +47,16 @@ router.route('/seasons/:seasonId/competitions/:competitionId/teams/:teamId/conta
   .get(seasons.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet)
   .put(seasons.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut)
   .delete(seasons.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete)
+router.route('/reminders/email')
+  .get(emailReminders.remindersEmailGet)
+  .put(emailReminders.remindersEmailPut)
+router.route('/reminders/email/body')
+  .get(emailReminders.remindersEmailBodyGet)
+  .put(emailReminders.remindersEmailBodyPut)
+router.route('/reminders/email/smtp')
+  .get(emailReminders.remindersEmailSMTPGet)
+  .put(emailReminders.remindersEmailSMTPPut)
+router.route('/reminders/email/next')
+  .get(emailReminders.remindersEmailNextGet)
 
 module.exports = router

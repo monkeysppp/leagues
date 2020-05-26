@@ -146,7 +146,7 @@ class Fixtures extends React.Component {
       deleteFixtureDialogFixture: {}
     }
     this.utils = props.utils
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
@@ -185,7 +185,7 @@ class Fixtures extends React.Component {
       fixture.adjudicator = this.state.addFixtureDialogFixtureAdjudicator
     }
 
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(this.props.season.id, this.props.competition.id, fixture)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(this.props.season.id, this.props.competition.id, fixture)
       .then(
         () => {
           this.refreshData()
@@ -244,7 +244,7 @@ class Fixtures extends React.Component {
       fixture.adjudicator = this.state.editFixtureDialogFixture.adjudicator
     }
 
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(this.props.season.id, this.props.competition.id, this.state.editFixtureDialogFixture.id, fixture)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(this.props.season.id, this.props.competition.id, this.state.editFixtureDialogFixture.id, fixture)
       .then(
         () => {
           this.refreshData()
@@ -288,7 +288,7 @@ class Fixtures extends React.Component {
 
   deleteFixtureDialogDelete () {
     this.deleteFixtureDialogClose()
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteFixtureDialogFixture.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteFixtureDialogFixture.id)
       .then(
         () => {
           this.enqueueSnackbar('Fixture on ' + this.state.deleteFixtureDialogFixture.date + ' deleted', { variant: 'success' })

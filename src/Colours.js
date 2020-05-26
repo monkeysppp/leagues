@@ -108,6 +108,12 @@ const Colours = {
       color: '#ffffff'
     }
   },
+  populateLeague: {
+    iconStyle: {
+      color: '#ffffff',
+      background: '#3C91E6'
+    }
+  },
   emailReminders: {
     border: '#2C81d6',
     background: '#ffffff',
@@ -123,8 +129,12 @@ const Colours = {
       text: '#ffffff'
     },
     iconStyle: {
-      color: '#ffffff'
+      color: '#ffffff',
+      background: '#3C91E6'
     }
+  },
+  navigationCars: {
+    background: '#3C91E6',
   }
 }
 

@@ -89,7 +89,7 @@ class League extends React.Component {
       deleteSeasonDialogOpen: false,
       deleteSeasonDialogSeason: {}
     }
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.enqueueSnackbar
 
     this.refreshData = this.refreshData.bind(this)
@@ -106,7 +106,7 @@ class League extends React.Component {
     this.deleteSeasonDialogDelete = this.deleteSeasonDialogDelete.bind(this)
 
     this.utils = {
-      seasonsClient: this.seasonsClient,
+      leaguesAPIClient: this.leaguesAPIClient,
       enqueueSnackbar: this.enqueueSnackbar,
       refreshData: this.refreshData
     }
@@ -127,7 +127,7 @@ class League extends React.Component {
   addSeasonDialogAdd () {
     this.addSeasonDialogClose()
     const seasonName = this.state.addSeasonDialogSeasonName
-    this.seasonsClient.seasonsPost(seasonName)
+    this.leaguesAPIClient.seasonsPost(seasonName)
       .then(
         () => {
           this.refreshData()
@@ -153,7 +153,7 @@ class League extends React.Component {
   editSeasonDialogEdit () {
     this.editSeasonDialogClose()
     const season = this.state.editSeasonDialogSeason
-    this.seasonsClient.seasonsSeasonIdPut(season.id, season.name)
+    this.leaguesAPIClient.seasonsSeasonIdPut(season.id, season.name)
       .then(
         () => {
           this.refreshData()
@@ -181,7 +181,7 @@ class League extends React.Component {
 
   deleteSeasonDialogDelete () {
     this.deleteSeasonDialogClose()
-    this.seasonsClient.seasonsSeasonIdDelete(this.state.deleteSeasonDialogSeason.id)
+    this.leaguesAPIClient.seasonsSeasonIdDelete(this.state.deleteSeasonDialogSeason.id)
       .then(
         () => {
           this.enqueueSnackbar('Season ' + this.state.deleteSeasonDialogSeason.name + ' deleted', { variant: 'success' })
@@ -193,7 +193,7 @@ class League extends React.Component {
   }
 
   refreshData () {
-    this.seasonsClient.seasonsGet()
+    this.leaguesAPIClient.seasonsGet()
       .then(seasons => {
         this.setState({
           seasons: seasons,

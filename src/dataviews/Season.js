@@ -88,7 +88,7 @@ class Season extends React.Component {
       deleteCompetitionDialogCompetition: {}
     }
     this.utils = props.utils
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
@@ -116,7 +116,7 @@ class Season extends React.Component {
   addCompetitionDialogAdd () {
     this.addCompetitionDialogClose()
     const competitionName = this.state.addCompetitionDialogCompetitionName
-    this.seasonsClient.seasonsSeasonIdCompetitionsPost(this.props.season.id, competitionName)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(this.props.season.id, competitionName)
       .then(
         () => {
           this.refreshData()
@@ -142,7 +142,7 @@ class Season extends React.Component {
   editCompetitionDialogEdit () {
     this.editCompetitionDialogClose()
     const competition = this.state.editCompetitionDialogCompetition
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdPut(this.props.season.id, competition.id, competition.name)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdPut(this.props.season.id, competition.id, competition.name)
       .then(
         () => {
           this.refreshData()
@@ -170,7 +170,7 @@ class Season extends React.Component {
 
   deleteCompetitionDialogDelete () {
     this.deleteCompetitionDialogClose()
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdDelete(this.props.season.id, this.state.deleteCompetitionDialogCompetition.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdDelete(this.props.season.id, this.state.deleteCompetitionDialogCompetition.id)
       .then(
         () => {
           this.enqueueSnackbar('Competition ' + this.state.deleteCompetitionDialogCompetition.name + ' deleted', { variant: 'success' })

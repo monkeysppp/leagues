@@ -2,7 +2,7 @@
 
 const logging = require('../../lib/logging.js')
 const log = logging.getLogger('api/data')
-const dataFile = require('./dataFile.js')
+const dataFile = require('./seasonsDataFile.js')
 
 let seasonsData
 
@@ -36,7 +36,7 @@ exports.seasonsGet = function () {
 /**
  * Create a new season.
  *
- * @param {string} name The name for the new season
+ * @param {string} seasonName The name for the new season
  *
  * @returns {number} The id of the new season.  If the season already exists, the id of the existing season is returned
  **/

@@ -28,7 +28,7 @@ class Team extends React.Component {
       deleteContactDialogContact: {}
     }
     this.utils = props.utils
-    this.seasonsClient = props.utils.seasonsClient
+    this.leaguesAPIClient = props.utils.leaguesAPIClient
     this.enqueueSnackbar = props.utils.enqueueSnackbar
     this.refreshData = props.utils.refreshData
 
@@ -56,7 +56,7 @@ class Team extends React.Component {
   addContactDialogAdd () {
     this.addContactDialogClose()
     const contactAddress = this.state.addContactDialogContactAddress
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(this.props.seasonId, this.props.competitionId, this.props.team.id, contactAddress)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(this.props.seasonId, this.props.competitionId, this.props.team.id, contactAddress)
       .then(
         () => {
           this.refreshData()
@@ -82,7 +82,7 @@ class Team extends React.Component {
   editContactDialogEdit () {
     this.editContactDialogClose()
     const contact = this.state.editContactDialogContact
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id, contact.email)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id, contact.email)
       .then(
         () => {
           this.refreshData()
@@ -110,7 +110,7 @@ class Team extends React.Component {
 
   deleteContactDialogDelete () {
     this.deleteContactDialogClose()
-    this.seasonsClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, this.state.deleteContactDialogContact.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, this.state.deleteContactDialogContact.id)
       .then(
         () => {
           this.enqueueSnackbar('Contact ' + this.state.deleteContactDialogContact.name + ' deleted', { variant: 'success' })
