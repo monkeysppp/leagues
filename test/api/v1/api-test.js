@@ -16,7 +16,7 @@ const bodyParser = require('body-parser')
 const request = require('supertest')
 
 const router = require('../../../api/v1/routes.js')
-const seasonsDataFile = require('../../../api/v1/seasonsseasonsDataFile.js')
+const seasonsDataFile = require('../../../api/v1/seasonsDataFile.js')
 
 const error500 = new Error('Internal failure')
 error500.status = 500
@@ -3926,5 +3926,4 @@ describe('/api/v1', () => {
 
     })
   })
-
 })

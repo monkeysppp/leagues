@@ -10,7 +10,7 @@ exports.remindersEmailGet = function (req, res, next) {
   try {
     res.setHeader('Content-Type', 'application/json')
     const emailConfig = data.remindersEmailGet()
-    res.json({enabled: emailConfig.enabled, reminderDays: emailConfig.reminderDays, reminderTime: emailConfig.reminderTime})
+    res.json({ enabled: emailConfig.enabled, reminderDays: emailConfig.reminderDays, reminderTime: emailConfig.reminderTime })
   } catch (err) {
     log.warn(err.message)
     res.status(err.status).end()
@@ -45,7 +45,7 @@ exports.remindersEmailBodyPut = function (req, res, next) {
   log.info(`PUT /v1/reminders/email/body ${req.body.leader} ${req.body.tailer}`)
 
   try {
-    const season = data.remindersEmailBodyPut(req.body.leader, req.body.tailer)
+    data.remindersEmailBodyPut(req.body.leader, req.body.tailer)
     res.end()
   } catch (err) {
     log.warn(err.message)

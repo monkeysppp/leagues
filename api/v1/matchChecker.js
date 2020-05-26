@@ -58,12 +58,9 @@ function getContacts (fixture, teams) {
   var returnList = ''
 
   fixture.matches.forEach(match => {
-    var contactIndex = 0
-
     getTeamFromId(teams, match.homeTeam).contacts.forEach(contact => {
       contactList[contact.email] = true
     })
-
 
     getTeamFromId(teams, match.awayTeam).contacts.forEach(contact => {
       contactList[contact.email] = true

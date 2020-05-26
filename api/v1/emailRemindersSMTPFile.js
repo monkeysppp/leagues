@@ -55,7 +55,7 @@ exports.readData = function () {
   } catch (error) {
     if (error.code === 'ENOENT') {
       log.warn('File ' + emailRemindersSMTPDataFile + ' not found, so creating it now')
-      emailRemindersSMTPData = { host: '', port: 587, user: "user", password: "pass" }
+      emailRemindersSMTPData = { host: '', port: 587, user: 'user', password: 'pass' }
       try {
         try {
           fs.mkdirSync(emailRemindersSMTPDataDir)

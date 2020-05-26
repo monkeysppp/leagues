@@ -57,8 +57,6 @@ exports.remindersEmailPut = function (enabled, reminderDays, reminderTime) {
   emailRemindersConfigFile.writeData(configData)
 
   reminderEmails.initialise()
-
-  return
 }
 
 /**
@@ -84,8 +82,6 @@ exports.remindersEmailBodyPut = function (leader, tailer) {
   configData.email.tailer = tailer
 
   emailRemindersConfigFile.writeData(configData)
-
-  return
 }
 
 exports.remindersEmailSMTPGet = function () {
@@ -94,7 +90,7 @@ exports.remindersEmailSMTPGet = function () {
   const returnedData = {
     host: smtpData.host,
     port: smtpData.port,
-    user: smtpData.user,
+    user: smtpData.user
   }
   return returnedData
 }
@@ -115,7 +111,7 @@ exports.remindersEmailSMTPPut = function (host, port, user, password) {
   if (typeof user !== 'string') {
     throwError('Bad SMTP user setting', 400)
   }
-  if (typeof password !== 'string' && password !== undefined ) {
+  if (typeof password !== 'string' && password !== undefined) {
     throwError('Bad SMTP password setting', 400)
   }
 
@@ -127,8 +123,6 @@ exports.remindersEmailSMTPPut = function (host, port, user, password) {
     smtpData.password = password
   }
   emailRemindersSMTPFile.writeData(smtpData)
-
-  return
 }
 
 exports.remindersEmailNextGet = function () {
@@ -146,7 +140,7 @@ exports.remindersEmailNextGet = function () {
     return {}
   }
 
-  const [ hours, minutes ] = configData.reminderTime.split(':')
+  const [hours, minutes] = configData.reminderTime.split(':')
   const emailTime = new Date(nextFixtureBundle.fixture.date)
   emailTime.setDate(emailTime.getDate() - parseInt(configData.reminderDays))
   emailTime.setHours(hours)
