@@ -197,12 +197,8 @@ const expectedData = {
   ]
 }
 
-function cloneSampleData () {
-  return JSON.parse(JSON.stringify(sampleData))
-}
-
-function cloneExpectedData () {
-  return JSON.parse(JSON.stringify(expectedData))
+function cloneData (data) {
+  return JSON.parse(JSON.stringify(data))
 }
 
 describe('/api/v1', () => {
@@ -215,7 +211,7 @@ describe('/api/v1', () => {
   })
 
   beforeEach(() => {
-    sinon.stub(seasonsDataFile, 'readData').returns(cloneSampleData())
+    sinon.stub(seasonsDataFile, 'readData').returns(cloneData(sampleData))
     sinon.stub(seasonsDataFile, 'writeData').returns()
   })
 
@@ -225,7 +221,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         it('returns the data with matches in date order', () => {
           return request(app)
@@ -252,7 +248,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonName is missing', () => {
@@ -308,7 +304,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -327,7 +323,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -355,7 +351,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -400,7 +396,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -475,7 +471,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons[2].name = 'NewSeason2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2]))
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -495,7 +491,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons[2].name = 'NewSeason2Name'
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -520,7 +516,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -550,7 +546,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -568,7 +564,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneSampleData()
+                const newData = cloneData(sampleData)
                 newData.seasons.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -592,7 +588,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -637,7 +633,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('season does not exist', () => {
@@ -706,7 +702,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -725,7 +721,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -753,7 +749,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -816,7 +812,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -913,7 +909,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2]))
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -933,7 +929,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -958,7 +954,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -1009,7 +1005,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -1027,7 +1023,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -1051,7 +1047,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/fixtures', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -1114,7 +1110,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('season does not exist', () => {
@@ -1226,7 +1222,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures.push({
                     id: 5,
                     date: 'Fri 31-Jan-20',
@@ -1251,7 +1247,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures.push({
                     id: 5,
                     date: 'Fri 31-Jan-20',
@@ -1300,7 +1296,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures.push({
                   id: 5,
                   date: 'Fri 31-Jan-20',
@@ -1329,7 +1325,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures.push({
                   id: 5,
                   date: 'Fri 31-Jan-20',
@@ -1367,7 +1363,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/fixtures/:fixtureId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -1448,7 +1444,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -1552,7 +1548,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -1577,7 +1573,7 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -1674,7 +1670,7 @@ describe('/api/v1', () => {
                 .expect('Content-Type', /application\/json/)
                 .expect(200)
                 .then(res => {
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2] = {
                     id: 2,
                     date: 'Fri 31-Jan-20',
@@ -1699,7 +1695,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2] = {
                   id: 2,
                   date: 'Fri 31-Jan-20',
@@ -1729,7 +1725,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2] = {
                   id: 2,
                   date: 'Fri 31-Jan-20',
@@ -1764,7 +1760,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -1836,7 +1832,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -1854,7 +1850,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -1878,7 +1874,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/fixtures/:fixtureId/matches', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -1959,7 +1955,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('season does not exist', () => {
@@ -2099,7 +2095,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
@@ -2115,7 +2111,7 @@ describe('/api/v1', () => {
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
@@ -2151,7 +2147,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2170,7 +2166,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3, refTeam: 1 })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2198,7 +2194,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/fixtures/:fixtureId/matches/:matchId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -2297,7 +2293,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -2386,6 +2382,16 @@ describe('/api/v1', () => {
             })
           })
 
+          context('homeTeam does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'NoSuchTeam', awayTeam: 'teamName2', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
           context('awayTeam is missing', () => {
             it('returns 400', () => {
               return request(app)
@@ -2406,6 +2412,16 @@ describe('/api/v1', () => {
             })
           })
 
+          context('awayTeam does not exist', () => {
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/seasons/2/competitions/2/fixtures/2/matches/2')
+                .set('Accept', 'application/json')
+                .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'NoSuchTeam', refTeam: 'teamName3' })
+                .expect(400)
+            })
+          })
+
           context('refTeam is missing', () => {
             it('returns the new match', () => {
               return request(app)
@@ -2414,7 +2430,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2' })
                 .expect(200)
                 .then(res => {
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -2430,7 +2446,7 @@ describe('/api/v1', () => {
                 .send({ time: '21:20', homeTeam: 'teamName2', awayTeam: 'teamName3', refTeam: '' })
                 .expect(200)
                 .then(res => {
-                  const newData = cloneExpectedData()
+                  const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 2, awayTeam: 3 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -2518,7 +2534,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -2538,7 +2554,7 @@ describe('/api/v1', () => {
               .send({ time: '21:20', homeTeam: 'teamName1', awayTeam: 'teamName2', refTeam: 'teamName3' })
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2, refTeam: 3 }
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2563,7 +2579,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -2656,7 +2672,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2674,7 +2690,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].fixtures[2].matches.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2698,7 +2714,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/teams', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -2761,7 +2777,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('season does not exist', () => {
@@ -2843,7 +2859,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2862,7 +2878,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2890,7 +2906,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/teams/:teamId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -2971,7 +2987,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -3090,7 +3106,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2]))
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -3110,7 +3126,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3135,7 +3151,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -3207,7 +3223,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3225,7 +3241,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3249,7 +3265,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/teams/:teamId/contacts', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -3330,7 +3346,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/post', () => {
+    describe('POST', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('season does not exist', () => {
@@ -3425,7 +3441,7 @@ describe('/api/v1', () => {
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3444,7 +3460,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3472,7 +3488,7 @@ describe('/api/v1', () => {
   })
 
   describe('/seasons/:seasonId/competitions/:competitionId/teams/:teamId/contacts/:contactId', () => {
-    describe('/get', () => {
+    describe('GET', () => {
       context('reading data succeeds', () => {
         context('seasonId is invalid', () => {
           it('returns 400', () => {
@@ -3571,7 +3587,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/put', () => {
+    describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -3712,7 +3728,7 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2].contacts[2]))
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
@@ -3732,7 +3748,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3757,7 +3773,7 @@ describe('/api/v1', () => {
         })
       })
     })
-    describe('/delete', () => {
+    describe('DELETE', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
           context('seasonId is invalid', () => {
@@ -3850,7 +3866,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3868,7 +3884,7 @@ describe('/api/v1', () => {
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
-                const newData = cloneExpectedData()
+                const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts.splice(2, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })

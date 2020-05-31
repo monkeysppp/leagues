@@ -61,6 +61,7 @@
     "jsdoc": "latest",
     "mocha": "latest",
     "nyc": "latest",
+    "proxyquire": "latest",
     "sinon": "latest",
     "sinon-chai": "latest",
     "standard": "latest",

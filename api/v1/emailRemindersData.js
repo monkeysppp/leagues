@@ -46,7 +46,7 @@ exports.remindersEmailPut = function (enabled, reminderDays, reminderTime) {
   if (typeof reminderDays !== 'number' || reminderDays > 32) {
     throwError('Bad reminderDays setting', 400)
   }
-  if (!reminderTime.match(timeRegex)) {
+  if (!reminderTime || !reminderTime.match(timeRegex)) {
     throwError('Bad reminderTime setting', 400)
   }
 

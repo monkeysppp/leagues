@@ -91,25 +91,16 @@ function getContacts (fixture, teams) {
 function getMatchSummary (fixture, teams) {
   var textSummary = fixture.date + ' at ' + fixture.venue + '\n'
   fixture.matches.forEach(match => {
-    const homeTeam = getTeamFromId(teams, match.homeTeam)
-    const awayTeam = getTeamFromId(teams, match.awayTeam)
-    textSummary += match.time + ' '
-    textSummary += homeTeam.name
-    textSummary += ' v '
-    textSummary += awayTeam.name
+    textSummary += `${match.time} ${getTeamFromId(teams, match.homeTeam).name} v ${getTeamFromId(teams, match.awayTeam).name}`
 
-    let refTeam
     if (match.refTeam) {
-      refTeam = getTeamFromId(teams, match.refTeam)
-      textSummary += ' ('
-      textSummary += refTeam.name
-      textSummary += ' ref)'
+      textSummary += ` (${getTeamFromId(teams, match.refTeam).name} ref)`
     }
     textSummary += '\n'
   })
 
   if (fixture.adjudicator) {
-    textSummary += 'Match Adjudicator: ' + fixture.adjudicator + '\n'
+    textSummary += `Match Adjudicator: ${getTeamFromId(teams, fixture.adjudicator).name}\n`
   }
 
   return textSummary

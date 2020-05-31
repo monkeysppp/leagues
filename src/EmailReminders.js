@@ -220,8 +220,10 @@ class EmailReminders extends React.Component {
   render () {
     //<p>Next Reminder at: <code>{format(this.state.nextReminder, 'YYYY-MM-DD HH:mm')}</code></p>
     //
-    let reminder = ''
-    if (this.state.emailRemindersEnabled) {
+    let reminder = <div style={{padding: '0px 16px'}}>
+      <p>Next Reminder at: <code>No pending match reminders</code></p>
+    </div>
+    if (this.state.emailRemindersEnabled && this.state.nextReminder.time) {
       reminder = <div style={{padding: '0px 16px'}}>
         <p>Next Reminder at: <code>{format(new Date(this.state.nextReminder.time), 'yyyy-MM-dd HH:mm')}</code></p>
         <p>To: <code>{this.state.nextReminder.recipients}</code></p>

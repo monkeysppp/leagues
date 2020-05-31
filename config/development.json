@@ -2,6 +2,7 @@
   "logging": {
     "level": "debug"
   },
+  "dbHost":"localhost",
   "dbName":"dbName",
   "dbUser":"dbUser",
   "dbPass":"dbPass",
