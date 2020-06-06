@@ -74,14 +74,14 @@ const sampleData = {
           ],
           fixtures: [
             {
-              id: 1,
-              date: 'Fri 10-Jan-20',
+              id: 4,
+              date: 'Fri 03-Jan-20',
               venue: 'Venue 1',
               matches: []
             },
             {
-              id: 3,
-              date: 'Fri 24-Jan-20',
+              id: 1,
+              date: 'Fri 10-Jan-20',
               venue: 'Venue 1',
               matches: []
             },
@@ -97,8 +97,8 @@ const sampleData = {
               ]
             },
             {
-              id: 4,
-              date: 'Fri 03-Jan-20',
+              id: 3,
+              date: 'Fri 24-Jan-20',
               venue: 'Venue 1',
               matches: []
             }
@@ -223,7 +223,7 @@ describe('/api/v1', () => {
   describe('/seasons', () => {
     describe('GET', () => {
       context('reading data succeeds', () => {
-        it('returns the data with matches in date order', () => {
+        it('returns the data', () => {
           return request(app)
             .get('/api/v1/seasons')
             .set('Accept', 'application/json')
@@ -295,7 +295,7 @@ describe('/api/v1', () => {
             })
           })
 
-          it('returns the new id', () => {
+          it('returns the new id and stores the data in order', () => {
             return request(app)
               .post('/api/v1/seasons')
               .send({ name: 'NewSeason' })
@@ -306,6 +306,7 @@ describe('/api/v1', () => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneData(sampleData)
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
+                newData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -325,6 +326,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(sampleData)
                 newData.seasons.push({ id: 4, name: 'NewSeason', competitions: [] })
+                newData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -474,6 +476,7 @@ describe('/api/v1', () => {
                 const newData = cloneData(sampleData)
                 newData.seasons[2].name = 'NewSeason2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2]))
+                newData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -493,6 +496,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(sampleData)
                 newData.seasons[2].name = 'NewSeason2Name'
+                newData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -696,14 +700,15 @@ describe('/api/v1', () => {
           it('returns the new id', () => {
             return request(app)
               .post('/api/v1/seasons/2/competitions')
-              .send({ name: 'NewCompetition' })
+              .send({ name: 'ANewCompetition' })
               .set('Accept', 'application/json')
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
+                newData.seasons[2].competitions.push({ id: 4, name: 'ANewCompetition', fixtures: [], teams: [] })
+                newData.seasons[2].competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -723,6 +728,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions.push({ id: 4, name: 'NewCompetition', fixtures: [], teams: [] })
+                newData.seasons[2].competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -912,6 +918,7 @@ describe('/api/v1', () => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2]))
+                newData.seasons[2].competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -931,6 +938,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].name = 'NewCompetition2Name'
+                newData.seasons[2].competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -1215,7 +1223,7 @@ describe('/api/v1', () => {
               return request(app)
                 .post('/api/v1/seasons/2/competitions/2/fixtures')
                 .send({
-                  date: 'Fri 31-Jan-20',
+                  date: 'Sun 05-Jan-20',
                   venue: 'Venue 1'
                 })
                 .set('Accept', 'application/json')
@@ -1225,9 +1233,14 @@ describe('/api/v1', () => {
                   const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures.push({
                     id: 5,
-                    date: 'Fri 31-Jan-20',
+                    date: 'Sun 05-Jan-20',
                     venue: 'Venue 1',
                     matches: []
+                  })
+                  newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                    const date1 = new Date(a.date)
+                    const date2 = new Date(b.date)
+                    return date1 - date2
                   })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
@@ -1556,6 +1569,11 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
+                  newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                    const date1 = new Date(a.date)
+                    const date2 = new Date(b.date)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -1581,6 +1599,11 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
+                  newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                    const date1 = new Date(a.date)
+                    const date2 = new Date(b.date)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -1678,6 +1701,11 @@ describe('/api/v1', () => {
                     matches: newData.seasons[2].competitions[2].fixtures[2].matches
                   }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
+                  newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                    const date1 = new Date(a.date)
+                    const date2 = new Date(b.date)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -1704,6 +1732,11 @@ describe('/api/v1', () => {
                   matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2]))
+                newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                  const date1 = new Date(a.date)
+                  const date2 = new Date(b.date)
+                  return date1 - date2
+                })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -1733,6 +1766,11 @@ describe('/api/v1', () => {
                   adjudicator: 3,
                   matches: newData.seasons[2].competitions[2].fixtures[2].matches
                 }
+                newData.seasons[2].competitions[2].fixtures.sort((a, b) => {
+                  const date1 = new Date(a.date)
+                  const date2 = new Date(b.date)
+                  return date1 - date2
+                })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -2090,13 +2128,18 @@ describe('/api/v1', () => {
             it('returns the new id', () => {
               return request(app)
                 .post('/api/v1/seasons/2/competitions/2/fixtures/2/matches')
-                .send({ time: '22:00', homeTeam: 'teamName2', awayTeam: 'teamName3' })
+                .send({ time: '19:30', homeTeam: 'teamName2', awayTeam: 'teamName3' })
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                   const newData = cloneData(expectedData)
-                  newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
+                  newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '19:30', homeTeam: 2, awayTeam: 3 })
+                  newData.seasons[2].competitions[2].fixtures[2].matches.sort((a, b) => {
+                    const date1 = new Date(a.time)
+                    const date2 = new Date(b.time)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -2113,6 +2156,11 @@ describe('/api/v1', () => {
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                   const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches.push({ id: 4, time: '22:00', homeTeam: 2, awayTeam: 3 })
+                  newData.seasons[2].competitions[2].fixtures[2].matches.sort((a, b) => {
+                    const date1 = new Date(a.time)
+                    const date2 = new Date(b.time)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -2433,6 +2481,11 @@ describe('/api/v1', () => {
                   const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 1, awayTeam: 2 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
+                  newData.seasons[2].competitions[2].fixtures[2].matches.sort((a, b) => {
+                    const date1 = new Date(a.time)
+                    const date2 = new Date(b.time)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -2449,6 +2502,11 @@ describe('/api/v1', () => {
                   const newData = cloneData(expectedData)
                   newData.seasons[2].competitions[2].fixtures[2].matches[2] = { id: 2, time: '21:20', homeTeam: 2, awayTeam: 3 }
                   expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].fixtures[2].matches[2]))
+                  newData.seasons[2].competitions[2].fixtures[2].matches.sort((a, b) => {
+                    const date1 = new Date(a.time)
+                    const date2 = new Date(b.time)
+                    return date1 - date2
+                  })
                   expect(seasonsDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -2853,14 +2911,15 @@ describe('/api/v1', () => {
           it('returns the new id', () => {
             return request(app)
               .post('/api/v1/seasons/2/competitions/2/teams')
-              .send({ name: 'NewTeam' })
+              .send({ name: 'ANewTeam' })
               .set('Accept', 'application/json')
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'ANewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -2874,12 +2933,13 @@ describe('/api/v1', () => {
           it('returns 500', () => {
             return request(app)
               .post('/api/v1/seasons/2/competitions/2/teams')
-              .send({ name: 'NewTeam' })
+              .send({ name: 'WeHaveANewTeam' })
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'NewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'WeHaveANewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3109,6 +3169,7 @@ describe('/api/v1', () => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2]))
+                newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3128,6 +3189,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].name = 'NewTeam2Name'
+                newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3435,14 +3497,15 @@ describe('/api/v1', () => {
           it('returns the new id', () => {
             return request(app)
               .post('/api/v1/seasons/2/competitions/2/teams/2/contacts')
-              .send({ email: 'NewContact@teamName2' })
+              .send({ email: 'ANewContact@teamName2' })
               .set('Accept', 'application/json')
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
+                newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'ANewContact@teamName2' })
+                newData.seasons[2].competitions[2].teams[2].contacts.sort((a, b) => { return a.email.localeCompare(b.email) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3462,6 +3525,7 @@ describe('/api/v1', () => {
               .then(() => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts.push({ id: 4, email: 'NewContact@teamName2' })
+                newData.seasons[2].competitions[2].teams[2].contacts.sort((a, b) => { return a.email.localeCompare(b.email) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3731,6 +3795,7 @@ describe('/api/v1', () => {
                 const newData = cloneData(expectedData)
                 newData.seasons[2].competitions[2].teams[2].contacts[2].email = 'newContact2@teamName2'
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(newData.seasons[2].competitions[2].teams[2].contacts[2]))
+                newData.seasons[2].competitions[2].teams[2].contacts.sort((a, b) => { return a.email.localeCompare(b.email) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3904,42 +3969,6 @@ describe('/api/v1', () => {
             .expect(500)
         })
       })
-    })
-  })
-
-  describe('/reminders/email', () => {
-    describe('get', () => {
-
-    })
-
-    describe('put', () => {
-
-    })
-  })
-
-  describe('/reminders/email/body', () => {
-    describe('get', () => {
-
-    })
-
-    describe('put', () => {
-
-    })
-  })
-
-  describe('/reminders/email/smtp', () => {
-    describe('get', () => {
-
-    })
-
-    describe('put', () => {
-
-    })
-  })
-
-  describe('/reminders/email/next', () => {
-    describe('get', () => {
-
     })
   })
 })

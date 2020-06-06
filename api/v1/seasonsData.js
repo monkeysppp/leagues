@@ -20,16 +20,6 @@ function throwError (message, statusCode) {
 exports.seasonsGet = function () {
   log.debug('seasonsGet()')
   seasonsData = dataFile.readData()
-  seasonsData.seasons.forEach(season => {
-    season.competitions.forEach(competition => {
-      competition.fixtures.sort((elem1, elem2) => {
-        const date1 = new Date(elem1.date)
-        const date2 = new Date(elem2.date)
-        return date1 - date2
-      })
-    })
-  })
-
   return seasonsData.seasons
 }
 
@@ -68,6 +58,7 @@ exports.seasonsPost = function (seasonName) {
   newSeason.competitions = []
   seasonsData.seasons.push(newSeason)
 
+  seasonsData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
   dataFile.writeData(seasonsData)
 
   return { id: newSeason.id }
@@ -135,6 +126,7 @@ exports.seasonsSeasonIdPut = function (seasonId, seasonName) {
 
   if (season) {
     season.name = seasonName
+    seasonsData.seasons.sort((a, b) => { return a.name.localeCompare(b.name) })
     dataFile.writeData(seasonsData)
     return season
   }
@@ -214,6 +206,7 @@ exports.seasonsSeasonIdCompetitionsPost = function (seasonId, competitionName) {
   newCompetition.teams = []
   season.competitions.push(newCompetition)
 
+  season.competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
   dataFile.writeData(seasonsData)
   return { id: newCompetition.id }
 }
@@ -282,6 +275,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdPut = function (seasonId, compet
 
   if (competition) {
     competition.name = competitionName
+    season.competitions.sort((a, b) => { return a.name.localeCompare(b.name) })
     dataFile.writeData(seasonsData)
     return competition
   }
@@ -363,6 +357,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost = function (seasonId, 
   newTeam.contacts = []
   competition.teams.push(newTeam)
 
+  competition.teams.sort((a, b) => { return a.name.localeCompare(b.name) })
   dataFile.writeData(seasonsData)
   return { id: newTeam.id }
 }
@@ -433,6 +428,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut = function (seaso
 
   if (team) {
     team.name = teamName
+    competition.teams.sort((a, b) => { return a.name.localeCompare(b.name) })
     dataFile.writeData(seasonsData)
     return team
   }
@@ -515,6 +511,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = functi
   newContact.email = contactAddress
   team.contacts.push(newContact)
 
+  team.contacts.sort((a, b) => { return a.email.localeCompare(b.email) })
   dataFile.writeData(seasonsData)
   return { id: newContact.id }
 }
@@ -587,9 +584,8 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut 
 
   if (contact) {
     contact.email = contactAddress
-
+    team.contacts.sort((a, b) => { return a.email.localeCompare(b.email) })
     dataFile.writeData(seasonsData)
-
     return contact
   } else {
     throwError('Contact not found', 404)
@@ -691,7 +687,11 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonI
     }
   }
   competition.fixtures.push(newFixture)
-
+  competition.fixtures.sort((a, b) => {
+    const date1 = new Date(a.date)
+    const date2 = new Date(b.date)
+    return date1 - date2
+  })
   dataFile.writeData(seasonsData)
   return { id: newFixture.id }
 }
@@ -772,7 +772,11 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function 
     } else {
       delete fixtureToReplace.adjudicator
     }
-
+    competition.fixtures.sort((a, b) => {
+      const date1 = new Date(a.date)
+      const date2 = new Date(b.date)
+      return date1 - date2
+    })
     dataFile.writeData(seasonsData)
     return fixtureToReplace
   }
@@ -892,6 +896,9 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost = f
   }
   fixture.matches.push(newMatch)
 
+  fixture.matches.sort((a, b) => {
+    return new Date(a.time) - new Date(b.time)
+  })
   dataFile.writeData(seasonsData)
   return { id: newMatch.id }
 }
@@ -1005,7 +1012,9 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdP
     } else {
       delete matchToReplace.refTeam
     }
-
+    fixture.matches.sort((a, b) => {
+      return new Date(a.time) - new Date(b.time)
+    })
     dataFile.writeData(seasonsData)
     return matchToReplace
   }
