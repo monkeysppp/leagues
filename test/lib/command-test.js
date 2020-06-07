@@ -8,11 +8,9 @@ chai.use(sinonChai)
 const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 
-// const userDb = require('../../lib/userDb.js');
-// const mysql = require('mysql');
-
 const command = require('../../lib/command.js')
-const addUser = require('../../lib/users.js')
+const users = require('../../lib/users.js')
+const server = require('../../lib/server.js')
 
 describe('leagues commands', () => {
   let args
@@ -24,18 +22,36 @@ describe('leagues commands', () => {
   context('called with run', () => {
     beforeEach(() => {
       args.push('run')
+      sinon.stub(server, 'runApp')
+    })
+
+    afterEach(() => {
+      server.runApp.restore()
     })
 
     context('call succeeds', () => {
       beforeEach(() => {
+        server.runApp.resolves()
       })
 
       it('resolves', () => {
+        return command.run(args)
+          .then(() => {
+            expect(server.runApp.callCount).to.equal(1)
+          })
       })
     })
 
     context('call fails', () => {
+      beforeEach(() => {
+        server.runApp.rejects(new Error('RunApp Failed'))
+      })
+
       it('rejects', () => {
+        return expect(command.run(args)).to.be.rejectedWith(Error, 'RunApp Failed')
+          .then(() => {
+            expect(server.runApp.callCount).to.equal(1)
+          })
       })
     })
   })
@@ -44,38 +60,77 @@ describe('leagues commands', () => {
     beforeEach(() => {
       args.push('addUser')
       args.push('username')
-
-      sinon.stub(addUser, 'addUser')
+      sinon.stub(users, 'addUser')
     })
 
     afterEach(() => {
-      addUser.addUser.restore()
+      users.addUser.restore()
     })
 
     context('call succeeds', () => {
       beforeEach(() => {
-        addUser.addUser.resolves()
+        users.addUser.resolves()
       })
 
       it('resolves', () => {
         return command.run(args)
           .then(() => {
-            expect(addUser.addUser.callCount).to.equal(1)
-            expect(addUser.addUser).to.be.calledWith('username')
+            expect(users.addUser.callCount).to.equal(1)
+            expect(users.addUser).to.be.calledWith('username')
           })
       })
     })
 
     context('call fails', () => {
       beforeEach(() => {
-        addUser.addUser.rejects(new Error('AddUser Failed'))
+        users.addUser.rejects(new Error('AddUser Failed'))
       })
 
       it('rejects', () => {
         return expect(command.run(args)).to.be.rejectedWith(Error, 'AddUser Failed')
           .then(() => {
-            expect(addUser.addUser.callCount).to.equal(1)
-            expect(addUser.addUser).to.be.calledWith('username')
+            expect(users.addUser.callCount).to.equal(1)
+            expect(users.addUser).to.be.calledWith('username')
+          })
+      })
+    })
+  })
+
+  context('called with deleteUser', () => {
+    beforeEach(() => {
+      args.push('deleteUser')
+      args.push('username')
+      sinon.stub(users, 'deleteUser')
+    })
+
+    afterEach(() => {
+      users.deleteUser.restore()
+    })
+
+    context('call succeeds', () => {
+      beforeEach(() => {
+        users.deleteUser.resolves()
+      })
+
+      it('resolves', () => {
+        return command.run(args)
+          .then(() => {
+            expect(users.deleteUser.callCount).to.equal(1)
+            expect(users.deleteUser).to.be.calledWith('username')
+          })
+      })
+    })
+
+    context('call fails', () => {
+      beforeEach(() => {
+        users.deleteUser.rejects(new Error('DeleteUser Failed'))
+      })
+
+      it('rejects', () => {
+        return expect(command.run(args)).to.be.rejectedWith(Error, 'DeleteUser Failed')
+          .then(() => {
+            expect(users.deleteUser.callCount).to.equal(1)
+            expect(users.deleteUser).to.be.calledWith('username')
           })
       })
     })
