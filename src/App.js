@@ -20,38 +20,21 @@ class Main extends React.Component {
     if (this.props.loggedIn) {
       return (
         <Switch>
-          <Route exact path='/ui'>
-            <Home loggedIn={this.props.loggedIn} />
-          </Route>
-          <Route exact path='/ui/LeagueContacts'>
-            <LeagueContacts utils={this.props.utils}/>
-          </Route>
-          <Route exact path='/ui/LeagueFixtures'>
-            <LeagueFixtures utils={this.props.utils}/>
-          </Route>
-          <Route exact path='/ui/LeagueMatches'>
-            <LeagueMatches utils={this.props.utils}/>
-          </Route>
-          <Route exact path='/ui/PopulateLeagues'>
-            <PopulateLeagues utils={this.props.utils}/>
-          </Route>
-          <Route exact path='/ui/EmailReminders'>
-            <EmailReminders utils={this.props.utils}/>
-          </Route>
-          <Route exact path='/ui/logout'>
-            <Home loggedIn={this.props.loggedIn} logout={true} />
-          </Route>
+          <Route exact path='/ui'><Home loggedIn={this.props.loggedIn} /></Route>
+          <Route exact path='/ui/LeagueContacts'><LeagueContacts utils={this.props.utils}/></Route>
+          <Route exact path='/ui/LeagueFixtures'><LeagueFixtures utils={this.props.utils}/></Route>
+          <Route exact path='/ui/LeagueMatches'><LeagueMatches utils={this.props.utils}/></Route>
+          <Route exact path='/ui/PopulateLeagues'><PopulateLeagues utils={this.props.utils}/></Route>
+          <Route exact path='/ui/EmailReminders'><EmailReminders utils={this.props.utils}/></Route>
+          <Route exact path='/ui/login'><Login /></Route>
+          <Route exact path='/ui/logout'><Home loggedIn={this.props.loggedIn}/></Route>
         </Switch>
       )
     } else {
       return (
         <Switch>
-          <Route exact path='/ui'>
-            <Home loggedIn={this.props.loggedIn} />
-          </Route>
-          <Route exact path='/ui/login'>
-            <Login />
-          </Route>
+          <Route exact path='/ui'><Home loggedIn={this.props.loggedIn} /></Route>
+          <Route exact path='/ui/login'><Login /></Route>
         </Switch>
       )
     }
