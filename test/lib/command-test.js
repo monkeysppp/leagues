@@ -12,7 +12,7 @@ chai.use(chaiAsPromised)
 // const mysql = require('mysql');
 
 const command = require('../../lib/command.js')
-const addUser = require('../../lib/addUser.js')
+const addUser = require('../../lib/users.js')
 
 describe('leagues commands', () => {
   let args
@@ -43,9 +43,6 @@ describe('leagues commands', () => {
   context('called with addUser', () => {
     beforeEach(() => {
       args.push('addUser')
-      args.push('dbHost')
-      args.push('dbName')
-      args.push('dbUser')
       args.push('username')
 
       sinon.stub(addUser, 'addUser')
@@ -64,7 +61,7 @@ describe('leagues commands', () => {
         return command.run(args)
           .then(() => {
             expect(addUser.addUser.callCount).to.equal(1)
-            expect(addUser.addUser).to.be.calledWith('dbHost', 'dbName', 'dbUser', 'username')
+            expect(addUser.addUser).to.be.calledWith('username')
           })
       })
     })
@@ -78,7 +75,7 @@ describe('leagues commands', () => {
         return expect(command.run(args)).to.be.rejectedWith(Error, 'AddUser Failed')
           .then(() => {
             expect(addUser.addUser.callCount).to.equal(1)
-            expect(addUser.addUser).to.be.calledWith('dbHost', 'dbName', 'dbUser', 'username')
+            expect(addUser.addUser).to.be.calledWith('username')
           })
       })
     })

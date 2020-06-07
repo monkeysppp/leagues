@@ -47,11 +47,11 @@ describe('userDb', () => {
     })
 
     it('stores the connection details', () => {
-      const userDB = new UserDb(hostname, database, dbUser, dbPass)
-      expect(userDB.dbHost).to.equal(hostname)
-      expect(userDB.dbName).to.equal(database)
-      expect(userDB.dbUser).to.equal(dbUser)
-      expect(userDB.dbPass).to.equal(dbPass)
+      const userDb = new UserDb(hostname, database, dbUser, dbPass)
+      expect(userDb.dbHost).to.equal(hostname)
+      expect(userDb.dbName).to.equal(database)
+      expect(userDb.dbUser).to.equal(dbUser)
+      expect(userDb.dbPass).to.equal(dbPass)
     })
   })
 
@@ -76,8 +76,8 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        const userDB = new UserDb(hostname, database, dbUser, dbPass)
-        await expect(userDB._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'createConnection Bang!')
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await expect(userDb._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'createConnection Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -95,8 +95,8 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        const userDB = new UserDb(hostname, database, dbUser, dbPass)
-        await expect(userDB._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'createTable Bang!')
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await expect(userDb._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'createTable Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -115,8 +115,8 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        const userDB = new UserDb(hostname, database, dbUser, dbPass)
-        await expect(userDB._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'insert Bang!')
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await expect(userDb._storePassword(username, passwordHash)).to.be.rejectedWith(Error, 'insert Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -132,8 +132,8 @@ describe('userDb', () => {
 
     context('the user is inserted successfully', () => {
       it('resolves', async () => {
-        const userDB = new UserDb(hostname, database, dbUser, dbPass)
-        await userDB._storePassword(username, passwordHash)
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await userDb._storePassword(username, passwordHash)
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -143,6 +143,74 @@ describe('userDb', () => {
         expect(connectionObject.query).to.be.calledWith('CREATE TABLE IF NOT EXISTS `users` ' +
           '(`username` varchar(100) NOT NULL UNIQUE, `identity` varchar(280) NOT NULL)')
         expect(connectionObject.query).to.be.calledWith('INSERT INTO users SET ?', { username: username, identity: passwordHash })
+        expect(connectionObject.destroy.callCount).to.equal(1)
+      })
+    })
+  })
+
+  describe('deleteUser', () => {
+    let connectionObject
+
+    beforeEach(() => {
+      delete process.env.NODE_SKIP_PASSWORD_CHECK
+      connectionObject = {
+        destroy: sinon.stub(),
+        query: sinon.stub().yields()
+      }
+      sinon.stub(mysql, 'createConnection').returns(connectionObject)
+    })
+
+    afterEach(() => {
+      mysql.createConnection.restore()
+    })
+
+    context('creating a connection fails', () => {
+      beforeEach(() => {
+        mysql.createConnection.throws(new Error('createConnection Bang!'))
+      })
+
+      it('rejects', async () => {
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await expect(userDb.deleteUser(username)).to.be.rejectedWith(Error, 'createConnection Bang!')
+        expect(mysql.createConnection).to.be.calledWith({
+          host: hostname,
+          database: database,
+          user: dbUser,
+          password: dbPass
+        })
+      })
+    })
+
+    context('deleting entry from table fails', () => {
+      beforeEach(() => {
+        connectionObject.query.yields(new Error('delete Bang!'))
+      })
+
+      it('rejects', async () => {
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await expect(userDb.deleteUser(username)).to.be.rejectedWith(Error, 'delete Bang!')
+        expect(mysql.createConnection).to.be.calledWith({
+          host: hostname,
+          database: database,
+          user: dbUser,
+          password: dbPass
+        })
+        expect(connectionObject.query).to.be.calledWith('DELETE FROM `users` WHERE `username` = ?', [username])
+        expect(connectionObject.destroy.callCount).to.equal(1)
+      })
+    })
+
+    context('the user is deleted successfully', () => {
+      it('resolves', async () => {
+        const userDb = new UserDb(hostname, database, dbUser, dbPass)
+        await userDb.deleteUser(username)
+        expect(mysql.createConnection).to.be.calledWith({
+          host: hostname,
+          database: database,
+          user: dbUser,
+          password: dbPass
+        })
+        expect(connectionObject.query).to.be.calledWith('DELETE FROM `users` WHERE `username` = ?', [username])
         expect(connectionObject.destroy.callCount).to.equal(1)
       })
     })
@@ -171,7 +239,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.saltHashAndStore(username, password)).to.be.rejectedWith('hash Bang!')
+        await expect(userDb.saltHashAndStore(username, password)).to.be.rejectedWith(Error, 'hash Bang!')
         expect(userDb._storePassword.callCount).to.equal(0)
       })
     })
@@ -182,7 +250,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.saltHashAndStore(username, password)).to.be.rejectedWith('store Bang!')
+        await expect(userDb.saltHashAndStore(username, password)).to.be.rejectedWith(Error, 'store Bang!')
         expect(userDb._storePassword).to.be.calledWith(username, passwordHash)
       })
     })
@@ -240,7 +308,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith('createConnection Bang!')
+        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith(Error, 'createConnection Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -256,7 +324,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith('lookup Bang!')
+        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith(Error, 'lookup Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -273,7 +341,7 @@ describe('userDb', () => {
         connectionObject.query.yields(undefined, [])
       })
 
-      it('resolves to null', async () => {
+      it('resolves to undefined', async () => {
         const user = await userDb.checkPassword(username, password)
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
@@ -283,7 +351,7 @@ describe('userDb', () => {
         })
         expect(connectionObject.query).to.be.calledWith('SELECT * FROM `users` WHERE `username` = ?', [username])
         expect(connectionObject.destroy.callCount).to.equal(1)
-        expect(user).to.equal(null)
+        expect(user).to.equal(undefined)
       })
     })
 
@@ -293,7 +361,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith('verify Bang!')
+        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith(Error, 'verify Bang!')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
@@ -312,7 +380,7 @@ describe('userDb', () => {
       })
 
       it('rejects', async () => {
-        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith('Password failed to validate')
+        await expect(userDb.checkPassword(username, password)).to.be.rejectedWith(Error, 'Password failed to validate')
         expect(mysql.createConnection).to.be.calledWith({
           host: hostname,
           database: database,
