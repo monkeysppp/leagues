@@ -449,6 +449,15 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete = function (se
     throwError('Invalid teamId', 400)
   }
 
+  const fixtures = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesGet(seasonId, competitionId)
+  fixtures.forEach(fixture => {
+    fixture.matches.forEach(match => {
+      if (match.homeTeam === teamId || match.awayTeam === teamId || match.refTeam === teamId || fixture.adjudicator === teamId) {
+        throwError('Team still has matches', 400)
+      }
+    })
+  })
+
   const teams = exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsGet(seasonId, competitionId)
   const teamCount = teams.length
   for (let i = 0; i < teamCount; i++) {

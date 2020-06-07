@@ -70,6 +70,13 @@ const sampleData = {
                 { id: 3, email: 'contact3@teamName2' },
                 { id: 2, email: 'contact2@teamName2' }
               ]
+            },
+            {
+              id: 4,
+              name: 'teamName4',
+              contacts: [
+                { id: 1, email: 'contact1@teamName4' }
+              ]
             }
           ],
           fixtures: [
@@ -157,6 +164,13 @@ const expectedData = {
                 { id: 1, email: 'contact1@teamName2' },
                 { id: 3, email: 'contact3@teamName2' },
                 { id: 2, email: 'contact2@teamName2' }
+              ]
+            },
+            {
+              id: 4,
+              name: 'teamName4',
+              contacts: [
+                { id: 1, email: 'contact1@teamName4' }
               ]
             }
           ],
@@ -1279,7 +1293,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName4'
+                  adjudicator: 'teamName10'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -1616,7 +1630,7 @@ describe('/api/v1', () => {
                 .send({
                   date: 'Fri 31-Jan-20',
                   venue: 'Venue 1',
-                  adjudicator: 'teamName4'
+                  adjudicator: 'teamName10'
                 })
                 .set('Accept', 'application/json')
                 .expect(400)
@@ -2916,9 +2930,9 @@ describe('/api/v1', () => {
               .expect('Content-Type', /application\/json/)
               .expect(200)
               .then(res => {
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 4 }))
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify({ id: 5 }))
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'ANewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.push({ id: 5, name: 'ANewTeam', contacts: [] })
                 newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -2938,7 +2952,7 @@ describe('/api/v1', () => {
               .expect(500)
               .then(() => {
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.push({ id: 4, name: 'WeHaveANewTeam', contacts: [] })
+                newData.seasons[2].competitions[2].teams.push({ id: 5, name: 'WeHaveANewTeam', contacts: [] })
                 newData.seasons[2].competitions[2].teams.sort((a, b) => { return a.name.localeCompare(b.name) })
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
@@ -3279,14 +3293,37 @@ describe('/api/v1', () => {
             })
           })
 
+          context('team still has matches', () => {
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/teams/1')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/teams/2')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .delete('/api/v1/seasons/2/competitions/2/teams/3')
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+          })
+
           it('deletes the data', () => {
             return request(app)
-              .delete('/api/v1/seasons/2/competitions/2/teams/2')
+              .delete('/api/v1/seasons/2/competitions/2/teams/4')
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.splice(2, 1)
+                newData.seasons[2].competitions[2].teams.splice(3, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3299,12 +3336,12 @@ describe('/api/v1', () => {
 
           it('returns 500', () => {
             return request(app)
-              .delete('/api/v1/seasons/2/competitions/2/teams/2')
+              .delete('/api/v1/seasons/2/competitions/2/teams/4')
               .set('Accept', 'application/json')
               .expect(500)
               .then(() => {
                 const newData = cloneData(expectedData)
-                newData.seasons[2].competitions[2].teams.splice(2, 1)
+                newData.seasons[2].competitions[2].teams.splice(3, 1)
                 expect(seasonsDataFile.writeData).to.be.calledWith(newData)
               })
           })
@@ -3318,7 +3355,7 @@ describe('/api/v1', () => {
 
         it('returns 500', () => {
           return request(app)
-            .delete('/api/v1/seasons/2/competitions/2/teams/2')
+            .delete('/api/v1/seasons/2/competitions/2/teams/4')
             .set('Accept', 'application/json')
             .expect(500)
         })
