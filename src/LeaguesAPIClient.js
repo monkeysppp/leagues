@@ -215,12 +215,12 @@ class LeaguesAPIClient {
       })
   }
 
-  async remindersEmailPut (enabled, reminderDays, reminderTime) {
+  async remindersEmailPut (enabled, from, reminderDays, reminderTime) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
     }
-    return axios.put('/api/v1/reminders/email', { enabled: enabled, reminderDays: reminderDays, reminderTime: reminderTime }, { headers: headers })
+    return axios.put('/api/v1/reminders/email', { enabled: enabled, from: from, reminderDays: reminderDays, reminderTime: reminderTime }, { headers: headers })
       .then(res => {
         return res.data
       })

@@ -1416,6 +1416,9 @@ definitions:
       enabled:
         type: "boolean"
         description: "Set whether email reminders are enabled or not"
+      from:
+        type: "string"
+        description: "The email address to set as the \"From\" address. Can be of the form \"alice@example.com\" or \"Alice Bobs <alice@example.com>\""
       reminderDays:
         type: "integer"
         format: "int32"

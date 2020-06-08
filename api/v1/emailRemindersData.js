@@ -36,12 +36,16 @@ exports.remindersEmailGet = function () {
  *
  * @returns
  **/
-exports.remindersEmailPut = function (enabled, reminderDays, reminderTime) {
+exports.remindersEmailPut = function (enabled, fromAddress, reminderDays, reminderTime) {
   const timeRegex = /\d\d:\d\d/
-  log.debug(`remindersEmailPut(emailConfig) req.body.enabled=<${enabled} req.body.reminderDays=<${reminderDays} req.body.reminderTime=<${reminderTime}>`)
+  const emailRegex = /[^@]+@[^@]+/
+  log.debug(`remindersEmailPut(emailConfig) req.body.enabled=<${enabled} req.body.from=<${fromAddress}> req.body.reminderDays=<${reminderDays} req.body.reminderTime=<${reminderTime}>`)
 
   if (typeof enabled !== 'boolean') {
     throwError('Bad enabled setting', 400)
+  }
+  if (typeof fromAddress !== 'string' || !fromAddress.match(emailRegex)) {
+    throwError('Bad from address setting', 400)
   }
   if (typeof reminderDays !== 'number' || reminderDays > 32) {
     throwError('Bad reminderDays setting', 400)
@@ -52,6 +56,7 @@ exports.remindersEmailPut = function (enabled, reminderDays, reminderTime) {
 
   configData = emailRemindersConfigFile.readData()
   configData.enabled = enabled
+  configData.from = fromAddress
   configData.reminderDays = reminderDays
   configData.reminderTime = reminderTime
   emailRemindersConfigFile.writeData(configData)

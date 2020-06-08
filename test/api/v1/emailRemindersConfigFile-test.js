@@ -74,15 +74,15 @@ describe('dataFile', () => {
         it('returns a 500 error', () => {
           expect(() => { dataFile.readData() }).to.throw(/Failed to write new data file/).with.property('status', 500)
           expect(fs.readFileSync).to.be.calledWith(configDataFile, 'utf-8')
-          expect(fs.writeFileSync).to.be.calledWith(configDataFile, JSON.stringify({ enabled: false, reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }), 'utf-8')
+          expect(fs.writeFileSync).to.be.calledWith(configDataFile, JSON.stringify({ enabled: false, from: '', reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }), 'utf-8')
         })
       })
 
       context('when creating the file succeeds', () => {
         it('succeeds', () => {
-          expect(JSON.stringify(dataFile.readData())).to.equal(JSON.stringify({ enabled: false, reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }))
+          expect(JSON.stringify(dataFile.readData())).to.equal(JSON.stringify({ enabled: false, from: '', reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }))
           expect(fs.readFileSync).to.be.calledWith(configDataFile, 'utf-8')
-          expect(fs.writeFileSync).to.be.calledWith(configDataFile, JSON.stringify({ enabled: false, reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }), 'utf-8')
+          expect(fs.writeFileSync).to.be.calledWith(configDataFile, JSON.stringify({ enabled: false, from: '', reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }), 'utf-8')
         })
       })
     })

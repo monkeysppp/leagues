@@ -83,6 +83,7 @@ class EmailReminders extends React.Component {
       smtpPass: 'xxxxxxxx',
       smtpPassChanged: false,
       emailRemindersEnabled: true,
+      emailFrom: '',
       emailReminderTime: new Date(),
       emailReminderDays: 0,
       emailBodyLeader: '',
@@ -101,6 +102,7 @@ class EmailReminders extends React.Component {
     this.handleSMTPPortChange = this.handleSMTPPortChange.bind(this)
     this.handleSMTPUserChange = this.handleSMTPUserChange.bind(this)
     this.handleSMTPPassChange = this.handleSMTPPassChange.bind(this)
+    this.handleEmailFromChange = this.handleEmailFromChange.bind(this)
     this.handleEmailLeaderChange = this.handleEmailLeaderChange.bind(this)
     this.handleEmailTailerChange = this.handleEmailTailerChange.bind(this)
     this.handleEmailTimeChange = this.handleEmailTimeChange.bind(this)
@@ -123,6 +125,7 @@ class EmailReminders extends React.Component {
       ])
       this.setState({
         emailRemindersEnabled: emailConfig.enabled,
+        emailFrom: emailConfig.from,
         emailReminderDays: emailConfig.reminderDays,
         emailReminderTime: parse(emailConfig.reminderTime, 'HH:mm', new Date('2000-01-01T19:00:00')),
         emailBodyLeader: emailBody.leader,
@@ -144,6 +147,10 @@ class EmailReminders extends React.Component {
       format(this.state.emailReminderTime, 'HH:mm')
     )
     this.refreshData()
+  }
+
+  handleEmailFromChange (e) {
+    this.setState({ emailFrom: e.target.value })
   }
 
   handleEmailTimeChange (e) {
@@ -202,6 +209,7 @@ class EmailReminders extends React.Component {
     try {
       await this.leaguesAPIClient.remindersEmailPut(
         this.state.emailRemindersEnabled,
+        this.state.emailFrom,
         parseInt(this.state.emailReminderDays),
         format(this.state.emailReminderTime, 'HH:mm')
       )
@@ -218,14 +226,13 @@ class EmailReminders extends React.Component {
 
 
   render () {
-    //<p>Next Reminder at: <code>{format(this.state.nextReminder, 'YYYY-MM-DD HH:mm')}</code></p>
-    //
     let reminder = <div style={{padding: '0px 16px'}}>
       <p>Next Reminder at: <code>No pending match reminders</code></p>
     </div>
     if (this.state.emailRemindersEnabled && this.state.nextReminder.time) {
       reminder = <div style={{padding: '0px 16px'}}>
         <p>Next Reminder at: <code>{format(new Date(this.state.nextReminder.time), 'yyyy-MM-dd HH:mm')}</code></p>
+        <p>From: <code>{this.state.emailFrom}</code></p>
         <p>To: <code>{this.state.nextReminder.recipients}</code></p>
         <p>Subject: <code>{this.state.nextReminder.subject}</code></p>
         <p>Body: </p>
@@ -260,6 +267,7 @@ class EmailReminders extends React.Component {
               Email Config
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
+              <TextField id="email.from" label="From Address" style={{width: 510}} variant="outlined" value={this.state.emailFrom} onChange={this.handleEmailFromChange} /><br/>
               <span>Email will be sent at <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker style={{'verticalAlign': 'baseline'}} format="HH:mm" margin="normal" id="time-picker-inline" label="Pick time" value={this.state.emailReminderTime} onChange={this.handleEmailTimeChange} KeyboardButtonProps={{ 'aria-label': 'pick time', }} />
               </MuiPickersUtilsProvider>, <TextField id="reminder.days" label="days" style={{width: 50, 'verticalAlign': 'baseline'}} variant="outlined" value={this.state.emailReminderDays} onChange={this.handleEmailDaysChange} />&nbsp;&nbsp;days in advance.</span>

@@ -50,7 +50,7 @@ exports.readData = function () {
   } catch (error) {
     if (error.code === 'ENOENT') {
       log.warn('File ' + emailRemindersConfigFile + ' not found, so creating it now')
-      emailRemindersConfigData = { enabled: false, reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }
+      emailRemindersConfigData = { enabled: false, from: '', reminderDays: 6, reminderTime: '10:00', email: { leader: '', tailer: '' } }
       try {
         try {
           fs.mkdirSync(emailRemindersConfigDir)

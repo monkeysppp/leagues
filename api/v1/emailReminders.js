@@ -10,7 +10,7 @@ exports.remindersEmailGet = function (req, res, next) {
   try {
     res.setHeader('Content-Type', 'application/json')
     const emailConfig = data.remindersEmailGet()
-    res.json({ enabled: emailConfig.enabled, reminderDays: emailConfig.reminderDays, reminderTime: emailConfig.reminderTime })
+    res.json({ enabled: emailConfig.enabled, from: emailConfig.from, reminderDays: emailConfig.reminderDays, reminderTime: emailConfig.reminderTime })
   } catch (err) {
     log.warn(err.message)
     res.status(err.status).end()
@@ -21,7 +21,7 @@ exports.remindersEmailPut = function (req, res, next) {
   log.info(`PUT /v1/reminders/email ${req.body.enabled}`)
 
   try {
-    data.remindersEmailPut(req.body.enabled, req.body.reminderDays, req.body.reminderTime)
+    data.remindersEmailPut(req.body.enabled, req.body.from, req.body.reminderDays, req.body.reminderTime)
     res.end()
   } catch (err) {
     log.warn(err.message)
