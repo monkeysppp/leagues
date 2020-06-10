@@ -286,7 +286,10 @@ class Fixtures extends React.Component {
     this.setState({ deleteFixtureDialogOpen: false })
   }
 
-  deleteFixtureDialogDelete () {
+  deleteFixtureDialogDelete (e) {
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     this.deleteFixtureDialogClose()
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteFixtureDialogFixture.id)
       .then(
@@ -309,8 +312,8 @@ class Fixtures extends React.Component {
         if (this.state.fixtureEditable) {
           body = <div>
             <span>{fixture.date} at {fixture.venue}</span>
-            <Tooltip title="Edit Fixture"><IconButton aria-label="Edit fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.editFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-            <Tooltip title="Delete Fixture"><IconButton aria-label="Delete fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+            <Tooltip disableFocusListener disableTouchListener title="Edit Fixture"><IconButton disableFocusRipple aria-label="Edit fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.editFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+            <Tooltip disableFocusListener disableTouchListener title="Delete Fixture"><IconButton disableFocusRipple aria-label="Delete fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
           </div>
         } else {
           body = <span>{fixture.date} at {fixture.venue}</span>
@@ -343,7 +346,7 @@ class Fixtures extends React.Component {
           <span>Fixtures</span>
         </ExpansionPanelSummaryWrapper>
         <ExpansionPanelDetailsWrapper>
-          <Tooltip title="Add new fixture"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addFixtureDialogOpen}>Add Fixture</Button></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Add new fixture"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addFixtureDialogOpen}>Add Fixture</Button></Tooltip>
           <div>
             {fixtures}
           </div>
@@ -399,11 +402,11 @@ class Fixtures extends React.Component {
           <Dialog open={this.state.deleteFixtureDialogOpen} onClose={this.deleteFixtureDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-fixture-dialog-title">Delete Fixture</DialogTitle>
             <DialogContent>
-              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteFixtureDialogDelete()}}>Are you sure you want to delete the fixture on "{this.state.deleteFixtureDialogFixture.date}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?</DialogContentText>
+              <DialogContentText>Are you sure you want to delete the fixture on "{this.state.deleteFixtureDialogFixture.date}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteFixtureDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.deleteFixtureDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
+              <Button onClick={this.deleteFixtureDialogDelete} autoFocus onKeyUp={this.deleteFixtureDialogDelete} variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
         </ExpansionPanelDetailsWrapper>

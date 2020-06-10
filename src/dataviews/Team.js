@@ -53,9 +53,17 @@ class Team extends React.Component {
     this.setState({ addContactDialogOpen: false })
   }
 
-  addContactDialogAdd () {
+  addContactDialogAdd (e) {
+    if (!this.state.addContactDialogOpen ||
+      this.state.addContactDialogContactAddress.length === 0 ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addContactDialogClose()
     const contactAddress = this.state.addContactDialogContactAddress
+    this.setState({ addContactDialogContactAddress: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(this.props.seasonId, this.props.competitionId, this.props.team.id, contactAddress)
       .then(
         () => {
@@ -79,9 +87,17 @@ class Team extends React.Component {
     this.setState({ editContactDialogOpen: false })
   }
 
-  editContactDialogEdit () {
+  editContactDialogEdit (e) {
+    if (!this.state.editContactDialogOpen ||
+      this.state.editContactDialogContact.email === this.state.editContactDialogContact.originalEmail ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editContactDialogClose()
     const contact = this.state.editContactDialogContact
+    this.setState({ editContactDialogContact: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id, contact.email)
       .then(
         () => {
@@ -108,16 +124,21 @@ class Team extends React.Component {
     this.setState({ deleteContactDialogOpen: false })
   }
 
-  deleteContactDialogDelete () {
+  deleteContactDialogDelete (e) {
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     this.deleteContactDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, this.state.deleteContactDialogContact.id)
+    const contact = this.state.deleteContactDialogContact
+    this.setState({ deleteContactDialogContact: {} })
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id)
       .then(
         () => {
-          this.enqueueSnackbar('Contact ' + this.state.deleteContactDialogContact.name + ' deleted', { variant: 'success' })
+          this.enqueueSnackbar('Contact ' + contact.name + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Contact ' + this.state.deleteContactDialogContact.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Contact ' + contact.name, { variant: 'error' })
         })
   }
 
@@ -128,8 +149,8 @@ class Team extends React.Component {
       if (this.state.contactEditable) {
         contacts.push(<div key={contact.id}>
           <Contact contact={contact}></Contact>
-          <Tooltip title="Edit contact"><IconButton aria-label="Edit contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.editContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete contact"><IconButton aria-label="Delete contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Edit contact"><IconButton disableFocusRipple aria-label="Edit contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.editContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Delete contact"><IconButton disableFocusRipple aria-label="Delete contact" component="span" style={Colours.contacts.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteContactDialogOpen(contact)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>)
       } else {
         contacts.push(<Contact contact={contact}></Contact>)
@@ -139,12 +160,12 @@ class Team extends React.Component {
     let addContact = <span></span>
     if (this.state.contactEditable) {
       addContact = <div>
-        <Tooltip title="Add new contact"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addContactDialogOpen}>Add Contact</Button></Tooltip>
+        <Tooltip disableFocusListener disableTouchListener title="Add new contact"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addContactDialogOpen}>Add Contact</Button></Tooltip>
         <Dialog open={this.state.addContactDialogOpen} onClose={this.addContactDialogClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="add-contact-dialog-title">Add Contact</DialogTitle>
           <DialogContent>
             <DialogContentText>Enter the email address for the new Contact</DialogContentText>
-            <TextField autoFocus margin="dense" id="add-contact-contactAddress" onChange={this.addContactDialogContactAddressChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addContactDialogAdd()}} label="Contact address" type="email" fullWidth/>
+            <TextField autoFocus margin="dense" id="add-contact-contactAddress" onChange={this.addContactDialogContactAddressChange} onKeyUp={this.addContactDialogAdd} label="Contact address" type="email" fullWidth/>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.addContactDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -155,7 +176,7 @@ class Team extends React.Component {
           <DialogTitle id="edit-contact-dialog-title">Edit Contact</DialogTitle>
           <DialogContent>
             <DialogContentText>Enter the email address for the Contact</DialogContentText>
-            <TextField autoFocus margin="dense" id="edit-contact-contactAddress" onChange={this.editContactDialogContactAddressChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editContactDialogEdit()}} label="Contact address" type="email" fullWidth defaultValue={this.state.editContactDialogContact.originalEmail}/>
+            <TextField autoFocus margin="dense" id="edit-contact-contactAddress" onChange={this.editContactDialogContactAddressChange} onKeyUp={this.editContactDialogEdit} label="Contact address" type="email" fullWidth defaultValue={this.state.editContactDialogContact.originalEmail}/>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.editContactDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -165,11 +186,11 @@ class Team extends React.Component {
         <Dialog open={this.state.deleteContactDialogOpen} onClose={this.deleteContactDialogClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="delete-contact-dialog-title">Delete Contact</DialogTitle>
           <DialogContent>
-            <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteContactDialogDelete()}}>Are you sure you want to delete the contact "{this.state.deleteContactDialogContact.email}" from {this.props.team.name}?</DialogContentText>
+            <DialogContentText>Are you sure you want to delete the contact "{this.state.deleteContactDialogContact.email}" from {this.props.team.name}?</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.deleteContactDialogClose} variant="outlined" color="primary">Cancel</Button>
-            <Button onClick={this.deleteContactDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
+            <Button onClick={this.deleteContactDialogDelete} autoFocus onKeyUp={this.deleteContactDialogDelete} variant="contained" color="secondary">Delete</Button>
           </DialogActions>
         </Dialog>
       </div>

@@ -113,9 +113,17 @@ class Season extends React.Component {
     this.setState({ addCompetitionDialogOpen: false })
   }
 
-  addCompetitionDialogAdd () {
+  addCompetitionDialogAdd (e) {
+    if (!this.state.addCompetitionDialogOpen ||
+      this.state.addCompetitionDialogCompetitionName.length === 0 ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addCompetitionDialogClose()
     const competitionName = this.state.addCompetitionDialogCompetitionName
+    this.setState({ addCompetitionDialogCompetitionName: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(this.props.season.id, competitionName)
       .then(
         () => {
@@ -139,9 +147,17 @@ class Season extends React.Component {
     this.setState({ editCompetitionDialogOpen: false })
   }
 
-  editCompetitionDialogEdit () {
+  editCompetitionDialogEdit (e) {
+    if (!this.state.editCompetitionDialogOpen ||
+      this.state.editCompetitionDialogCompetition.name === this.state.editCompetitionDialogCompetition.originalName ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editCompetitionDialogClose()
     const competition = this.state.editCompetitionDialogCompetition
+    this.setState({ editCompetitionDialogCompetition: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdPut(this.props.season.id, competition.id, competition.name)
       .then(
         () => {
@@ -168,16 +184,21 @@ class Season extends React.Component {
     this.setState({ deleteCompetitionDialogOpen: false })
   }
 
-  deleteCompetitionDialogDelete () {
+  deleteCompetitionDialogDelete (e) {
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     this.deleteCompetitionDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdDelete(this.props.season.id, this.state.deleteCompetitionDialogCompetition.id)
+    const competition = this.state.deleteCompetitionDialogCompetition
+    this.setState({ deleteCompetitionDialogCompetition: {} })
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdDelete(this.props.season.id, competition.id)
       .then(
         () => {
-          this.enqueueSnackbar('Competition ' + this.state.deleteCompetitionDialogCompetition.name + ' deleted', { variant: 'success' })
+          this.enqueueSnackbar('Competition ' + competition.name + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Competition ' + this.state.deleteCompetitionDialogCompetition.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Competition ' + competition.name, { variant: 'error' })
         })
   }
 
@@ -189,8 +210,8 @@ class Season extends React.Component {
       if (this.state.competitionEditable) {
         body = <div>
           <span>{competition.name}</span>
-          <Tooltip title="Edit competition name"><IconButton aria-label="Edit competition name" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.editCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete Competition"><IconButton aria-label="Delete competition" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Edit competition name"><IconButton disableFocusRipple aria-label="Edit competition name" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.editCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Delete Competition"><IconButton disableFocusRipple aria-label="Delete competition" component="span" style={Colours.competitions.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteCompetitionDialogOpen(competition)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>
       } else {
         body = <span>{competition.name}</span>
@@ -209,7 +230,7 @@ class Season extends React.Component {
     if (this.state.competitionEditable) {
       return (
         <div>
-          <Tooltip title="Add new competition"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addCompetitionDialogOpen}>Add Competition</Button></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Add new competition"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addCompetitionDialogOpen}>Add Competition</Button></Tooltip>
           <div>
             {competitions}
           </div>
@@ -217,7 +238,7 @@ class Season extends React.Component {
             <DialogTitle id="add-competition-dialog-title">Add Competition</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the new Competition</DialogContentText>
-              <TextField autoFocus margin="dense" id="add-competition-seasonName" onChange={this.addCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addCompetitionDialogAdd()}} label="Competition name" type="text" fullWidth/>
+              <TextField autoFocus margin="dense" id="add-competition-seasonName" onChange={this.addCompetitionDialogCompetitionNameChange} onKeyUp={this.addCompetitionDialogAdd} label="Competition name" type="text" fullWidth/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.addCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -228,7 +249,7 @@ class Season extends React.Component {
             <DialogTitle id="edit-competition-dialog-title">Edit Competition</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the Competition</DialogContentText>
-              <TextField autoFocus margin="dense" id="edit-competition-seasonName" onChange={this.editCompetitionDialogCompetitionNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editCompetitionDialogEdit()}} label="Competition name" type="text" fullWidth defaultValue={this.state.editCompetitionDialogCompetition.originalName}/>
+              <TextField autoFocus margin="dense" id="edit-competition-seasonName" onChange={this.editCompetitionDialogCompetitionNameChange} onKeyUp={this.editCompetitionDialogEdit} label="Competition name" type="text" fullWidth defaultValue={this.state.editCompetitionDialogCompetition.originalName}/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.editCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -238,11 +259,11 @@ class Season extends React.Component {
           <Dialog open={this.state.deleteCompetitionDialogOpen} onClose={this.deleteCompetitionDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-competition-dialog-title">Delete Competition</DialogTitle>
             <DialogContent>
-              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteCompetitionDialogDelete()}}>Are you sure you want to delete the {this.state.deleteCompetitionDialogCompetition.name} competition from the {this.props.season.name} Season?</DialogContentText>
+              <DialogContentText>Are you sure you want to delete the {this.state.deleteCompetitionDialogCompetition.name} competition from the {this.props.season.name} Season?</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteCompetitionDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.deleteCompetitionDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
+              <Button onClick={this.deleteCompetitionDialogDelete} autoFocus onKeyUp={this.deleteCompetitionDialogDelete} variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
         </div>

@@ -124,9 +124,17 @@ class League extends React.Component {
     this.setState({ addSeasonDialogOpen: false })
   }
 
-  addSeasonDialogAdd () {
+  addSeasonDialogAdd (e) {
+    if (!this.state.addSeasonDialogOpen ||
+      this.state.addSeasonDialogSeasonName.length === 0 ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addSeasonDialogClose()
     const seasonName = this.state.addSeasonDialogSeasonName
+    this.setState({ addSeasonDialogSeasonName: '' })
     this.leaguesAPIClient.seasonsPost(seasonName)
       .then(
         () => {
@@ -150,9 +158,17 @@ class League extends React.Component {
     this.setState({ editSeasonDialogOpen: false })
   }
 
-  editSeasonDialogEdit () {
+  editSeasonDialogEdit (e) {
+    if (!this.state.editSeasonDialogOpen ||
+      this.state.editSeasonDialogSeason.name === this.state.editSeasonDialogSeason.originalName ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editSeasonDialogClose()
     const season = this.state.editSeasonDialogSeason
+    this.setState({ editSeasonDialogSeason: {} })
     this.leaguesAPIClient.seasonsSeasonIdPut(season.id, season.name)
       .then(
         () => {
@@ -179,16 +195,21 @@ class League extends React.Component {
     this.setState({ deleteSeasonDialogOpen: false })
   }
 
-  deleteSeasonDialogDelete () {
+  deleteSeasonDialogDelete (e) {
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     this.deleteSeasonDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdDelete(this.state.deleteSeasonDialogSeason.id)
+    const season = this.state.deleteSeasonDialogSeason
+    this.setState({ deleteSeasonDialogSeason: {} })
+    this.leaguesAPIClient.seasonsSeasonIdDelete(season.id)
       .then(
         () => {
-          this.enqueueSnackbar('Season ' + this.state.deleteSeasonDialogSeason.name + ' deleted', { variant: 'success' })
+          this.enqueueSnackbar('Season ' + season.name + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete season ' + this.state.deleteSeasonDialogSeason.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete season ' + season.name, { variant: 'error' })
         })
   }
 
@@ -219,8 +240,8 @@ class League extends React.Component {
       if (this.state.seasonEditable) {
         body = <div>
           <span>{season.name}</span>
-          <Tooltip title="Edit Season"><IconButton aria-label="Edit season name" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.editSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-          <Tooltip title="Delete Season"><IconButton aria-label="Delete season" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Edit Season"><IconButton disableFocusRipple aria-label="Edit season name" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.editSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Delete Season"><IconButton disableFocusRipple aria-label="Delete season" component="span" style={Colours.seasons.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteSeasonDialogOpen(season)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
         </div>
       } else {
         body = <span>{season.name}</span>
@@ -239,7 +260,7 @@ class League extends React.Component {
     if (this.state.seasonEditable) {
       return (
         <div>
-          <Tooltip title="Add new season"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addSeasonDialogOpen}>Add Season</Button></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Add new season"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addSeasonDialogOpen}>Add Season</Button></Tooltip>
           <div>
             {seasons}
           </div>
@@ -251,7 +272,7 @@ class League extends React.Component {
             <DialogTitle id="add-season-dialog-title">Add Season</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the new Season</DialogContentText>
-              <TextField autoFocus margin="dense" id="add-season-seasonName" onChange={this.addSeasonDialogSeasonNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addSeasonDialogAdd()}} label="Season name" type="text" fullWidth/>
+              <TextField autoFocus margin="dense" id="add-season-seasonName" onChange={this.addSeasonDialogSeasonNameChange} onKeyUp={this.addSeasonDialogAdd} label="Season name" type="text" fullWidth/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.addSeasonDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -262,7 +283,7 @@ class League extends React.Component {
             <DialogTitle id="edit-season-dialog-title">Edit Season</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the Season</DialogContentText>
-              <TextField autoFocus margin="dense" id="edit-season-seasonName" onChange={this.editSeasonDialogSeasonNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editSeasonDialogEdit()}} label="Season name" type="text" fullWidth defaultValue={this.state.editSeasonDialogSeason.originalName} />
+              <TextField autoFocus margin="dense" id="edit-season-seasonName" onChange={this.editSeasonDialogSeasonNameChange} onKeyUp={this.editSeasonDialogEdit} label="Season name" type="text" fullWidth defaultValue={this.state.editSeasonDialogSeason.originalName} />
             </DialogContent>
             <DialogActions>
               <Button onClick={this.editSeasonDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -276,7 +297,7 @@ class League extends React.Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteSeasonDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.deleteSeasonDialogDelete} autoFocus onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteSeasonDialogDelete()}} variant="contained" color="secondary">Delete</Button>
+              <Button onClick={this.deleteSeasonDialogDelete} autoFocus onKeyUp={this.deleteSeasonDialogDelete} variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
         </div>

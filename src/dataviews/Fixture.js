@@ -190,7 +190,11 @@ class Fixture extends React.Component {
     this.setState({ deleteMatchDialogOpen: false })
   }
 
-  deleteMatchDialogDelete () {
+  deleteMatchDialogDelete (e) {
+    console.log(`delete called : ${e.keyCode}`)
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     const teamMap = {}
     this.props.teams.forEach(team => {
       teamMap[`id-${team.id}`] = team
@@ -238,8 +242,8 @@ class Fixture extends React.Component {
       }
       matches.push(<div key={match.id}>
         {matchString}
-        <Tooltip title="Edit match"><IconButton aria-label="Edit match" component="span" style={Colours.matches.iconStyle} onClick={(e) => {e.stopPropagation(); this.editMatchDialogOpen(match)}} onFocus={(event) => event.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-        <Tooltip title="Delete match"><IconButton aria-label="Delete match" component="span" style={Colours.matches.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteMatchDialogOpen(match)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+        <Tooltip disableFocusListener disableTouchListener title="Edit match"><IconButton disableFocusRipple aria-label="Edit match" component="span" style={Colours.matches.iconStyle} onClick={(e) => {e.stopPropagation(); this.editMatchDialogOpen(match)}} onFocus={(event) => event.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+        <Tooltip disableFocusListener disableTouchListener title="Delete match"><IconButton disableFocusRipple aria-label="Delete match" component="span" style={Colours.matches.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteMatchDialogOpen(match)}} onFocus={(event) => event.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
       </div>)
     })
 
@@ -255,7 +259,7 @@ class Fixture extends React.Component {
       deleteMessage = 'Are you sure you want to delete the match between ' + teamMap[`id-${this.state.deleteMatchDialogMatch.homeTeam}`].name + ' and ' + teamMap[`id-${this.state.deleteMatchDialogMatch.awayTeam}`].name + '?'
     }
     const addMatch = <div>
-      <Tooltip title="Add new match"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addMatchDialogOpen}>Add match</Button></Tooltip>
+      <Tooltip disableFocusListener disableTouchListener title="Add new match"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addMatchDialogOpen}>Add match</Button></Tooltip>
       <Dialog open={this.state.addMatchDialogOpen} onClose={this.addMatchDialogClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="add-match-dialog-title">Add Match</DialogTitle>
         <DialogContent>
@@ -334,11 +338,11 @@ class Fixture extends React.Component {
       <Dialog open={this.state.deleteMatchDialogOpen} onClose={this.deleteMatchDialogClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="delete-match-dialog-title">Delete Match</DialogTitle>
         <DialogContent>
-          <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteMatchDialogDelete()}}>{deleteMessage}</DialogContentText>
+          <DialogContentText>{deleteMessage}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.deleteMatchDialogClose} variant="outlined" color="primary">Cancel</Button>
-          <Button onClick={this.deleteMatchDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
+          <Button onClick={this.deleteMatchDialogDelete} autoFocus onKeyUp={this.deleteMatchDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
         </DialogActions>
       </Dialog>
     </div>

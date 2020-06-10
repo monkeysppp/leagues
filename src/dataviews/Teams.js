@@ -162,9 +162,17 @@ class Teams extends React.Component {
     this.setState({ addTeamDialogOpen: false })
   }
 
-  addTeamDialogAdd () {
+  addTeamDialogAdd (e) {
+    if (!this.state.addTeamDialogOpen ||
+      this.state.addTeamDialogTeamName.length === 0 ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addTeamDialogClose()
     const teamName = this.state.addTeamDialogTeamName
+    this.setState({ addTeamDialogTeamName: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(this.props.season.id, this.props.competition.id, teamName)
       .then(
         () => {
@@ -188,9 +196,17 @@ class Teams extends React.Component {
     this.setState({ editTeamDialogOpen: false })
   }
 
-  editTeamDialogEdit () {
+  editTeamDialogEdit (e) {
+    if (!this.state.editTeamDialogOpen ||
+      this.state.editTeamDialogTeam.name === this.state.editTeamDialogTeam.originalName ||
+      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editTeamDialogClose()
     const team = this.state.editTeamDialogTeam
+    this.setState({ editTeamDialogTeam: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(this.props.season.id, this.props.competition.id, team.id, team.name)
       .then(
         () => {
@@ -217,16 +233,20 @@ class Teams extends React.Component {
     this.setState({ deleteTeamDialogOpen: false })
   }
 
-  deleteTeamDialogDelete () {
+  deleteTeamDialogDelete (e) {
+    if (e.keyCode !== 10 && e.keyCode !== 13) {
+      return
+    }
     this.deleteTeamDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteTeamDialogTeam.id)
+    const team = this.state.deleteTeamDialogTeam
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete(this.props.season.id, this.props.competition.id, team.id)
       .then(
         () => {
-          this.enqueueSnackbar('Team ' + this.state.deleteTeamDialogTeam.name + ' deleted', { variant: 'success' })
+          this.enqueueSnackbar('Team ' + team.name + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Team ' + this.state.deleteTeamDialogTeam.name, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Team ' + team.name, { variant: 'error' })
         })
   }
 
@@ -239,8 +259,8 @@ class Teams extends React.Component {
         if (this.state.teamEditable) {
           body = <div>
             <span>{team.name}</span>
-            <Tooltip title="Edit Team"><IconButton aria-label="Edit team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.editTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-            <Tooltip title="Delete Team"><IconButton aria-label="Delete team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+            <Tooltip disableFocusListener disableTouchListener title="Edit Team"><IconButton disableFocusRipple aria-label="Edit team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.editTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
+            <Tooltip disableFocusListener disableTouchListener title="Delete Team"><IconButton disableFocusRipple aria-label="Delete team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
           </div>
         } else {
           body = <span>{team.name}</span>
@@ -265,7 +285,7 @@ class Teams extends React.Component {
           <span>Teams</span>
         </ExpansionPanelSummaryWrapper>
         <ExpansionPanelDetailsWrapper>
-          <Tooltip title="Add new team"><Button style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addTeamDialogOpen}>Add Team</Button></Tooltip>
+          <Tooltip disableFocusListener disableTouchListener title="Add new team"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addTeamDialogOpen}>Add Team</Button></Tooltip>
           <div>
             {teams}
           </div>
@@ -273,7 +293,7 @@ class Teams extends React.Component {
             <DialogTitle id="add-team-dialog-title">Add Team</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the new Team</DialogContentText>
-              <TextField autoFocus margin="dense" id="add-team-teamName" onChange={this.addTeamDialogTeamNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.addTeamDialogAdd()}} label="Team name" type="text" fullWidth/>
+              <TextField autoFocus margin="dense" id="add-team-teamName" onChange={this.addTeamDialogTeamNameChange} onKeyUp={this.addTeamDialogAdd} label="Team name" type="text" fullWidth/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.addTeamDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -284,7 +304,7 @@ class Teams extends React.Component {
             <DialogTitle id="edit-team-dialog-title">Edit Team</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the name for the Team</DialogContentText>
-              <TextField autoFocus margin="dense" id="edit-team-teamName" onChange={this.editTeamDialogTeamNameChange} onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.editTeamDialogEdit()}} label="Team name" type="text" fullWidth defaultValue={this.state.editTeamDialogTeam.originalName}/>
+              <TextField autoFocus margin="dense" id="edit-team-teamName" onChange={this.editTeamDialogTeamNameChange} onKeyUp={this.editTeamDialogEdit} label="Team name" type="text" fullWidth defaultValue={this.state.editTeamDialogTeam.originalName}/>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.editTeamDialogClose} variant="outlined" color="primary">Cancel</Button>
@@ -294,11 +314,11 @@ class Teams extends React.Component {
           <Dialog open={this.state.deleteTeamDialogOpen} onClose={this.deleteTeamDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-team-dialog-title">Delete Team</DialogTitle>
             <DialogContent>
-              <DialogContentText onKeyUp={(e) => {if (e.keyCode === 10 || e.keyCode === 13) this.deleteTeamDialogDelete()}}>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?<br/><br/>WARNING: deleting a team when it still has fixtures will break the seaon!</DialogContentText>
+              <DialogContentText>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?<br/><br/>WARNING: deleting a team when it still has fixtures will break the seaon!</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteTeamDialogClose} variant="outlined" color="primary">Cancel</Button>
-              <Button onClick={this.deleteTeamDialogDelete} variant="contained" color="secondary" disableElevation>Delete</Button>
+              <Button onClick={this.deleteTeamDialogDelete} autoFocus onKeyUp={this.deleteTeamDialogDelete}variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
         </ExpansionPanelDetailsWrapper>
