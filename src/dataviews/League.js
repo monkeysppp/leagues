@@ -127,14 +127,13 @@ class League extends React.Component {
   addSeasonDialogAdd (e) {
     if (!this.state.addSeasonDialogOpen ||
       this.state.addSeasonDialogSeasonName.length === 0 ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.addSeasonDialogClose()
     const seasonName = this.state.addSeasonDialogSeasonName
-    this.setState({ addSeasonDialogSeasonName: '' })
     this.leaguesAPIClient.seasonsPost(seasonName)
       .then(
         () => {
@@ -144,6 +143,9 @@ class League extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to add season ' + seasonName, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ addSeasonDialogSeasonName: '' })
+      })
   }
 
   addSeasonDialogSeasonNameChange (e) {
@@ -161,14 +163,13 @@ class League extends React.Component {
   editSeasonDialogEdit (e) {
     if (!this.state.editSeasonDialogOpen ||
       this.state.editSeasonDialogSeason.name === this.state.editSeasonDialogSeason.originalName ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.editSeasonDialogClose()
     const season = this.state.editSeasonDialogSeason
-    this.setState({ editSeasonDialogSeason: {} })
     this.leaguesAPIClient.seasonsSeasonIdPut(season.id, season.name)
       .then(
         () => {
@@ -178,6 +179,9 @@ class League extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to update season from ' + season.originalName + ' to ' + season.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editSeasonDialogSeason: {} })
+      })
   }
 
   editSeasonDialogSeasonNameChange (e) {
@@ -196,12 +200,11 @@ class League extends React.Component {
   }
 
   deleteSeasonDialogDelete (e) {
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     this.deleteSeasonDialogClose()
     const season = this.state.deleteSeasonDialogSeason
-    this.setState({ deleteSeasonDialogSeason: {} })
     this.leaguesAPIClient.seasonsSeasonIdDelete(season.id)
       .then(
         () => {
@@ -211,6 +214,9 @@ class League extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to delete season ' + season.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteSeasonDialogSeason: {} })
+      })
   }
 
   refreshData () {

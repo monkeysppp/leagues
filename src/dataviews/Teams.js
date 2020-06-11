@@ -165,14 +165,13 @@ class Teams extends React.Component {
   addTeamDialogAdd (e) {
     if (!this.state.addTeamDialogOpen ||
       this.state.addTeamDialogTeamName.length === 0 ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.addTeamDialogClose()
     const teamName = this.state.addTeamDialogTeamName
-    this.setState({ addTeamDialogTeamName: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(this.props.season.id, this.props.competition.id, teamName)
       .then(
         () => {
@@ -182,6 +181,9 @@ class Teams extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to add team ' + teamName, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ addTeamDialogTeamName: '' })
+      })
   }
 
   addTeamDialogTeamNameChange (e) {
@@ -199,14 +201,13 @@ class Teams extends React.Component {
   editTeamDialogEdit (e) {
     if (!this.state.editTeamDialogOpen ||
       this.state.editTeamDialogTeam.name === this.state.editTeamDialogTeam.originalName ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.editTeamDialogClose()
     const team = this.state.editTeamDialogTeam
-    this.setState({ editTeamDialogTeam: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(this.props.season.id, this.props.competition.id, team.id, team.name)
       .then(
         () => {
@@ -216,6 +217,9 @@ class Teams extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to update team from ' + team.originalName + ' to ' + team.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editTeamDialogTeam: {} })
+      })
   }
 
   editTeamDialogTeamNameChange (e) {
@@ -234,7 +238,7 @@ class Teams extends React.Component {
   }
 
   deleteTeamDialogDelete (e) {
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     this.deleteTeamDialogClose()
@@ -248,6 +252,9 @@ class Teams extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to delete Team ' + team.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteTeamDialogTeam: {} })
+      })
   }
 
   render () {

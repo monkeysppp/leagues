@@ -175,7 +175,14 @@ class Fixtures extends React.Component {
     this.setState({ addFixtureDialogOpen: false })
   }
 
-  addFixtureDialogAdd () {
+  addFixtureDialogAdd (e) {
+    if (!this.state.addFixtureDialogOpen ||
+      this.state.addFixtureDialogFixtureVenue.length === 0 ||
+      (e.keyCode && e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addFixtureDialogClose()
     const fixture = {
       date: format(this.state.addFixtureDialogFixtureDate, 'eee dd-LLL-yy'),
@@ -184,7 +191,6 @@ class Fixtures extends React.Component {
     if (this.state.addFixtureDialogFixtureAdjudicator !== 'None') {
       fixture.adjudicator = this.state.addFixtureDialogFixtureAdjudicator
     }
-
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(this.props.season.id, this.props.competition.id, fixture)
       .then(
         () => {
@@ -195,11 +201,7 @@ class Fixtures extends React.Component {
           this.enqueueSnackbar('Failed to add fixture on ' + fixture.date, { variant: 'error' })
         })
       .then(() => {
-        this.setState({
-          addFixtureDialogFixtureDate: new Date(),
-          addFixtureDialogFixtureVenue: '',
-          addFixtureDialogFixtureAdjudicator: 'None'
-        })
+        this.setState({ addFixtureDialogFixtureDate: new Date(), addFixtureDialogFixtureVenue: '', addFixtureDialogFixtureAdjudicator: 'None' })
       })
   }
 
@@ -234,7 +236,14 @@ class Fixtures extends React.Component {
     this.setState({ editFixtureDialogOpen: false })
   }
 
-  editFixtureDialogEdit () {
+  editFixtureDialogEdit (e) {
+    if (!this.state.editFixtureDialogOpen ||
+      this.state.editFixtureDialogFixture.venue.length === 0 ||
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editFixtureDialogClose()
     const fixture = {
       date: format(this.state.editFixtureDialogFixture.date, 'eee dd-LLL-yy'),
@@ -243,7 +252,6 @@ class Fixtures extends React.Component {
     if (this.state.editFixtureDialogFixture.adjudicator !== 'None') {
       fixture.adjudicator = this.state.editFixtureDialogFixture.adjudicator
     }
-
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(this.props.season.id, this.props.competition.id, this.state.editFixtureDialogFixture.id, fixture)
       .then(
         () => {
@@ -253,6 +261,9 @@ class Fixtures extends React.Component {
         (err) => {
           this.enqueueSnackbar(`Failed to edit fixture on ${this.state.editFixtureDialogFixture.originalDate}`, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editFixtureDialogFixture: {} })
+      })
   }
 
   editFixtureDialogFixtureDateChange (e) {
@@ -287,19 +298,23 @@ class Fixtures extends React.Component {
   }
 
   deleteFixtureDialogDelete (e) {
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     this.deleteFixtureDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(this.props.season.id, this.props.competition.id, this.state.deleteFixtureDialogFixture.id)
+    const fixture = this.state.deleteFixtureDialogFixture
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdDelete(this.props.season.id, this.props.competition.id, fixture.id)
       .then(
         () => {
-          this.enqueueSnackbar('Fixture on ' + this.state.deleteFixtureDialogFixture.date + ' deleted', { variant: 'success' })
+          this.enqueueSnackbar('Fixture on ' + fixture.date + ' deleted', { variant: 'success' })
           this.refreshData()
         },
         (err) => {
-          this.enqueueSnackbar('Failed to delete Fixture on ' + this.state.deleteFixtureDialogFixture.date, { variant: 'error' })
+          this.enqueueSnackbar('Failed to delete Fixture on ' + fixture.date, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteFixtureDialogFixture: {} })
+      })
   }
 
 
@@ -355,14 +370,14 @@ class Fixtures extends React.Component {
             <DialogContent>
               <DialogContentText>Enter the details for the new Fixture</DialogContentText>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.addFixtureDialogFixtureDate} onChange={this.addFixtureDialogFixtureDateChange} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
+                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.addFixtureDialogFixtureDate} onChange={this.addFixtureDialogFixtureDateChange} onKeyUp={this.addFixtureDialogAdd} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
                 <br/>
-                <TextField margin="dense" id="add-fixture-venue" onChange={this.addFixtureDialogFixtureVenueChange} label="Venue" type="text" />
+                <TextField margin="dense" id="add-fixture-venue" onChange={this.addFixtureDialogFixtureVenueChange} onKeyUp={this.addFixtureDialogAdd} label="Venue" type="text" />
                 <br/>
                 <br/>
                 <FormControl>
                   <InputLabel shrink id="demo-simple-select-placeholder-label-label">Adjudicator</InputLabel>
-                  <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.addFixtureDialogFixtureAdjudicator} onChange={this.addFixtureDialogFixtureAdjudicatorChange}>
+                  <Select labelId="home-team-select-label" label="Adjudicators" id="home-team-select" value={this.state.addFixtureDialogFixtureAdjudicator} onChange={this.addFixtureDialogFixtureAdjudicatorChange} onKeyUp={this.addFixtureDialogAdd}>
                     {teamSelectorItems}
                   </Select>
                 </FormControl>
@@ -379,9 +394,9 @@ class Fixtures extends React.Component {
             <DialogContent>
               <DialogContentText>Enter the new details for the Fixture</DialogContentText>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.editFixtureDialogFixture.date} onChange={this.editFixtureDialogFixtureDateChange} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
+                <KeyboardDatePicker format="yyyy/MM/dd" margin="normal" id="date-picker-inline" label="Fixture date" value={this.state.editFixtureDialogFixture.date} onChange={this.editFixtureDialogFixtureDateChange} onKeyUp={this.editFixtureDialogEdit} KeyboardButtonProps={{ 'aria-label': 'change date', }} />
                 <br/>
-                <TextField margin="dense" id="edit-fixture-venue" value={this.state.editFixtureDialogFixture.venue} onChange={this.editFixtureDialogFixtureVenueChange} label="Venue" type="text" />
+                <TextField margin="dense" id="edit-fixture-venue" value={this.state.editFixtureDialogFixture.venue} onChange={this.editFixtureDialogFixtureVenueChange} onKeyUp={this.editFixtureDialogEdit} label="Venue" type="text" />
                 <br/>
                 <br/>
                 <FormControl>

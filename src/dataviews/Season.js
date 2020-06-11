@@ -116,14 +116,13 @@ class Season extends React.Component {
   addCompetitionDialogAdd (e) {
     if (!this.state.addCompetitionDialogOpen ||
       this.state.addCompetitionDialogCompetitionName.length === 0 ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.addCompetitionDialogClose()
     const competitionName = this.state.addCompetitionDialogCompetitionName
-    this.setState({ addCompetitionDialogCompetitionName: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(this.props.season.id, competitionName)
       .then(
         () => {
@@ -133,6 +132,9 @@ class Season extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to add competition ' + competitionName, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ addCompetitionDialogCompetitionName: '' })
+      })
   }
 
   addCompetitionDialogCompetitionNameChange (e) {
@@ -150,14 +152,13 @@ class Season extends React.Component {
   editCompetitionDialogEdit (e) {
     if (!this.state.editCompetitionDialogOpen ||
       this.state.editCompetitionDialogCompetition.name === this.state.editCompetitionDialogCompetition.originalName ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.editCompetitionDialogClose()
     const competition = this.state.editCompetitionDialogCompetition
-    this.setState({ editCompetitionDialogCompetition: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdPut(this.props.season.id, competition.id, competition.name)
       .then(
         () => {
@@ -167,6 +168,9 @@ class Season extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to update competition from ' + competition.originalName + ' to ' + competition.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editCompetitionDialogCompetition: {} })
+      })
   }
 
   editCompetitionDialogCompetitionNameChange (e) {
@@ -185,12 +189,11 @@ class Season extends React.Component {
   }
 
   deleteCompetitionDialogDelete (e) {
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     this.deleteCompetitionDialogClose()
     const competition = this.state.deleteCompetitionDialogCompetition
-    this.setState({ deleteCompetitionDialogCompetition: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdDelete(this.props.season.id, competition.id)
       .then(
         () => {
@@ -200,6 +203,9 @@ class Season extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to delete Competition ' + competition.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteCompetitionDialogCompetition: {} })
+      })
   }
 
   render () {

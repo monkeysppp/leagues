@@ -56,14 +56,13 @@ class Team extends React.Component {
   addContactDialogAdd (e) {
     if (!this.state.addContactDialogOpen ||
       this.state.addContactDialogContactAddress.length === 0 ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.addContactDialogClose()
     const contactAddress = this.state.addContactDialogContactAddress
-    this.setState({ addContactDialogContactAddress: '' })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost(this.props.seasonId, this.props.competitionId, this.props.team.id, contactAddress)
       .then(
         () => {
@@ -73,6 +72,9 @@ class Team extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to add Contact ' + contactAddress, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ addContactDialogContactAddress: '' })
+      })
   }
 
   addContactDialogContactAddressChange (e) {
@@ -90,14 +92,13 @@ class Team extends React.Component {
   editContactDialogEdit (e) {
     if (!this.state.editContactDialogOpen ||
       this.state.editContactDialogContact.email === this.state.editContactDialogContact.originalEmail ||
-      (e.keyCode !== 10 && e.keyCode !== 13)) {
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
       return
     }
 
     e.stopPropagation()
     this.editContactDialogClose()
     const contact = this.state.editContactDialogContact
-    this.setState({ editContactDialogContact: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id, contact.email)
       .then(
         () => {
@@ -107,6 +108,9 @@ class Team extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to update contact email from ' + contact.originalEmail + ' to ' + contact.email, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editContactDialogContact: {} })
+      })
   }
 
   editContactDialogContactAddressChange (e) {
@@ -125,12 +129,11 @@ class Team extends React.Component {
   }
 
   deleteContactDialogDelete (e) {
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     this.deleteContactDialogClose()
     const contact = this.state.deleteContactDialogContact
-    this.setState({ deleteContactDialogContact: {} })
     this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdDelete(this.props.seasonId, this.props.competitionId, this.props.team.id, contact.id)
       .then(
         () => {
@@ -140,6 +143,9 @@ class Team extends React.Component {
         (err) => {
           this.enqueueSnackbar('Failed to delete Contact ' + contact.name, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteContactDialogContact: {} })
+      })
   }
 
   render () {

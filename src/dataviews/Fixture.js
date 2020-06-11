@@ -43,10 +43,10 @@ class Fixture extends React.Component {
     this.addMatchDialogOpen = this.addMatchDialogOpen.bind(this)
     this.addMatchDialogClose = this.addMatchDialogClose.bind(this)
     this.addMatchDialogAdd = this.addMatchDialogAdd.bind(this)
-    this.addMatchDialogMatchTimeChange = this.addMatchDialogMatchTimeChange.bind(this)
-    this.addMatchDialogMatchHomeChange = this.addMatchDialogMatchHomeChange.bind(this)
-    this.addMatchDialogMatchAwayChange = this.addMatchDialogMatchAwayChange.bind(this)
-    this.addMatchDialogMatchRefChange = this.addMatchDialogMatchRefChange.bind(this)
+    this.addMatchDialogMatchTime = this.addMatchDialogMatchTime.bind(this)
+    this.addMatchDialogMatchHome = this.addMatchDialogMatchHome.bind(this)
+    this.addMatchDialogMatchAway = this.addMatchDialogMatchAway.bind(this)
+    this.addMatchDialogMatchRef = this.addMatchDialogMatchRef.bind(this)
     this.editMatchDialogOpen = this.editMatchDialogOpen.bind(this)
     this.editMatchDialogClose = this.editMatchDialogClose.bind(this)
     this.editMatchDialogEdit = this.editMatchDialogEdit.bind(this)
@@ -67,7 +67,15 @@ class Fixture extends React.Component {
     this.setState({ addMatchDialogOpen: false })
   }
 
-  addMatchDialogAdd () {
+  addMatchDialogAdd (e) {
+    if (!this.state.addMatchDialogOpen ||
+      this.state.addMatchDialogMatchHome === 'None' ||
+      this.state.addMatchDialogMatchAway === 'None' ||
+      (e.keyCode && e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.addMatchDialogClose()
     const match = {
       time: format(this.state.addMatchDialogMatchTime, 'HH:mm'),
@@ -96,21 +104,21 @@ class Fixture extends React.Component {
       })
   }
 
-  addMatchDialogMatchTimeChange (e) {
+  addMatchDialogMatchTime (e) {
     if (e instanceof Date) {
       this.setState({ addMatchDialogMatchTime: e })
     }
   }
 
-  addMatchDialogMatchHomeChange (e) {
+  addMatchDialogMatchHome (e) {
     this.setState({ addMatchDialogMatchHome: e.target.value })
   }
 
-  addMatchDialogMatchAwayChange (e) {
+  addMatchDialogMatchAway (e) {
     this.setState({ addMatchDialogMatchAway: e.target.value })
   }
 
-  addMatchDialogMatchRefChange (e) {
+  addMatchDialogMatchRef (e) {
     this.setState({ addMatchDialogMatchRef: e.target.value })
   }
 
@@ -131,7 +139,15 @@ class Fixture extends React.Component {
     this.setState({ editMatchDialogOpen: false })
   }
 
-  editMatchDialogEdit () {
+  editMatchDialogEdit (e) {
+    if (!this.state.editMatchDialogOpen ||
+      this.state.editMatchDialogMatch.homeTeam === 'None' ||
+      this.state.editMatchDialogMatch.awayTeam === 'None' ||
+      (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13)) {
+      return
+    }
+
+    e.stopPropagation()
     this.editMatchDialogClose()
     const match = {
       time: format(this.state.editMatchDialogMatch.time, 'HH:mm'),
@@ -150,6 +166,9 @@ class Fixture extends React.Component {
         (err) => {
           this.enqueueSnackbar(`Failed to edit Match at ${this.state.editMatchDialogMatch.originalTime} between ${this.state.editMatchDialogMatch.originalHomeTeam} and ${this.state.editMatchDialogMatch.originalAwayTeam}`, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ editMatchDialogMatch: {} })
+      })
   }
 
   editMatchDialogMatchTimeChange (e) {
@@ -191,8 +210,7 @@ class Fixture extends React.Component {
   }
 
   deleteMatchDialogDelete (e) {
-    console.log(`delete called : ${e.keyCode}`)
-    if (e.keyCode !== 10 && e.keyCode !== 13) {
+    if (e.keyCode && e.keyCode !== 10 && e.keyCode !== 13) {
       return
     }
     const teamMap = {}
@@ -201,8 +219,9 @@ class Fixture extends React.Component {
     })
     const homeTeam = teamMap[`id-${this.state.deleteMatchDialogMatch.homeTeam}`].name
     const awayTeam = teamMap[`id-${this.state.deleteMatchDialogMatch.awayTeam}`].name
+    const matchId = this.state.deleteMatchDialogMatch.id
     this.deleteMatchDialogClose()
-    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete(this.props.seasonId, this.props.competition.id, this.props.fixture.id, this.state.deleteMatchDialogMatch.id)
+    this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdDelete(this.props.seasonId, this.props.competition.id, this.props.fixture.id, matchId)
       .then(
         () => {
           this.enqueueSnackbar(`Match between ${homeTeam} and ${awayTeam} deleted`, { variant: 'success' })
@@ -211,6 +230,9 @@ class Fixture extends React.Component {
         (err) => {
           this.enqueueSnackbar(`Failed to delete Match between ${homeTeam} and ${awayTeam}`, { variant: 'error' })
         })
+      .then(() => {
+        this.setState({ deleteMatchDialogMatch: {} })
+      })
   }
 
   render () {
@@ -265,11 +287,11 @@ class Fixture extends React.Component {
         <DialogContent>
           <DialogContentText>Enter the details for the new Match</DialogContentText>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.addMatchDialogMatchTime} onChange={this.addMatchDialogMatchTimeChange} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
+            <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.addMatchDialogMatchTime} onChange={this.addMatchDialogMatchTime} onKeyUp={this.addMatchDialogAdd} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
             <br/>
             <FormControl>
               <InputLabel shrink id="home-team-label">Home&nbsp;Team</InputLabel>
-              <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.addMatchDialogMatchHome} onChange={this.addMatchDialogMatchHomeChange}>
+              <Select labelId="home-team-select-label" label="Home Team" id="home-team-select" value={this.state.addMatchDialogMatchHome} onChange={this.addMatchDialogMatchHome}>
                 {teamSelectorItems}
               </Select>
             </FormControl>
@@ -277,7 +299,7 @@ class Fixture extends React.Component {
             <br/>
             <FormControl>
               <InputLabel shrink id="away-team-label">Away&nbsp;Team</InputLabel>
-              <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.addMatchDialogMatchAway} onChange={this.addMatchDialogMatchAwayChange}>
+              <Select labelId="away-team-select-label" label="Away Team" id="away-team-select" value={this.state.addMatchDialogMatchAway} onChange={this.addMatchDialogMatchAway}>
                 {teamSelectorItems}
               </Select>
             </FormControl>
@@ -285,7 +307,7 @@ class Fixture extends React.Component {
             <br/>
             <FormControl>
               <InputLabel shrink id="ref-team-label">Reffing&nbsp;Team</InputLabel>
-              <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.addMatchDialogMatchRef} onChange={this.addMatchDialogMatchRefChange}>
+              <Select labelId="ref-team-select-label" label="Reffing Team" id="ref-team-select" value={this.state.addMatchDialogMatchRef} onChange={this.addMatchDialogMatchRef}>
                 {teamSelectorItems}
               </Select>
             </FormControl>
@@ -303,7 +325,7 @@ class Fixture extends React.Component {
         <DialogContent>
           <DialogContentText>Enter the new details for the Match</DialogContentText>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.editMatchDialogMatch.time} onChange={this.editMatchDialogMatchTimeChange} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
+            <KeyboardTimePicker format="HH:mm" margin="normal" id="time-picker-inline" label="Match time" value={this.state.editMatchDialogMatch.time} onChange={this.editMatchDialogMatchTimeChange} onKeyUp={this.editMatchDialogEdit} KeyboardButtonProps={{ 'aria-label': 'change time', }} />
             <br/>
             <FormControl>
               <InputLabel shrink id="home-team-label">Home&nbsp;Team</InputLabel>
