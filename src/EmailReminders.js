@@ -143,6 +143,7 @@ class EmailReminders extends React.Component {
   async toggleEmailRemindersEnabled () {
     await this.leaguesAPIClient.remindersEmailPut(
       !this.state.emailRemindersEnabled,
+      this.state.emailFrom,
       this.state.emailReminderDays,
       format(this.state.emailReminderTime, 'HH:mm')
     )
