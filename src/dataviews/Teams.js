@@ -135,6 +135,8 @@ class Teams extends React.Component {
       editTeamDialogTeam: {},
       deleteTeamDialogOpen: false,
       deleteTeamDialogTeam: {},
+      cannotDeleteTeamDialogOpen: false,
+      cannotDeleteTeamDialogTeam: {}
     }
     this.utils = props.utils
     this.leaguesAPIClient = props.utils.leaguesAPIClient
@@ -152,6 +154,8 @@ class Teams extends React.Component {
     this.deleteTeamDialogOpen = this.deleteTeamDialogOpen.bind(this)
     this.deleteTeamDialogClose = this.deleteTeamDialogClose.bind(this)
     this.deleteTeamDialogDelete = this.deleteTeamDialogDelete.bind(this)
+    this.cannotDeleteTeamDialogOpen = this.cannotDeleteTeamDialogOpen.bind(this)
+    this.cannotDeleteTeamDialogClose = this.cannotDeleteTeamDialogClose.bind(this)
   }
 
   addTeamDialogOpen () {
@@ -257,17 +261,42 @@ class Teams extends React.Component {
       })
   }
 
+  cannotDeleteTeamDialogOpen (team) {
+    this.setState({ cannotDeleteTeamDialogOpen: true, cannotDeleteTeamDialogTeam: team })
+  }
+
+  cannotDeleteTeamDialogClose () {
+    this.setState({ cannotDeleteTeamDialogOpen: false, cannotDeleteTeamDialogTeam: {} })
+  }
+
   render () {
     const teams = []
 
     if (this.state.teamsDrawn) {
       this.props.competition.teams.forEach((team) => {
+        let teamHasResponsibilities = false
+        this.props.competition.fixtures.forEach(fixture => {
+          if (fixture.adjudicator === team.id) {
+            teamHasResponsibilities = true
+          }
+          fixture.matches.forEach(match => {
+            if (match.homeTeam === team.id || match.awayTeam === team.id || match.refTeam === team.id) {
+              teamHasResponsibilities = true
+            }
+          })
+        })
+        let deleteButton
+        if (teamHasResponsibilities) {
+          deleteButton = <Tooltip disableFocusListener disableTouchListener title="Delete Team"><IconButton disableFocusRipple aria-label="Delete team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.cannotDeleteTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+        } else {
+          deleteButton = <Tooltip disableFocusListener disableTouchListener title="Delete Team"><IconButton disableFocusRipple aria-label="Delete team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+        }
         let body
         if (this.state.teamEditable) {
           body = <div>
             <span>{team.name}</span>
             <Tooltip disableFocusListener disableTouchListener title="Edit Team"><IconButton disableFocusRipple aria-label="Edit team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.editTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
-            <Tooltip disableFocusListener disableTouchListener title="Delete Team"><IconButton disableFocusRipple aria-label="Delete team" component="span" style={Colours.teams.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteTeamDialogOpen(team)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
+            {deleteButton}
           </div>
         } else {
           body = <span>{team.name}</span>
@@ -321,11 +350,20 @@ class Teams extends React.Component {
           <Dialog open={this.state.deleteTeamDialogOpen} onClose={this.deleteTeamDialogClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="delete-team-dialog-title">Delete Team</DialogTitle>
             <DialogContent>
-              <DialogContentText>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the {this.props.competition.name} Competition in the {this.props.season.name} Season?<br/><br/>WARNING: deleting a team when it still has fixtures will break the seaon!</DialogContentText>
+              <DialogContentText>Are you sure you want to delete the team "{this.state.deleteTeamDialogTeam.name}" from the "{this.props.competition.name}" Competition in the "{this.props.season.name}" Season?</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.deleteTeamDialogClose} variant="outlined" color="primary">Cancel</Button>
               <Button onClick={this.deleteTeamDialogDelete} autoFocus onKeyUp={this.deleteTeamDialogDelete}variant="contained" color="secondary">Delete</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={this.state.cannotDeleteTeamDialogOpen} onClose={this.cannotDeleteTeamDialogClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="cannot-delete-team-dialog-title">Cannot Delete Team</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Can't delete the team "{this.state.cannotDeleteTeamDialogTeam.name}" as it still has matches or reffing responsibilities in the "{this.props.competition.name}" Competiton!</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.cannotDeleteTeamDialogClose} variant="contained" color="primary">OK</Button>
             </DialogActions>
           </Dialog>
         </ExpansionPanelDetailsWrapper>

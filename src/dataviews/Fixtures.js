@@ -322,16 +322,27 @@ class Fixtures extends React.Component {
     const fixtures = []
 
     if (this.state.fixturesDrawn) {
+      const teamMap = {}
+      this.props.competition.teams.forEach(team => {
+        teamMap[`id-${team.id}`] = team
+      })
       this.props.competition.fixtures.forEach((fixture) => {
+        let fixtureDetails
+        if (fixture.adjudicator) {
+          const team = teamMap[`id-${fixture.adjudicator}`].name
+          fixtureDetails = <span>{fixture.date} at {fixture.venue} ({team} adjudicator)</span>
+        } else {
+          fixtureDetails = <span>{fixture.date} at {fixture.venue}</span>
+        }
         let body
         if (this.state.fixtureEditable) {
           body = <div>
-            <span>{fixture.date} at {fixture.venue}</span>
+            {fixtureDetails}
             <Tooltip disableFocusListener disableTouchListener title="Edit Fixture"><IconButton disableFocusRipple aria-label="Edit fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.editFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><EditOutlined /></IconButton></Tooltip>
             <Tooltip disableFocusListener disableTouchListener title="Delete Fixture"><IconButton disableFocusRipple aria-label="Delete fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
           </div>
         } else {
-          body = <span>{fixture.date} at {fixture.venue}</span>
+          body = {fixtureDetails}
         }
 
         fixtures.push(<ExpansionPanel key={fixture.id}>
