@@ -451,8 +451,11 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdDelete = function (se
 
   const fixtures = exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesGet(seasonId, competitionId)
   fixtures.forEach(fixture => {
+    if (fixture.adjudicator === teamId) {
+      throwError('Team still has matches', 400)
+    }
     fixture.matches.forEach(match => {
-      if (match.homeTeam === teamId || match.awayTeam === teamId || match.refTeam === teamId || fixture.adjudicator === teamId) {
+      if (match.homeTeam === teamId || match.awayTeam === teamId || match.refTeam === teamId) {
         throwError('Team still has matches', 400)
       }
     })
