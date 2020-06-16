@@ -1,3 +1,5 @@
+/** @module api/v1/emailRemindersConfigFile */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -19,7 +21,12 @@ function throwError (message, statusCode) {
  * the 'seasons.json' file in the 'data' directory).
  *
  * @param  {object} emailRemindersConfigData The emailRemindersConfigData object to save
- * @return
+ * @param  {boolean} emailRemindersConfigData.enabled Whether email reminders are enabled
+ * @param  {string} emailRemindersConfigData.from The email to claim email reminders are from
+ * @param  {number} emailRemindersConfigData.reminderDays The number of days in advance of a fixture to send the reminders
+ * @param  {string} emailRemindersConfigData.reminderTime The time of day to send the reminder
+ * @param  {string} emailRemindersConfigData.email.leader The leader part of the email
+ * @param  {string} emailRemindersConfigData.email.tailer The tailer part of the email
  */
 exports.writeData = function (emailRemindersConfigData) {
   log.debug('writeData()')

@@ -1,3 +1,5 @@
+/** @module api/v1/matchChecker */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -5,10 +7,13 @@ const log = logging.getLogger('matchChecker')
 const seasonsData = require('./seasonsData.js')
 
 /**
- * anonymous function - description
+ * findNextFixtureAfterDate - Find the next fixture after a given date and return an object ontaining the
+ * fixture, the season name, the contacts for the teams with responsibilities at that fixture and a
+ * summary of the match schedule.
  *
- * @param  {type} fromDate description
- * @return {type}          description
+ * @param  {Datae} fromDate The date to search for fistures after
+
+ * @return {object} The fixture information
  */
 exports.findNextFixtureAfterDate = function (fromDate) {
   log.info(`Checking for the first match after ${fromDate}`)

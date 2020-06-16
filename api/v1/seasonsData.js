@@ -1,3 +1,5 @@
+/** @module api/v1/seasonsData */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -97,7 +99,7 @@ exports.seasonsSeasonIdGet = function (seasonId) {
  * @param {number} seasonId The id of the season
  * @param {string} seasonName The new name for the season
  *
- * @returns
+ * @returns {object} The updated season
  **/
 exports.seasonsSeasonIdPut = function (seasonId, seasonName) {
   log.debug(`seasonsSeasonIdPut(seasonId, seasonName) seasonId=<${seasonId}> seasonName=<${seasonName}>`)
@@ -246,7 +248,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdGet = function (seasonId, compet
  * @param {number} competitionId The id of the competition
  * @param {string} competitionName The new name for the competition
  *
- * @returns
+ * @returns {Object} the updated competition
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdPut = function (seasonId, competitionId, competitionName) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdPut(seasonId, competitionId, seasonName) seasonId=<${seasonId}> competitionId=<${competitionId}> competitionName=<${competitionName}>`)
@@ -369,7 +371,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost = function (seasonId, 
  * @param {number} competitionId id for the competition
  * @param {number} teamId id for the team
  *
- * @returns {array} the requested team
+ * @returns {object} the requested team
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet = function (seasonId, competitionId, teamId) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet(seasonId, competitionId, teamId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}>`)
@@ -399,7 +401,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdGet = function (seaso
  * @param {number} teamId id for the team
  * @param {string} teamName The new name for the team
  *
- * @returns
+ * @returns {object} the updated team
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut = function (seasonId, competitionId, teamId, teamName) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdPut(seasonId, competitionId, teamId, seasonName) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> teamName=<${teamName}>`)
@@ -536,7 +538,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = functi
  * @param {number} teamId id for the team
  * @param {number} contactId id for the contact
  *
- * @returns {array} the requested contact
+ * @returns {object} the requested contact
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet = function (seasonId, competitionId, teamId, contactId) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet(seasonId, competitionId, teamId, contactId) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> contactId=<${contactId}>`)
@@ -567,7 +569,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdGet 
  * @param {number} contactId id for the contact
  * @param {string} contactAddress The new email address for the contact
  *
- * @returns
+ * @returns {object} the updated contact
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut = function (seasonId, competitionId, teamId, contactId, contactAddress) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsContactIdPut(seasonId, competitionId, teamId, contactId, contactAddress) seasonId=<${seasonId}> competitionId=<${competitionId}> teamId=<${teamId}> contactId=<${contactId}> contactAddress=<${contactAddress}>`)
@@ -715,7 +717,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost = function (seasonI
  * @param {number} competitionId id for the competition
  * @param {number} fixtureId id for the fixture
  *
- * @returns {array} the requested fixture
+ * @returns {object} the requested fixture
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet = function (seasonId, competitionId, fixtureId) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet(seasonId, competitionId, fixtureId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}>`)
@@ -745,7 +747,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdGet = function 
  * @param {number} fixtureId The id of the fixture
  * @param {object} fixture the new details for the fixture
  *
- * @returns
+ * @returns {object} the updated fixture
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut = function (seasonId, competitionId, fixtureId, fixture) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdPut(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> fixture=<${JSON.stringify(fixture)}>`)
@@ -923,7 +925,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost = f
  * @param {number} fixtureId id for the fixture
  * @param {number} matchId id for the match
  *
- * @returns {array} the requested match
+ * @returns {object} the requested match
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdGet = function (seasonId, competitionId, fixtureId, matchId) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdGet(seasonId, competitionId, fixtureId, matchId) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> matchId=<${matchId}>`)
@@ -954,7 +956,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdG
  * @param {number} matchId id for the match
  * @param {object} match the new details for the match
  *
- * @returns
+ * @returns {object} the updated match
  **/
 exports.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut = function (seasonId, competitionId, fixtureId, matchId, match) {
   log.debug(`seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesMatchIdPut(seasonId, competitionId, fixture) seasonId=<${seasonId}> competitionId=<${competitionId}> fixtureId=<${fixtureId}> matchId=<${matchId}> match=<${JSON.stringify(match)}>`)

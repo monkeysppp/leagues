@@ -1,3 +1,5 @@
+/** @module api/v1/seasonsDataFile */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -19,7 +21,6 @@ function throwError (message, statusCode) {
  * the 'seasons.json' file in the 'data' directory).
  *
  * @param  {object} seasonsData The seasonsData object to save
- * @return
  */
 exports.writeData = function (seasonsData) {
   log.debug('writeData()')

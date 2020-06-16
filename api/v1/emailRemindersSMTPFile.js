@@ -1,3 +1,5 @@
+/** @module api/v1/emailRemindersSMTPFile */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -23,7 +25,6 @@ function throwError (message, statusCode) {
  * @param  {number} emailRemindersSMTPData.port The port for the SMTP server
  * @param  {string} emailRemindersSMTPData.user The port for the SMTP server
  * @param  {string} emailRemindersSMTPData.password The port for the SMTP server
- * @return
  */
 exports.writeData = function (emailRemindersSMTPData) {
   const filteredData = JSON.parse(JSON.stringify(emailRemindersSMTPData))

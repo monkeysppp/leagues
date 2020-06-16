@@ -1,3 +1,5 @@
+/** @module api/v1/emailRemindersData */
+
 'use strict'
 
 const logging = require('../../lib/logging.js')
@@ -31,10 +33,10 @@ exports.remindersEmailGet = function () {
  * Set the basic reminders email config
  *
  * @param {boolean} enabled Whether the email reminder is enabled or not
+ * @param {string} fromAddress The address to claim email is from
  * @param {number} reminderDays The number of days in advance to send the reminder email
  * @param {string} reminderTime The time of day to send the reminder email
  *
- * @returns
  **/
 exports.remindersEmailPut = function (enabled, fromAddress, reminderDays, reminderTime) {
   const timeRegex = /\d\d:\d\d/
@@ -70,7 +72,6 @@ exports.remindersEmailPut = function (enabled, fromAddress, reminderDays, remind
  * @param {string} leader The leader part of the reminder email
  * @param {string} tailer The tailer part of the reminder email
  *
- * @returns
  **/
 exports.remindersEmailBodyPut = function (leader, tailer) {
   log.debug(`remindersEmailPut(leader, tailer) req.body.leader=<${leader}> req.body.tailer=<${tailer}>`)
@@ -89,6 +90,11 @@ exports.remindersEmailBodyPut = function (leader, tailer) {
   emailRemindersConfigFile.writeData(configData)
 }
 
+/**
+ * remindersEmailSMTPGet - Returns the SMTP data from the config file
+ *
+ * @return {object}  The SMTP data
+ */
 exports.remindersEmailSMTPGet = function () {
   log.debug('remindersEmailSMTPGet()')
   smtpData = emailRemindersSMTPFile.readData()
@@ -100,6 +106,14 @@ exports.remindersEmailSMTPGet = function () {
   return returnedData
 }
 
+/**
+ * remindersEmailSMTPPut - Accepts the SMTP data and updates the config file.
+ *
+ * @param  {string} host     The SMTP hostname
+ * @param  {number} port     The SMTP port
+ * @param  {string} user     The SMTP login username
+ * @param  {string} password The SMTP login password
+ */
 exports.remindersEmailSMTPPut = function (host, port, user, password) {
   if (typeof password === 'string') {
     log.info(`remindersEmailSMTPPut(host, port, user, password) req.body.host=<${host}> req.body.port=<${port}> req.body.user=<${user}> req.body.password=<XXX>`)
@@ -130,6 +144,12 @@ exports.remindersEmailSMTPPut = function (host, port, user, password) {
   emailRemindersSMTPFile.writeData(smtpData)
 }
 
+/**
+ * remindersEmailNextGet - Looks at the pending fixtures and calculates the content and timing of the
+ * next reminder email.
+ *
+ * @return {object}  The data for the next reminder email to be sent
+ */
 exports.remindersEmailNextGet = function () {
   configData = emailRemindersConfigFile.readData()
 

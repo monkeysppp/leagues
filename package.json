@@ -16,7 +16,7 @@
     "lint": "standard --verbose",
     "lint-fix": "standard --verbose --fix",
     "postlint": "npm run doc",
-    "doc": "jsdoc --configure jsdoc.json",
+    "doc": "jsdoc --configure jsdoc.json -P ./package.json -R ./README.md .",
     "start-react": "react-scripts start",
     "build-react": "react-scripts build",
     "test-react": "react-scripts test",
