@@ -193,51 +193,73 @@ describe('authenticator', () => {
       })
     })
 
-    context('when the CSRF cookie is missing', () => {
+    context('when calling a UI URL', () => {
       beforeEach(() => {
+        req.originalUrl = '/ui/something'
         delete req.cookies['X-CSRF-Token']
-      })
-
-      it('calls next with an error', () => {
-        authenticator.validateCall(req, res, next)
-        const err = next.getCall(0).args[0]
-        expect(err).to.be.instanceOf(Error)
-        expect(err.message).to.equal('Authentication Error: Missing CSRF token cookie')
-      })
-    })
-
-    context('when the CSRF header is missing', () => {
-      beforeEach(() => {
         delete req.headers['x-csrf-token']
       })
 
-      it('calls next with an error', () => {
+      it('ignores CSRF and calls next', () => {
         authenticator.validateCall(req, res, next)
-        const err = next.getCall(0).args[0]
-        expect(err).to.be.instanceOf(Error)
-        expect(err.message).to.equal('Authentication Error: Missing CSRF token header')
+        expect(next.callCount).to.equal(1)
+        expect(authenticator.isJwtPresent.callCount).to.equal(1)
+        expect(authenticator.validateToken.callCount).to.equal(1)
+        expect(next).to.be.calledWith()
       })
     })
 
-    context('when the CSRF header and cookie do not match', () => {
+    context('when calling an API URL', () => {
       beforeEach(() => {
-        req.headers['x-csrf-token'] = 'something different'
+        req.originalUrl = '/api/v1/something'
       })
 
-      it('calls next with an error', () => {
+      context('when the CSRF cookie is missing', () => {
+        beforeEach(() => {
+          delete req.cookies['X-CSRF-Token']
+        })
+
+        it('calls next with an error', () => {
+          authenticator.validateCall(req, res, next)
+          const err = next.getCall(0).args[0]
+          expect(err).to.be.instanceOf(Error)
+          expect(err.message).to.equal('Authentication Error: Missing CSRF token cookie')
+        })
+      })
+
+      context('when the CSRF header is missing', () => {
+        beforeEach(() => {
+          delete req.headers['x-csrf-token']
+        })
+
+        it('calls next with an error', () => {
+          authenticator.validateCall(req, res, next)
+          const err = next.getCall(0).args[0]
+          expect(err).to.be.instanceOf(Error)
+          expect(err.message).to.equal('Authentication Error: Missing CSRF token header')
+        })
+      })
+
+      context('when the CSRF header and cookie do not match', () => {
+        beforeEach(() => {
+          req.headers['x-csrf-token'] = 'something different'
+        })
+
+        it('calls next with an error', () => {
+          authenticator.validateCall(req, res, next)
+          const err = next.getCall(0).args[0]
+          expect(err).to.be.instanceOf(Error)
+          expect(err.message).to.equal('Authentication Error: CSRF token cookie and header do not match')
+        })
+      })
+
+      it('calls next', () => {
         authenticator.validateCall(req, res, next)
-        const err = next.getCall(0).args[0]
-        expect(err).to.be.instanceOf(Error)
-        expect(err.message).to.equal('Authentication Error: CSRF token cookie and header do not match')
+        expect(next.callCount).to.equal(1)
+        expect(authenticator.isJwtPresent.callCount).to.equal(1)
+        expect(authenticator.validateToken.callCount).to.equal(1)
+        expect(next).to.be.calledWith()
       })
-    })
-
-    it('calls next', () => {
-      authenticator.validateCall(req, res, next)
-      expect(next.callCount).to.equal(1)
-      expect(authenticator.isJwtPresent.callCount).to.equal(1)
-      expect(authenticator.validateToken.callCount).to.equal(1)
-      expect(next).to.be.calledWith()
     })
   })
 
