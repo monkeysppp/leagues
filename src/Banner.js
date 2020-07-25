@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import HomeIcon from '@material-ui/icons/Home'
 import { withStyles } from '@material-ui/core/styles'
+import packageJson from '../package.json';
 
 const styles = theme => ({
   root: {
@@ -15,8 +16,11 @@ const styles = theme => ({
     marginRight: theme.spacing(2),
     color: '#ffffff'
   },
-  title: {
+  version: {
     flexGrow: 1,
+    fontSize: 12,
+    color: '#bbccff',
+    marginTop: '3px'
   },
   appBar: {
     'background-color': '#3C91E6'
@@ -35,7 +39,6 @@ class Banner extends React.Component {
 
   render () {
     const { classes } = this.props
-    //<NavLink to='/logout' onClick={this.props.logout} className='flatLink'>logout</NavLink>
     if (this.props.loggedIn) {
       return (
         <AppBar position="static" className={classes.appBar}>
@@ -45,21 +48,12 @@ class Banner extends React.Component {
                 <HomeIcon />
               </IconButton>
             </NavLink>
-            <Typography variant="h6" className={classes.title}>
-              Leagues
-            </Typography>
+            <Typography variant="h6">Leagues</Typography>
+            <Typography variant="body2" className={classes.version}>&nbsp;({packageJson.version})</Typography>
             <a href="/auth/logout" className="whiteLink">Logout</a>
           </Toolbar>
         </AppBar>
       )
-      // <div className='topBanner'>
-      //   <div className='topBannerLeft'>
-      //     <NavLink to='/ui' className='flatLink'>Home</NavLink>
-      //   </div>
-      //   <div className='topBannerRight'>
-      //     <span>Hi {this.state.username} - </span><a href='/auth/logout' className='flatLink'>logout</a>
-      //   </div>
-      // </div>
     } else {
       return (
         <AppBar position="static" className={classes.appBar}>
@@ -69,21 +63,12 @@ class Banner extends React.Component {
                 <HomeIcon />
               </IconButton>
             </NavLink>
-            <Typography variant="h6" className={classes.title}>
-              Leagues
-            </Typography>
+            <Typography variant="h6">Leagues</Typography>
+            <Typography variant="body2" className={classes.version}>&nbsp;({packageJson.version})</Typography>
             <NavLink to='/ui/login' className="whiteLink">Login</NavLink>
           </Toolbar>
         </AppBar>
       )
-      // <div className='topBanner'>
-      //   <div className='topBannerLeft'>
-      //     <NavLink to='/ui' className='flatLink'>Home</NavLink>
-      //   </div>
-      //   <div className='topBannerRight'>
-      //     <NavLink to='/ui/login' className='flatLink'>login</NavLink>
-      //   </div>
-      // </div>
     }
   }
 }

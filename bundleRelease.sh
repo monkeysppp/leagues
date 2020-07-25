@@ -2,7 +2,11 @@
 
 echo "Building release TGZ"
 
-tar -C .. -czf leagues.tgz \
+echo "Getting version"
+VERSION=$(grep "\"version\": " package.json | cut -d'"' -f4)
+echo "Bundling version ${VERSION}"
+
+tar -C .. -czf leagues-${VERSION}.tgz \
   leagues/api \
   leagues/cert/README.md \
   leagues/config/development.json \
@@ -16,4 +20,4 @@ tar -C .. -czf leagues.tgz \
   leagues/package.json \
   leagues/README.md
 
-echo "leagues.tgz built successfully"
+echo "leagues-${VERSION}.tgz built successfully"
