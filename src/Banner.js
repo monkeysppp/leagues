@@ -20,7 +20,7 @@ const styles = theme => ({
     flexGrow: 1,
     fontSize: 12,
     color: '#bbccff',
-    marginTop: '3px'
+    marginTop: '5px'
   },
   appBar: {
     'background-color': '#3C91E6'
@@ -49,7 +49,7 @@ class Banner extends React.Component {
               </IconButton>
             </NavLink>
             <Typography variant="h6">Leagues</Typography>
-            <Typography variant="body2" className={classes.version}>&nbsp;({packageJson.version})</Typography>
+            <Typography variant="body2" className={classes.version}>&nbsp;&nbsp;v{packageJson.version}</Typography>
             <a href="/auth/logout" className="whiteLink">Logout</a>
           </Toolbar>
         </AppBar>
@@ -64,7 +64,7 @@ class Banner extends React.Component {
               </IconButton>
             </NavLink>
             <Typography variant="h6">Leagues</Typography>
-            <Typography variant="body2" className={classes.version}>&nbsp;({packageJson.version})</Typography>
+            <Typography variant="body2" className={classes.version}>&nbsp;&nbsp;v{packageJson.version}</Typography>
             <NavLink to='/ui/login' className="whiteLink">Login</NavLink>
           </Toolbar>
         </AppBar>

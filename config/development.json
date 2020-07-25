@@ -1,11 +1,12 @@
 {
   "logging": {
-    "level": "debug"
+    "level": "info"
   },
-  "dbHost":"localhost",
-  "dbName":"dbName",
-  "dbUser":"dbUser",
-  "dbPass":"dbPass",
-  "jwtSecret":"SomeRandonString",
-  "jwtIssuer":"server-domain.org"
+  "httpsPort": 3001,
+  "dbHost": "localhost",
+  "dbName": "dbName",
+  "dbUser": "dbUser",
+  "dbPass": "dbPass",
+  "jwtSecret": "SomeRandonString",
+  "jwtIssuer": "server-domain.org"
 }
