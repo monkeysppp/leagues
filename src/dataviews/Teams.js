@@ -1,9 +1,9 @@
 import React from 'react'
 import { AddCircleOutlined, DeleteOutlined, EditOutlined } from '@material-ui/icons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -20,7 +20,7 @@ import { withSnackbar  } from 'notistack'
 import Team from'./Team.js'
 import Colours from '../Colours.js'
 
-const ExpansionPanelWrapper = withStyles(() => ({
+const AccordionWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.border,
     margin: '0px',
@@ -36,8 +36,8 @@ const ExpansionPanelWrapper = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummaryWrapper = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummaryWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.heading.border,
     background: Colours.teams.heading.background,
@@ -62,15 +62,15 @@ const ExpansionPanelSummaryWrapper = withStyles(() => ({
   expandIcon: {
     color: Colours.teams.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetailsWrapper = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.teams.body.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
-const ExpansionPanel = withStyles(() => ({
+}))(MuiAccordionDetails)
+const Accordion = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.border,
     boxShadow: 'none',
@@ -85,8 +85,8 @@ const ExpansionPanel = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummary = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.teams.heading.border,
     background: Colours.teams.heading.background,
@@ -114,14 +114,14 @@ const ExpansionPanelSummary = withStyles(() => ({
   expandIcon: {
     color: Colours.teams.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetails = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetails = withStyles(() => ({
   root: {
     background: Colours.contacts.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 class Teams extends React.Component {
   constructor(props) {
@@ -301,14 +301,14 @@ class Teams extends React.Component {
         } else {
           body = <span>{team.name}</span>
         }
-        teams.push(<ExpansionPanel key={team.id}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+        teams.push(<Accordion key={team.id}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
             {body}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <Team editConfig={this.props.editConfig} seasonId={this.props.season.id} competitionId={this.props.competition.id} team={team} utils={this.utils} key={team.id}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>)
+          </AccordionDetails>
+        </Accordion>)
       })
     }
 
@@ -316,11 +316,11 @@ class Teams extends React.Component {
     if (!this.state.teamsDrawn) {
       teamPanel = <div></div>
     } else if (this.state.teamEditable) {
-      teamPanel = <ExpansionPanelWrapper key='teams'>
-        <ExpansionPanelSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+      teamPanel = <AccordionWrapper key='teams'>
+        <AccordionSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
           <span>Teams</span>
-        </ExpansionPanelSummaryWrapper>
-        <ExpansionPanelDetailsWrapper>
+        </AccordionSummaryWrapper>
+        <AccordionDetailsWrapper>
           <Tooltip disableFocusListener disableTouchListener title="Add new team"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addTeamDialogOpen}>Add Team</Button></Tooltip>
           <div>
             {teams}
@@ -366,19 +366,19 @@ class Teams extends React.Component {
               <Button onClick={this.cannotDeleteTeamDialogClose} variant="contained" color="primary">OK</Button>
             </DialogActions>
           </Dialog>
-        </ExpansionPanelDetailsWrapper>
-      </ExpansionPanelWrapper>
+        </AccordionDetailsWrapper>
+      </AccordionWrapper>
     } else {
-      teamPanel = <ExpansionPanelWrapper key='teams'>
-        <ExpansionPanelSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+      teamPanel = <AccordionWrapper key='teams'>
+        <AccordionSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
           <span>Teams</span>
-        </ExpansionPanelSummaryWrapper>
-        <ExpansionPanelDetailsWrapper>
+        </AccordionSummaryWrapper>
+        <AccordionDetailsWrapper>
           <div>
             {teams}
           </div>
-        </ExpansionPanelDetailsWrapper>
-      </ExpansionPanelWrapper>
+        </AccordionDetailsWrapper>
+      </AccordionWrapper>
     }
 
     return (

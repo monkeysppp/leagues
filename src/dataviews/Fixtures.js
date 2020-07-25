@@ -1,9 +1,9 @@
 import React from 'react'
 import { AddCircleOutlined, DeleteOutlined, EditOutlined } from '@material-ui/icons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -27,7 +27,7 @@ import { withSnackbar  } from 'notistack'
 import Fixture from'./Fixture.js'
 import Colours from '../Colours.js'
 
-const ExpansionPanelWrapper = withStyles(() => ({
+const AccordionWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.border,
     margin: '0px 0px 6px',
@@ -43,8 +43,8 @@ const ExpansionPanelWrapper = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummaryWrapper = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummaryWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.heading.border,
     background: Colours.fixtures.heading.background,
@@ -69,15 +69,15 @@ const ExpansionPanelSummaryWrapper = withStyles(() => ({
   expandIcon: {
     color: Colours.fixtures.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetailsWrapper = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.fixtures.body.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
-const ExpansionPanel = withStyles(() => ({
+}))(MuiAccordionDetails)
+const Accordion = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.border,
     boxShadow: 'none',
@@ -92,8 +92,8 @@ const ExpansionPanel = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummary = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.fixtures.heading.border,
     background: Colours.fixtures.heading.background,
@@ -121,14 +121,14 @@ const ExpansionPanelSummary = withStyles(() => ({
   expandIcon: {
     color: Colours.fixtures.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetails = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetails = withStyles(() => ({
   root: {
     background: Colours.matches.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 class Fixtures extends React.Component {
   constructor(props) {
@@ -342,17 +342,17 @@ class Fixtures extends React.Component {
             <Tooltip disableFocusListener disableTouchListener title="Delete Fixture"><IconButton disableFocusRipple aria-label="Delete fixture" component="span" style={Colours.fixtures.iconStyle} onClick={(e) => {e.stopPropagation(); this.deleteFixtureDialogOpen(fixture)}} onFocus={(e) => e.stopPropagation()}><DeleteOutlined /></IconButton></Tooltip>
           </div>
         } else {
-          body = {fixtureDetails}
+          body = fixtureDetails
         }
 
-        fixtures.push(<ExpansionPanel key={fixture.id}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+        fixtures.push(<Accordion key={fixture.id}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
             {body}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <Fixture editConfig={this.props.editConfig} seasonId={this.props.season.id} competition={this.props.competition} fixture={fixture} teams={this.props.competition.teams} utils={this.utils} key={fixture.id}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>)
+          </AccordionDetails>
+        </Accordion>)
       })
     }
 
@@ -367,11 +367,11 @@ class Fixtures extends React.Component {
     if (!this.state.fixturesDrawn) {
       fixturePanel = <div></div>
     } else if (this.state.fixtureEditable) {
-      fixturePanel = <ExpansionPanelWrapper key='fixtures'>
-        <ExpansionPanelSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+      fixturePanel = <AccordionWrapper key='fixtures'>
+        <AccordionSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
           <span>Fixtures</span>
-        </ExpansionPanelSummaryWrapper>
-        <ExpansionPanelDetailsWrapper>
+        </AccordionSummaryWrapper>
+        <AccordionDetailsWrapper>
           <Tooltip disableFocusListener disableTouchListener title="Add new fixture"><Button disableFocusRipple style={{ color: "#66cc66" }} startIcon={<AddCircleOutlined />} onClick={this.addFixtureDialogOpen}>Add Fixture</Button></Tooltip>
           <div>
             {fixtures}
@@ -435,19 +435,19 @@ class Fixtures extends React.Component {
               <Button onClick={this.deleteFixtureDialogDelete} autoFocus onKeyUp={this.deleteFixtureDialogDelete} variant="contained" color="secondary">Delete</Button>
             </DialogActions>
           </Dialog>
-        </ExpansionPanelDetailsWrapper>
-      </ExpansionPanelWrapper>
+        </AccordionDetailsWrapper>
+      </AccordionWrapper>
     } else {
-      fixturePanel = <ExpansionPanelWrapper>
-      <ExpansionPanelSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+      fixturePanel = <AccordionWrapper>
+      <AccordionSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
         <span>Fixtures</span>
-      </ExpansionPanelSummaryWrapper>
-      <ExpansionPanelDetailsWrapper>
+      </AccordionSummaryWrapper>
+      <AccordionDetailsWrapper>
         <div>
           {fixtures}
         </div>
-      </ExpansionPanelDetailsWrapper>
-    </ExpansionPanelWrapper>
+      </AccordionDetailsWrapper>
+    </AccordionWrapper>
     }
 
     return (

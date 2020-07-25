@@ -1,9 +1,9 @@
 import React from 'react'
 import { CloudUpload } from '@material-ui/icons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -17,7 +17,7 @@ import { withSnackbar  } from 'notistack'
 
 import Colours from './Colours.js'
 
-const ExpansionPanel = withStyles(() => ({
+const Accordion = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.emailReminders.border,
     boxShadow: 'none',
@@ -32,9 +32,9 @@ const ExpansionPanel = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
+}))(MuiAccordion)
 
-const ExpansionPanelSummary = withStyles(() => ({
+const AccordionSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.emailReminders.heading.background,
     background: Colours.emailReminders.heading.background,
@@ -62,15 +62,15 @@ const ExpansionPanelSummary = withStyles(() => ({
   expandIcon: {
     color: Colours.emailReminders.heading.text
   }
-}))(MuiExpansionPanelSummary)
+}))(MuiAccordionSummary)
 
-const ExpansionPanelDetails = withStyles(() => ({
+const AccordionDetails = withStyles(() => ({
   root: {
     background: Colours.emailReminders.body.background,
     display: 'block',
     padding: '20px'
   }
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 class EmailReminders extends React.Component {
   constructor(props) {
@@ -249,11 +249,11 @@ class EmailReminders extends React.Component {
         <FormControlLabel value="start" control={<Switch checked={this.state.emailRemindersEnabled} onChange={this.toggleEmailRemindersEnabled} color="primary" name="emailRemindersEnabled" inputProps={{ 'aria-label': 'primary checkbox' }} />} label="Enable Email Reminders" labelPlacement="start" />
         <br/><br/>
         <div>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
               SMTP Config
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            </AccordionSummary>
+            <AccordionDetails>
               <TextField id="smtp.host" label="SMTP Hostname" style={{width: 400}} variant="outlined" value={this.state.smtpHost} onChange={this.handleSMTPHostChange} />&nbsp;&nbsp;
               <TextField id="smtp.port" label="SMTP Port" style={{width: 100}} variant="outlined" value={this.state.smtpPort} onChange={this.handleSMTPPortChange} />
               <br/><br/>
@@ -261,13 +261,13 @@ class EmailReminders extends React.Component {
               <TextField id="smtp.password" label="SMTP Password" type='password' style={{width: 250}} variant="outlined" value={this.state.smtpPass} onChange={this.handleSMTPPassChange} />&nbsp;&nbsp;
               <br/><br/>
               <Tooltip title="Apply SMTP Settings"><Button variant="contained" style={Colours.emailReminders.iconStyle} startIcon={<CloudUpload />} onClick={this.saveSMTPSettings}>Save config</Button></Tooltip>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions2-content" id="additional-actions2-header">
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions2-content" id="additional-actions2-header">
               Email Config
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            </AccordionSummary>
+            <AccordionDetails>
               <TextField id="email.from" label="From Address" style={{width: 510}} variant="outlined" value={this.state.emailFrom} onChange={this.handleEmailFromChange} /><br/>
               <span>Email will be sent at <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker style={{'verticalAlign': 'baseline'}} format="HH:mm" margin="normal" id="time-picker-inline" label="Pick time" value={this.state.emailReminderTime} onChange={this.handleEmailTimeChange} KeyboardButtonProps={{ 'aria-label': 'pick time', }} />
@@ -278,8 +278,8 @@ class EmailReminders extends React.Component {
               <TextField id="email.tailer" label="Email Tailer" multiline rows={6} onChange={this.handleEmailTailerChange} fullWidth variant="outlined" value={this.state.emailBodyTailer} />
               <br/><br/>
               <Tooltip title="Apply Email Settings"><Button variant="contained" style={Colours.emailReminders.iconStyle} startIcon={<CloudUpload />} onClick={this.saveEmailSettings}>Save config</Button></Tooltip>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
         </div>
         <br/><br/>
         {reminder}

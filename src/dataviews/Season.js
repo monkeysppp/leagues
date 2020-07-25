@@ -1,9 +1,9 @@
 import React from 'react'
 import { AddCircleOutlined, DeleteOutlined, EditOutlined } from '@material-ui/icons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -20,7 +20,7 @@ import { withSnackbar  } from 'notistack'
 import Competition from'./Competition.js'
 import Colours from '../Colours.js'
 
-const ExpansionPanel = withStyles(() => ({
+const Accordion = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.competitions.border,
     boxShadow: 'none',
@@ -35,9 +35,9 @@ const ExpansionPanel = withStyles(() => ({
     },
   },
   expanded: {},
-}))(MuiExpansionPanel)
+}))(MuiAccordion)
 
-const ExpansionPanelSummary = withStyles(() => ({
+const AccordionSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.competitions.heading.background,
     background: Colours.competitions.heading.background,
@@ -65,15 +65,15 @@ const ExpansionPanelSummary = withStyles(() => ({
   expandIcon: {
     color: Colours.competitions.heading.text
   }
-}))(MuiExpansionPanelSummary)
+}))(MuiAccordionSummary)
 
-const ExpansionPanelDetails = withStyles(() => ({
+const AccordionDetails = withStyles(() => ({
   root: {
     background: Colours.competitions.body.background,
     display: 'block',
     padding: '6px'
   },
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 class Season extends React.Component {
   constructor(props) {
@@ -223,14 +223,14 @@ class Season extends React.Component {
         body = <span>{competition.name}</span>
       }
 
-      competitions.push(<ExpansionPanel key={competition.id}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header" >
+      competitions.push(<Accordion key={competition.id}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header" >
           {body}
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
           <Competition editConfig={this.props.editConfig} drawConfig={this.props.drawConfig} season={this.props.season} competition={competition} utils={this.utils} key={competition.id}/>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>)
+        </AccordionDetails>
+      </Accordion>)
     })
 
     if (this.state.competitionEditable) {

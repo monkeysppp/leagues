@@ -1,14 +1,14 @@
 import React from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import { withStyles } from '@material-ui/styles'
 
 import MatchList from'./MatchList.js'
 import Colours from '../Colours.js'
 
-const ExpansionPanelWrapper = withStyles(() => ({
+const AccordionWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.matches.border,
     margin: '0px',
@@ -24,8 +24,8 @@ const ExpansionPanelWrapper = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummaryWrapper = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummaryWrapper = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.matches.heading.border,
     background: Colours.matches.heading.background,
@@ -50,15 +50,15 @@ const ExpansionPanelSummaryWrapper = withStyles(() => ({
   expandIcon: {
     color: Colours.matches.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetailsWrapper = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetailsWrapper = withStyles(() => ({
   root: {
     background: Colours.matches.body.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
-const ExpansionPanel = withStyles(() => ({
+}))(MuiAccordionDetails)
+const Accordion = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.matches.border,
     boxShadow: 'none',
@@ -73,8 +73,8 @@ const ExpansionPanel = withStyles(() => ({
     },
   },
   expanded: {}
-}))(MuiExpansionPanel)
-const ExpansionPanelSummary = withStyles(() => ({
+}))(MuiAccordion)
+const AccordionSummary = withStyles(() => ({
   root: {
     border: '1px solid ' + Colours.matches.heading.border,
     background: Colours.matches.heading.background,
@@ -102,14 +102,14 @@ const ExpansionPanelSummary = withStyles(() => ({
   expandIcon: {
     color: Colours.matches.heading.text
   }
-}))(MuiExpansionPanelSummary)
-const ExpansionPanelDetails = withStyles(() => ({
+}))(MuiAccordionSummary)
+const AccordionDetails = withStyles(() => ({
   root: {
     background: Colours.matches.background,
     display: 'block',
     padding: '6px'
   }
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 class Matches extends React.Component {
   constructor(props) {
@@ -124,14 +124,14 @@ class Matches extends React.Component {
 
     if (this.state.matchesDrawn) {
       this.props.competition.teams.forEach((team) => {
-        matches.push(<ExpansionPanel key={team.id}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+        matches.push(<Accordion key={team.id}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
             <span>{team.name}</span>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <MatchList team={team} teams={this.props.competition.teams} fixtures={this.props.competition.fixtures} key={team.id}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>)
+          </AccordionDetails>
+        </Accordion>)
       })
     }
 
@@ -139,16 +139,16 @@ class Matches extends React.Component {
     if (!this.state.matchesDrawn) {
       matchesPanel = <div></div>
     } else {
-      matchesPanel = <ExpansionPanelWrapper key='matches'>
-        <ExpansionPanelSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
+      matchesPanel = <AccordionWrapper key='matches'>
+        <AccordionSummaryWrapper expandIcon={<ExpandMoreIcon />} aria-label="Expand" aria-controls="additional-actions1-content" id="additional-actions1-header">
           <span>Matches</span>
-        </ExpansionPanelSummaryWrapper>
-        <ExpansionPanelDetailsWrapper>
+        </AccordionSummaryWrapper>
+        <AccordionDetailsWrapper>
           <div>
             {matches}
           </div>
-        </ExpansionPanelDetailsWrapper>
-      </ExpansionPanelWrapper>
+        </AccordionDetailsWrapper>
+      </AccordionWrapper>
     }
 
     return (
