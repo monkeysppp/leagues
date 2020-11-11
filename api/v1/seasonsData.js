@@ -54,7 +54,7 @@ exports.seasonsPost = function (seasonName) {
     }
   }
 
-  var newSeason = {}
+  const newSeason = {}
   newSeason.id = nextSeasonId + 1
   newSeason.name = seasonName
   newSeason.competitions = []
@@ -201,7 +201,7 @@ exports.seasonsSeasonIdCompetitionsPost = function (seasonId, competitionName) {
     }
   }
 
-  var newCompetition = {}
+  const newCompetition = {}
   newCompetition.id = nextCompetitionId + 1
   newCompetition.name = competitionName
   newCompetition.fixtures = []
@@ -353,7 +353,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost = function (seasonId, 
     }
   }
 
-  var newTeam = {}
+  const newTeam = {}
   newTeam.id = nextTeamId + 1
   newTeam.name = teamName
   newTeam.contacts = []
@@ -520,7 +520,7 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = functi
     }
   }
 
-  var newContact = {}
+  const newContact = {}
   newContact.id = nextContactId + 1
   newContact.email = contactAddress
   team.contacts.push(newContact)

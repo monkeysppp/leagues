@@ -59,8 +59,8 @@ exports.findNextFixtureAfterDate = function (fromDate) {
  * @returns {String} a string containing a list of email addresses
  **/
 function getContacts (fixture, teams) {
-  var contactList = {}
-  var returnList = ''
+  const contactList = {}
+  let returnList = ''
 
   fixture.matches.forEach(match => {
     getTeamFromId(teams, match.homeTeam).contacts.forEach(contact => {
@@ -94,7 +94,7 @@ function getContacts (fixture, teams) {
  * @returns {String} a string containing a summary of the match schedule
  **/
 function getMatchSummary (fixture, teams) {
-  var textSummary = fixture.date + ' at ' + fixture.venue + '\n'
+  let textSummary = fixture.date + ' at ' + fixture.venue + '\n'
   fixture.matches.forEach(match => {
     textSummary += `${match.time} ${getTeamFromId(teams, match.homeTeam).name} v ${getTeamFromId(teams, match.awayTeam).name}`
 

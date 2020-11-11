@@ -81,7 +81,7 @@ exports.readData = function () {
   try {
     emailRemindersSMTPData = JSON.parse(data)
   } catch (error) {
-    var errorMessage = "Couldn't interpret the stored data as JSON: " + error.message
+    const errorMessage = "Couldn't interpret the stored data as JSON: " + error.message
     log.error(errorMessage)
     throwError(errorMessage, 500)
   }
