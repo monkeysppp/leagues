@@ -38,8 +38,8 @@ You'll need the following:
     - `> create database leagues`
     - `> create user '{username}'@'localhost' identified by '{database password}';`
     - `> grant all on leagues.* to '{username}'@'localhost';`
-- Download and expand the latest leagues-V.M.R.tgz file
-- Install the Node.js packages and build the React code by running `npm install-release`
+- Download and expand the latest leagues-{semver}.tgz file
+- Install the Node.js packages and build the React code by running `npm run install-release`
 - Create the file `config/production.json` as a copy of `config/development.json`
   - Add the Database Connection details, using your new database username and password.  Note that the code expects MariaDB to be running on the same machine as the application.
   - Add a long random string as `jwtSecret`
