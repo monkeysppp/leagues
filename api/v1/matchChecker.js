@@ -11,7 +11,7 @@ const seasonsData = require('./seasonsData.js')
  * fixture, the season name, the contacts for the teams with responsibilities at that fixture and a
  * summary of the match schedule.
  *
- * @param  {Datae} fromDate The date to search for fistures after
+ * @param  {Date} fromDate The date to search for fistures after
 
  * @return {object} The fixture information
  */
