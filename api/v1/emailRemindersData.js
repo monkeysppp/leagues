@@ -101,7 +101,8 @@ exports.remindersEmailSMTPGet = function () {
   const returnedData = {
     host: smtpData.host,
     port: smtpData.port,
-    user: smtpData.user
+    user: smtpData.user,
+    ssltls: smtpData.ssltls
   }
   return returnedData
 }
@@ -113,12 +114,13 @@ exports.remindersEmailSMTPGet = function () {
  * @param  {number} port     The SMTP port
  * @param  {string} user     The SMTP login username
  * @param  {string} password The SMTP login password
+ * @param  {boolean} ssltsl  Whether to use SSL/TLS or STARTTLS
  */
-exports.remindersEmailSMTPPut = function (host, port, user, password) {
+exports.remindersEmailSMTPPut = function (host, port, user, password, ssltls) {
   if (typeof password === 'string') {
-    log.info(`remindersEmailSMTPPut(host, port, user, password) req.body.host=<${host}> req.body.port=<${port}> req.body.user=<${user}> req.body.password=<XXX>`)
+    log.info(`remindersEmailSMTPPut(host, port, user, password, ssltls) req.body.host=<${host}> req.body.port=<${port}> req.body.user=<${user}> req.body.password=<XXX> req.body.ssltls=<${ssltls}>`)
   } else {
-    log.info(`remindersEmailSMTPPut(host, port, user, password) req.body.host=<${host}> req.body.port=<${port}> req.body.user=<${user}>`)
+    log.info(`remindersEmailSMTPPut(host, port, user, password, ssltls) req.body.host=<${host}> req.body.port=<${port}> req.body.user=<${user}> req.body.ssltls=<${ssltls}>`)
   }
 
   if (typeof host !== 'string') {
@@ -133,6 +135,9 @@ exports.remindersEmailSMTPPut = function (host, port, user, password) {
   if (typeof password !== 'string' && password !== undefined) {
     throwError('Bad SMTP password setting', 400)
   }
+  if (typeof ssltls !== 'boolean') {
+    throwError('Bad SMTP ssltls setting', 400)
+  }
 
   smtpData = emailRemindersSMTPFile.readData()
   smtpData.host = host
@@ -141,6 +146,7 @@ exports.remindersEmailSMTPPut = function (host, port, user, password) {
   if (typeof password === 'string') {
     smtpData.password = password
   }
+  smtpData.ssltls = ssltls
   emailRemindersSMTPFile.writeData(smtpData)
 }
 

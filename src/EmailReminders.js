@@ -82,6 +82,7 @@ class EmailReminders extends React.Component {
       smtpUser: ' ',
       smtpPass: 'xxxxxxxx',
       smtpPassChanged: false,
+      smtpSslTls: false,
       emailRemindersEnabled: true,
       emailFrom: '',
       emailReminderTime: new Date(),
@@ -102,6 +103,7 @@ class EmailReminders extends React.Component {
     this.handleSMTPPortChange = this.handleSMTPPortChange.bind(this)
     this.handleSMTPUserChange = this.handleSMTPUserChange.bind(this)
     this.handleSMTPPassChange = this.handleSMTPPassChange.bind(this)
+    this.handleSMTPSslTlsChange = this.handleSMTPSslTlsChange.bind(this)
     this.handleEmailFromChange = this.handleEmailFromChange.bind(this)
     this.handleEmailLeaderChange = this.handleEmailLeaderChange.bind(this)
     this.handleEmailTailerChange = this.handleEmailTailerChange.bind(this)
@@ -133,6 +135,7 @@ class EmailReminders extends React.Component {
         smtpHost: smtpConfig.host,
         smtpPort: smtpConfig.port,
         smtpUser: smtpConfig.user,
+        smtpSslTls: smtpConfig.ssltls,
         nextReminder: nextReminder
       })
     } catch (e) {
@@ -184,6 +187,10 @@ class EmailReminders extends React.Component {
     this.setState({ smtpPass: e.target.value, smtpPassChanged: true })
   }
 
+  handleSMTPSslTlsChange () {
+    this.setState({ smtpSslTls: !this.state.smtpSslTls })
+  }
+
   handleEmailLeaderChange (e) {
     this.setState({ emailBodyLeader: e.target.value })
   }
@@ -198,7 +205,8 @@ class EmailReminders extends React.Component {
         this.state.smtpHost,
         parseInt(this.state.smtpPort),
         this.state.smtpUser,
-        this.state.smtpPassChanged ? this.state.smtpPass : undefined
+        this.state.smtpPassChanged ? this.state.smtpPass : undefined,
+        this.state.smtpSslTls
       )
       this.enqueueSnackbar(`SMTP Settings applied`, { variant: 'success' })
     } catch (e) {
@@ -254,6 +262,8 @@ class EmailReminders extends React.Component {
               SMTP Config
             </AccordionSummary>
             <AccordionDetails>
+              <FormControlLabel control={<Switch checked={this.state.smtpSslTls} onChange={this.handleSMTPSslTlsChange} color="primary" name="emailSslTls" inputProps={{ 'aria-label': 'primary checkbox' }} />} label="Use SSL/TLS (instead of STARTTLS)" labelPlacement="start" />
+              <br/><br/>
               <TextField id="smtp.host" label="SMTP Hostname" style={{width: 400}} variant="outlined" value={this.state.smtpHost} onChange={this.handleSMTPHostChange} />&nbsp;&nbsp;
               <TextField id="smtp.port" label="SMTP Port" style={{width: 100}} variant="outlined" value={this.state.smtpPort} onChange={this.handleSMTPPortChange} />
               <br/><br/>

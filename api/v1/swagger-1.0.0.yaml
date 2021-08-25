@@ -1441,7 +1441,6 @@ definitions:
     - host
     - port
     - user
-    - ssltls
     properties:
       host:
         type: "string"
@@ -1456,9 +1455,6 @@ definitions:
       password:
         type: "string"
         description: "The password to log in with"
-      ssltls:
-        type: "boolean"
-        description: "Shoult the SMTP connection use SSL/TLS directly (true), or STARTTLS if supported (false)"
   ReminderEmailSMTPGet:
     type: "object"
     properties:
@@ -1472,9 +1468,6 @@ definitions:
       user:
         type: "string"
         description: "The user to log in as"
-      ssltls:
-        type: "boolean"
-        description: "Shoult the SMTP connection use SSL/TLS directly (true), or STARTTLS if supported (false)"
   ReminderEmailNext:
     type: "object"
     properties:

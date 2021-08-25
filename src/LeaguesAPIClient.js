@@ -257,12 +257,12 @@ class LeaguesAPIClient {
       })
   }
 
-  async remindersEmailSMTPPut (host, port, user, password) {
+  async remindersEmailSMTPPut (host, port, user, password, ssltls) {
     const headers = {
       'x-csrf-token': cookies.get('X-CSRF-Token'),
       'content-type': 'application/json'
     }
-    return axios.put('/api/v1/reminders/email/smtp', { host: host, port: port, user: user, password: password }, { headers: headers })
+    return axios.put('/api/v1/reminders/email/smtp', { host: host, port: port, user: user, password: password, ssltls: ssltls }, { headers: headers })
       .then(res => {
         return res.data
       })

@@ -522,7 +522,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                  .send({ port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -532,7 +532,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 12345, port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                  .send({ host: 12345, port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -542,7 +542,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 'foo.exmaple.net', user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                  .send({ host: 'foo.exmaple.net', user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -552,7 +552,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 'foo.exmaple.net', port: true, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                  .send({ host: 'foo.exmaple.net', port: true, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -562,7 +562,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 'foo.exmaple.net', port: 123, password: 'ImNotTellingYouMyPassword' })
+                  .send({ host: 'foo.exmaple.net', port: 123, password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -572,7 +572,7 @@ describe('/api/v1', () => {
               it('fails with 400', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 'foo.exmaple.net', port: 123, user: true, password: 'ImNotTellingYouMyPassword' })
+                  .send({ host: 'foo.exmaple.net', port: 123, user: true, password: 'ImNotTellingYouMyPassword', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(400)
               })
@@ -588,11 +588,31 @@ describe('/api/v1', () => {
               })
             })
 
+            context('ssltls is missing', () => {
+              it('fails with 400', () => {
+                return request(app)
+                  .put('/api/v1/reminders/email/smtp')
+                  .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                  .set('Accept', 'application/json')
+                  .expect(400)
+              })
+            })
+
+            context('ssltls is invalid', () => {
+              it('fails with 400', () => {
+                return request(app)
+                  .put('/api/v1/reminders/email/smtp')
+                  .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: 'true' })
+                  .set('Accept', 'application/json')
+                  .expect(400)
+              })
+            })
+
             context('password is missing', () => {
               it('returns 200', () => {
                 return request(app)
                   .put('/api/v1/reminders/email/smtp')
-                  .send({ host: 'foo.exmaple.net', port: 123, user: 'dave' })
+                  .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', ssltls: true })
                   .set('Accept', 'application/json')
                   .expect(200)
                   .then(() => {
@@ -600,6 +620,7 @@ describe('/api/v1', () => {
                     newData.host = 'foo.exmaple.net'
                     newData.port = 123
                     newData.user = 'dave'
+                    newData.ssltls = true
                     expect(emailRemindersSMTPDataFile.writeData).to.be.calledWith(newData)
                   })
               })
@@ -608,7 +629,7 @@ describe('/api/v1', () => {
             it('returns 200', () => {
               return request(app)
                 .put('/api/v1/reminders/email/smtp')
-                .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: false })
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(() => {
@@ -617,6 +638,7 @@ describe('/api/v1', () => {
                   newData.port = 123
                   newData.user = 'dave'
                   newData.password = 'ImNotTellingYouMyPassword'
+                  newData.ssltls = false
                   expect(emailRemindersSMTPDataFile.writeData).to.be.calledWith(newData)
                 })
             })
@@ -630,7 +652,7 @@ describe('/api/v1', () => {
             it('returns 500', () => {
               return request(app)
                 .put('/api/v1/reminders/email/smtp')
-                .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+                .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: false })
                 .set('Accept', 'application/json')
                 .expect(500)
             })
@@ -645,7 +667,7 @@ describe('/api/v1', () => {
           it('returns 500', () => {
             return request(app)
               .put('/api/v1/reminders/email/smtp')
-              .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword' })
+              .send({ host: 'foo.exmaple.net', port: 123, user: 'dave', password: 'ImNotTellingYouMyPassword', ssltls: false })
               .set('Accept', 'application/json')
               .expect(500)
           })

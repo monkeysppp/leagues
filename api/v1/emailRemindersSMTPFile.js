@@ -25,6 +25,7 @@ function throwError (message, statusCode) {
  * @param  {number} emailRemindersSMTPData.port The port for the SMTP server
  * @param  {string} emailRemindersSMTPData.user The port for the SMTP server
  * @param  {string} emailRemindersSMTPData.password The port for the SMTP server
+ * @param  {boolean} emailRemindersSMTPData.ssltls Whether to use SSL/TLS or STARTTLS
  */
 exports.writeData = function (emailRemindersSMTPData) {
   const filteredData = JSON.parse(JSON.stringify(emailRemindersSMTPData))

@@ -69,7 +69,7 @@ exports.remindersEmailSMTPPut = function (req, res, next) {
   log.info(`PUT /v1/reminders/email/smtp ${req.body.host}:${req.body.port} ${req.body.user} ${req.body.password ? 'REDACTED PASSWORD' : 'no password'}`)
 
   try {
-    data.remindersEmailSMTPPut(req.body.host, req.body.port, req.body.user, req.body.password)
+    data.remindersEmailSMTPPut(req.body.host, req.body.port, req.body.user, req.body.password, req.body.ssltls)
     res.end()
   } catch (err) {
     log.warn(err.message)

@@ -186,7 +186,7 @@ class Team extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.editContactDialogClose} variant="outlined" color="primary">Cancel</Button>
-            <Button onClick={this.editContactDialogEdit} variant="contained" color="primary">Edit</Button>
+            <Button onClick={this.editContactDialogEdit} variant="contained" color="primary">Update</Button>
           </DialogActions>
         </Dialog>
         <Dialog open={this.state.deleteContactDialogOpen} onClose={this.deleteContactDialogClose} aria-labelledby="form-dialog-title">
