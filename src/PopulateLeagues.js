@@ -72,7 +72,7 @@ class PopulateLeagues extends React.Component {
     try {
       const seasonRes = await this.leaguesAPIClient.seasonsPost(this.state.season[0].name)
       for (let i = 0; i < this.state.season[0].competitions.length; i++) {
-        const competition = this.state.season[0].competitions
+        const competition = this.state.season[0].competitions[i]
         const teamMap = {}
         const competitionRes = await this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(seasonRes.id, competition.name)
         for (let i = 0; i < competition.teams.length; i++) {
