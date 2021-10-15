@@ -71,21 +71,25 @@ class PopulateLeagues extends React.Component {
   async uploadData () {
     try {
       const seasonRes = await this.leaguesAPIClient.seasonsPost(this.state.season[0].name)
-      this.state.season[0].competitions.forEach(async (competition) => {
+      for (let i = 0; i < this.state.season[0].competitions.length; i++) {
+        const competition = this.state.season[0].competitions
         const teamMap = {}
         const competitionRes = await this.leaguesAPIClient.seasonsSeasonIdCompetitionsPost(seasonRes.id, competition.name)
-        competition.teams.forEach(async (team) => {
+        for (let i = 0; i < competition.teams.length; i++) {
+          const team = competition.teams[i]
           teamMap[`id-${team.id}`] = team
           await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdTeamsPost(seasonRes.id, competitionRes.id, team.name)
-        })
-        competition.fixtures.forEach(async (fixture) => {
+        }
+        for (let i = 0; i < competition.fixtures.length; i++) {
+          const fixture = competition.fixtures[i]
           const postFixture = {
             date: fixture.date,
             venue: fixture.venue,
             adjudicator: fixture.adjudicator,
           }
           const fixtureRes = await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesPost(seasonRes.id, competitionRes.id, postFixture)
-          fixture.matches.forEach(async (match) => {
+          for (let i = 0; i < fixture.matches.length; i++) {
+            const match = fixture.matches[i]
             const postMatch = {
               time: match.time,
               homeTeam: teamMap[`id-${match.homeTeam}`].name,
@@ -93,9 +97,9 @@ class PopulateLeagues extends React.Component {
               refTeam: teamMap[`id-${match.refTeam}`].name
             }
             await this.leaguesAPIClient.seasonsSeasonIdCompetitionsCompetitionIdFixturesFixtureIdMatchesPost(seasonRes.id, competitionRes.id, fixtureRes.id, postMatch)
-          })
-        })
-      })
+          }
+        }
+      }
       this.enqueueSnackbar(`Season ${this.state.season[0].name} saved`, { variant: 'success' })
       document.getElementById('season-csv').value = ''
       document.getElementById('season-name').value = ''

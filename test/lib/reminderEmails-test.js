@@ -137,6 +137,38 @@ describe('reminderEmails', () => {
             text: 'some body'
           })
         })
+
+        context('when ssl/tls is turned on', () => {
+          beforeEach(() => {
+            smtpConfigFile.readData.returns({
+              host: 'host',
+              port: 12345,
+              user: 'user',
+              password: 'pass',
+              ssltls: true
+            })
+          })
+
+          it('sends the email connecting with SSL/TLS', () => {
+            reminderEmails.emailTick()
+            expect(nodemailer.createTransport).to.be.calledWith({
+              host: 'host',
+              port: 12345,
+              auth: {
+                user: 'user',
+                pass: 'pass'
+              },
+              secure: true
+            })
+            expect(sendMailStub.callCount).to.equal(1)
+            expect(sendMailStub).to.be.calledWith({
+              from: 'f@example.com',
+              to: 'a@example.com',
+              subject: 'some subject',
+              text: 'some body'
+            })
+          })
+        })
       })
 
       context('when sending email fails', () => {
