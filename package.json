@@ -42,7 +42,7 @@
     "express": "^4.17.2",
     "helmet": "^4.6.0",
     "inquirer": "^8.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "nocache": "^3.0.1",
     "nodemailer": "^6.7.2",
