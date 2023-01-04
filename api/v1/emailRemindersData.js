@@ -39,8 +39,8 @@ exports.remindersEmailGet = function () {
  *
  **/
 exports.remindersEmailPut = function (enabled, fromAddress, reminderDays, reminderTime) {
-  const timeRegex = /\d\d:\d\d/
-  const emailRegex = /[^@]+@[^@]+/
+  const timeRegex = /^\d\d:\d\d$/
+  const emailRegex = /^[^@\s]+@[^@\s]+$/
   log.debug(`remindersEmailPut(emailConfig) req.body.enabled=<${enabled} req.body.from=<${fromAddress}> req.body.reminderDays=<${reminderDays} req.body.reminderTime=<${reminderTime}>`)
 
   if (typeof enabled !== 'boolean') {

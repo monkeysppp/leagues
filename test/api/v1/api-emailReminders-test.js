@@ -101,7 +101,7 @@ const sampleSeasonData = {
 
 const sampleConfigData = {
   enabled: true,
-  from: 'Alice Bobs <alice@example.com>',
+  from: 'alice@example.com',
   reminderDays: 6,
   reminderTime: '10:00',
   email: {
@@ -118,7 +118,7 @@ const sampleSMTPData = {
 
 const expectedConfig = {
   enabled: true,
-  from: 'Alice Bobs <alice@example.com>',
+  from: 'alice@example.com',
   reminderDays: 6,
   reminderTime: '10:00'
 }
@@ -191,6 +191,7 @@ describe('/api/v1', () => {
         })
       })
     })
+
     describe('PUT', () => {
       context('reading data succeeds', () => {
         context('writing data succeeds', () => {
@@ -207,7 +208,7 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+                .send({ from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -217,7 +218,7 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: 'true', from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+                .send({ enabled: 'true', from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -241,13 +242,53 @@ describe('/api/v1', () => {
                 .set('Accept', 'application/json')
                 .expect(400)
             })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: '@alice@example.com', reminderDays: 5, reminderTime: '14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: ' alice@example.com', reminderDays: 5, reminderTime: '14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@exam@ple.com', reminderDays: 5, reminderTime: '14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com@', reminderDays: 5, reminderTime: '14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com ', reminderDays: 5, reminderTime: '14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
           })
 
           context('reminderDays is missing', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderTime: '14:00' })
+                .send({ enabled: true, from: 'alice@example.com', reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -257,7 +298,7 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 'hello', reminderTime: '14:00' })
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 'hello', reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -267,7 +308,7 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 33, reminderTime: '14:00' })
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 33, reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -277,7 +318,7 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5 })
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5 })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -287,7 +328,39 @@ describe('/api/v1', () => {
             it('fails with 400', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '100' })
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '100' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: ' 14:00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00 ' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14 :00' })
+                .set('Accept', 'application/json')
+                .expect(400)
+            })
+
+            it('returns 400', () => {
+              return request(app)
+                .put('/api/v1/reminders/email')
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00:22' })
                 .set('Accept', 'application/json')
                 .expect(400)
             })
@@ -301,7 +374,7 @@ describe('/api/v1', () => {
             it('returns 500', () => {
               return request(app)
                 .put('/api/v1/reminders/email')
-                .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+                .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
                 .set('Accept', 'application/json')
                 .expect(500)
             })
@@ -310,7 +383,7 @@ describe('/api/v1', () => {
           it('returns 200', () => {
             return request(app)
               .put('/api/v1/reminders/email')
-              .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+              .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
               .set('Accept', 'application/json')
               .expect(200)
               .then(() => {
@@ -330,7 +403,7 @@ describe('/api/v1', () => {
           it('returns 500', () => {
             return request(app)
               .put('/api/v1/reminders/email')
-              .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+              .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
               .set('Accept', 'application/json')
               .expect(500)
           })
@@ -345,7 +418,7 @@ describe('/api/v1', () => {
         it('returns 500', () => {
           return request(app)
             .put('/api/v1/reminders/email')
-            .send({ enabled: true, from: 'Alice Bobs <alice@example.com>', reminderDays: 5, reminderTime: '14:00' })
+            .send({ enabled: true, from: 'alice@example.com', reminderDays: 5, reminderTime: '14:00' })
             .set('Accept', 'application/json')
             .expect(500)
         })
@@ -380,6 +453,7 @@ describe('/api/v1', () => {
           })
         })
       })
+
       describe('PUT', () => {
         context('reading data succeeds', () => {
           context('writing data succeeds', () => {
@@ -506,6 +580,7 @@ describe('/api/v1', () => {
           })
         })
       })
+
       describe('PUT', () => {
         context('reading data succeeds', () => {
           context('writing data succeeds', () => {
