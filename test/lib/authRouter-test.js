@@ -222,15 +222,43 @@ describe('authRoutes', () => {
     })
   })
 
-  context('when the jwt issuer and secret are not set', () => {
+  context('when the jwtSecret is not set', () => {
     let AuthenticatorStub
 
     beforeEach(() => {
       sinon.spy(log, 'error')
+      sinon.stub(process, 'exit')
       AuthenticatorStub = sinon.stub()
       proxyquire('../../lib/authRouter.js', {
         './config.js': {
-          jwtSecret: undefined,
+          jwtSecret: undefined
+        },
+        '../lib/authenticator.js': AuthenticatorStub
+      })
+    })
+
+    afterEach(() => {
+      log.error.restore()
+      process.exit.restore()
+    })
+
+    it('logs error messages and exits', () => {
+      expect(log.error).to.be.calledWith('Configuration file does not set a value for jwtSecret!')
+      expect(AuthenticatorStub.callCount).to.equal(0)
+      expect(process.exit.callCount).to.equal(1)
+      expect(process.exit).to.be.calledWith(1)
+    })
+  })
+
+  context('when the jwtIssuer is not set', () => {
+    let AuthenticatorStub
+
+    beforeEach(() => {
+      sinon.spy(log, 'error')
+      sinon.stub(process, 'exit')
+      AuthenticatorStub = sinon.stub()
+      proxyquire('../../lib/authRouter.js', {
+        './config.js': {
           jwtIssuer: undefined
         },
         '../lib/authenticator.js': AuthenticatorStub
@@ -239,12 +267,14 @@ describe('authRoutes', () => {
 
     afterEach(() => {
       log.error.restore()
+      process.exit.restore()
     })
 
-    it('logs error messages', () => {
-      expect(AuthenticatorStub).to.be.calledWith('changeThisIssuer', 'changeThisSecret')
-      expect(log.error).to.be.calledWith('Using an insecure secret for JWT.  You will want to change this!')
-      expect(log.error).to.be.calledWith('Using JWT without defining an issuer.  You will want to change this!')
+    it('logs error messages and exits', () => {
+      expect(log.error).to.be.calledWith('Configuration file does not set a value for jwtIssuer!')
+      expect(AuthenticatorStub.callCount).to.equal(0)
+      expect(process.exit.callCount).to.equal(1)
+      expect(process.exit).to.be.calledWith(1)
     })
   })
 })
