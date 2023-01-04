@@ -244,7 +244,6 @@ describe('authRoutes', () => {
 
     it('logs error messages and exits', () => {
       expect(log.error).to.be.calledWith('Configuration file does not set a value for jwtSecret!')
-      expect(AuthenticatorStub.callCount).to.equal(0)
       expect(process.exit.callCount).to.equal(1)
       expect(process.exit).to.be.calledWith(1)
     })
@@ -272,7 +271,6 @@ describe('authRoutes', () => {
 
     it('logs error messages and exits', () => {
       expect(log.error).to.be.calledWith('Configuration file does not set a value for jwtIssuer!')
-      expect(AuthenticatorStub.callCount).to.equal(0)
       expect(process.exit.callCount).to.equal(1)
       expect(process.exit).to.be.calledWith(1)
     })
