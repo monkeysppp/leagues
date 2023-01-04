@@ -520,6 +520,8 @@ exports.seasonsSeasonIdCompetitionsCompetitionIdTeamsTeamIdContactsPost = functi
     }
   }
 
+  // TODO validate email address with a regex, like we do for reminder email "from" address
+
   const newContact = {}
   newContact.id = nextContactId + 1
   newContact.email = contactAddress
